@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Sesuai/internal/api/constants"
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/handlers"
 	"Sesuai/internal/api/helpers"
@@ -47,7 +46,7 @@ func main() {
 	helpers.Init(app)
 
 	srv := &http.Server{
-		Addr:         ":" + os.Getenv(constants.ServerPort),
+		Addr:         ":80",
 		ReadTimeout:  10 * time.Minute,
 		WriteTimeout: 10 * time.Minute,
 	}
