@@ -23,7 +23,7 @@ const (
 
 	findResultSubmission = `
 		SELECT
-			c.id_category as category_id
+			c.id_category as category_id,
 			c.name as category_name,
 			ps.point as point
 		FROM 
