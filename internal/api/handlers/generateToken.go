@@ -55,8 +55,6 @@ func UseToken(c iris.Context) {
 		return
 	}
 
-	err = app.Service.GenerateToken.InsertUsedToken()
-
 	HttpSuccess(c, headers, nil)
 	return
 }
