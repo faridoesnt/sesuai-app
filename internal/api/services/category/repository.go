@@ -68,7 +68,7 @@ func (r Repository) InsertCategory(category entities.RequestCategory) (err error
 }
 
 func (r Repository) UpdateCategory(categoryId string, params entities.RequestCategory) (err error) {
-	_, err = r.stmt.updateCategory.Exec(params.Name, params.Photo, params.AdminId, categoryId)
+	_, err = r.stmt.updateCategory.Exec(params.Name, params.FileName, params.AdminId, categoryId)
 	if err != nil {
 		log.Println("error while update category ", err)
 	}

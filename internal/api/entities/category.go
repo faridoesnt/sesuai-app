@@ -7,7 +7,8 @@ type Category struct {
 }
 
 type RequestCategory struct {
-	Name    string `db:"name" json:"name"`
-	Photo   string `db:"photo" json:"photo"`
-	AdminId string `db:"admin_id"`
+	Name     string `db:"name" json:"name"`
+	FileName string `db:"photo" json:"filename"`
+	Image    string `db:"-" json:"image"`
+	AdminId  string `db:"admin_id"`
 }

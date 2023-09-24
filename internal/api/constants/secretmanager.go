@@ -9,3 +9,10 @@ const (
 	DbUser       = "db_user"
 	DbPass       = "db_pass"
 )
+
+//Amazon Services
+const (
+	AwsS3Key    = "amazons3_key"
+	AwsS3Secret = "amazons3_secret"
+	AwsS3Bucket = "amazons3_bucket"
+)
