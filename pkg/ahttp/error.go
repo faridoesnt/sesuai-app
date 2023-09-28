@@ -1,6 +1,8 @@
 package ahttp
 
 import (
+	"Sesuai/internal/api/constants"
+	"Sesuai/internal/api/models"
 	"Sesuai/pkg/alog"
 	"net/http"
 )
@@ -100,12 +102,21 @@ func (e Error) Error() string {
 }
 
 // CastError cast error interface as an Error
-func CastError(err error) Error {
+func CastError(err error, headers *models.Headers) Error {
 	apiErr, ok := err.(Error)
 	if !ok {
 		alog.Logger.Errorf("internal error occurred: %s", err)
 		// If assert type fail, create new internal error
 		apiErr = ErrInternalServer
+
+		if headers.OS == constants.Android {
+			apiErr.Data = nil
+		}
 	}
+
+	if headers.OS == constants.Android {
+		apiErr.Data = nil
+	}
+
 	return apiErr
 }

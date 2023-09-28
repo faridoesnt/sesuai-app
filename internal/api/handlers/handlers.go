@@ -30,7 +30,7 @@ func HttpError(c iris.Context, headers *models.Headers, err error, httpError aht
 		//helpers.LogAction("HTTP_RESPONSE", "fail", err.Error(), headers, string(response))
 	}
 
-	apiError := ahttp.CastError(httpError)
+	apiError := ahttp.CastError(httpError, headers)
 	if app.Config[constants.ServerEnv] == constants.EnvDevelopment {
 		res := ahttp.ErrorResponse{
 			Status:  apiError.Status,

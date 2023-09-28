@@ -8,3 +8,8 @@ const (
 const (
 	EnvDevelopment = "dev"
 )
+
+const (
+	IOS     = "Iphone"
+	Android = "Android"
+)
