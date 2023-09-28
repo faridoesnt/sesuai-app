@@ -17,7 +17,10 @@ func GetGenerateToken(c iris.Context) {
 
 	tokens := app.Services.GenerateToken.GetGenerateToken(adminId)
 
-	HttpSuccess(c, headers, tokens)
+	data := make(map[string]interface{})
+	data["token_list"] = tokens
+
+	HttpSuccess(c, headers, data)
 	return
 }
 
