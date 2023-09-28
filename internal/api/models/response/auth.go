@@ -13,4 +13,5 @@ type Auth struct {
 	Horoscope   string `json:"horoscope"`
 	Sex         string `json:"sex"`
 	Language    string `json:"language"`
+	Type        string `json:"type"`
 }

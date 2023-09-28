@@ -103,64 +103,75 @@ func Login(c iris.Context) {
 		return
 	}
 
-	//data := response.Auth{}
-	data := make(map[string]interface{})
-	hashPassword := ""
-
-	user := entities.User{}
-	admin := entities.Admin{}
-
-	if params.Type != "admin" {
-		user, _ = app.Services.User.GetUserByEmail(params.Email)
-
-		data["id"] = user.UserId
-		data["full_name"] = user.FullName
-		data["email"] = user.Email
-		data["phone_number"] = user.PhoneNumber
-		data["date_birth"] = user.DateBirth
-		data["birth_time"] = user.BirthTime
-		data["sex"] = user.Sex
-		data["blood_type"] = user.BloodType
-		data["language"] = user.Language
-
-		hashPassword = user.Password
-	} else {
-		admin, _ = app.Services.Admin.GetAdminByEmail(params.Email)
-
-		data["id"] = admin.AdminId
-		data["full_name"] = admin.FullName
-		data["email"] = admin.Email
-
-		hashPassword = admin.Password
-	}
-
-	// verify password
-	if !verifyPassword(params.Password, hashPassword) {
-		HttpError(c, headers, err, ahttp.ErrFailure("password_not_match"))
-		return
-	}
-
-	// refresh token
+	// generate new token
 	newToken := helpers.GenerateAccessToken(constants.TOKEN_AUTH_LENGTH)
 
 	if params.Type != "admin" {
+		user, err := app.Services.User.GetUserByEmail(params.Email)
+		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		// verify password
+		if !verifyPassword(params.Password, user.Password) {
+			HttpError(c, headers, err, ahttp.ErrFailure("password_not_match"))
+			return
+		}
+
 		err = app.Services.User.RefreshToken(user.Email, newToken)
 		if err != nil {
 			HttpError(c, headers, err, ahttp.ErrFailure("error while refresh token user"))
 			return
 		}
+
+		data := &response.Auth{
+			Token:       newToken,
+			Id:          user.UserId,
+			FullName:    user.FullName,
+			Email:       user.Email,
+			PhoneNumber: user.PhoneNumber,
+			DateBirth:   user.DateBirth,
+			TimeBirth:   user.BirthTime,
+			BloodType:   user.BloodType,
+			Shio:        user.Shio,
+			Horoscope:   user.Horoscope,
+			Sex:         user.Sex,
+			Language:    user.Language,
+			Type:        params.Type,
+		}
+
+		HttpSuccess(c, headers, data)
+		return
 	} else {
+		admin, err := app.Services.Admin.GetAdminByEmail(params.Email)
+		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		// verify password
+		if !verifyPassword(params.Password, admin.Password) {
+			HttpError(c, headers, err, ahttp.ErrFailure("password_not_match"))
+			return
+		}
+
 		err = app.Services.Admin.RefreshToken(admin.Email, newToken)
 		if err != nil {
 			HttpError(c, headers, err, ahttp.ErrFailure("error while refresh token admin"))
 			return
 		}
+
+		data := make(map[string]interface{})
+		data["token"] = newToken
+		data["id"] = admin.AdminId
+		data["full_name"] = admin.FullName
+		data["email"] = admin.Email
+		data["type"] = params.Type
+
+		HttpSuccess(c, headers, data)
+		return
 	}
-
-	data["token"] = newToken
-
-	HttpSuccess(c, headers, data)
-	return
 }
 
 func Register(c iris.Context) {
