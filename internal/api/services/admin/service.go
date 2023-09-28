@@ -34,7 +34,7 @@ func (s Service) RefreshToken(email, token string) (err error) {
 }
 
 func (s Service) GetAdminLoggedIn(adminId, token string) (admin entities.Admin, err error) {
-	admin, _ = s.repo.FindAdminLoggedIn(adminId, token)
+	admin, err = s.repo.FindAdminLoggedIn(adminId, token)
 
 	return
 }
