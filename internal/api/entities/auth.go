@@ -22,4 +22,5 @@ type RequestRegister struct {
 	Shio        string `db:"id_shio"`
 	Horoscope   string `db:"id_horoscope"`
 	Token       string `db:"token"`
+	Agreement   bool   `json:"user_agreement"`
 }

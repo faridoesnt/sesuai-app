@@ -9,6 +9,7 @@ import (
 	"Sesuai/pkg/ahttp"
 	"Sesuai/pkg/autils"
 	"errors"
+	"fmt"
 	"github.com/kataras/iris/v12"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -173,95 +174,101 @@ func Register(c iris.Context) {
 		return
 	}
 
-	// get user for check email not used
-	user, _ := app.Services.User.GetUserByEmail(params.Email)
+	if params.Agreement {
+		// get user for check email not used
+		user, _ := app.Services.User.GetUserByEmail(params.Email)
 
-	// check email not used
-	if user.Email == params.Email {
-		HttpError(c, headers, err, ahttp.ErrFailure("email_cant_same"))
+		// check email not used
+		if user.Email == params.Email {
+			HttpError(c, headers, err, ahttp.ErrFailure("email_cant_same"))
+			return
+		}
+
+		// check phone number not used
+		existPhoneNumber := app.Services.User.IsExistPhoneNumber(params.PhoneNumber)
+		if existPhoneNumber {
+			HttpError(c, headers, err, ahttp.ErrFailure("phone_number_cant_same"))
+			return
+		}
+
+		// generate token and set token
+		token := helpers.GenerateAccessToken(constants.TOKEN_AUTH_LENGTH)
+		params.Token = token
+
+		// hash password
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(params.Password), 16)
+		if err != nil {
+			HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		params.Password = string(hashPassword)
+
+		// get year on date birth
+		t, err := time.Parse(constants.FormatDate, params.BirthDate)
+		if err != nil {
+			HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		year := t.Year()
+
+		// get all shio
+		shio, err := app.Services.Shio.GetShio()
+		if err != nil {
+			HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		shioYear := (year - 4) % 12
+
+		// set shio
+		params.Shio = shio[shioYear].Id
+
+		// get horoscope from date birth
+		horoscopeName := helpers.GetHoroscope(t)
+
+		// set horoscope
+		horoscope, err := app.Services.Horoscope.GetHoroscopeByName(horoscopeName)
+		if err != nil {
+			HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		params.Horoscope = horoscope.Id
+
+		// insert user
+		err = app.Services.User.InsertUser(params)
+		if err != nil {
+			HttpError(c, headers, err, ahttp.ErrFailure("error while register"))
+			return
+		}
+
+		// get user for response
+		user, _ = app.Services.User.GetUserByEmail(params.Email)
+
+		data := &response.Auth{
+			Token:       token,
+			Id:          user.UserId,
+			FullName:    user.FullName,
+			Email:       user.Email,
+			PhoneNumber: user.PhoneNumber,
+			DateBirth:   user.DateBirth,
+			TimeBirth:   user.BirthTime,
+			BloodType:   user.BloodType,
+			Shio:        user.Shio,
+			Horoscope:   user.Horoscope,
+			Sex:         user.Sex,
+			Language:    user.Language,
+		}
+
+		HttpSuccess(c, headers, data)
+		return
+	} else {
+		HttpError(c, headers, fmt.Errorf("user agreement must be true"), ahttp.ErrFailure("user_agreement_must_be_true"))
 		return
 	}
 
-	// check phone number not used
-	existPhoneNumber := app.Services.User.IsExistPhoneNumber(params.PhoneNumber)
-	if existPhoneNumber {
-		HttpError(c, headers, err, ahttp.ErrFailure("phone_number_cant_same"))
-		return
-	}
-
-	// generate token and set token
-	token := helpers.GenerateAccessToken(constants.TOKEN_AUTH_LENGTH)
-	params.Token = token
-
-	// hash password
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(params.Password), 16)
-	if err != nil {
-		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
-		return
-	}
-
-	params.Password = string(hashPassword)
-
-	// get year on date birth
-	t, err := time.Parse(constants.FormatDate, params.BirthDate)
-	if err != nil {
-		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
-		return
-	}
-
-	year := t.Year()
-
-	// get all shio
-	shio, err := app.Services.Shio.GetShio()
-	if err != nil {
-		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
-		return
-	}
-
-	shioYear := (year - 4) % 12
-
-	// set shio
-	params.Shio = shio[shioYear].Id
-
-	// get horoscope from date birth
-	horoscopeName := helpers.GetHoroscope(t)
-
-	// set horoscope
-	horoscope, err := app.Services.Horoscope.GetHoroscopeByName(horoscopeName)
-	if err != nil {
-		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
-		return
-	}
-
-	params.Horoscope = horoscope.Id
-
-	// insert user
-	err = app.Services.User.InsertUser(params)
-	if err != nil {
-		HttpError(c, headers, err, ahttp.ErrFailure("error while register"))
-		return
-	}
-
-	// get user for response
-	user, _ = app.Services.User.GetUserByEmail(params.Email)
-
-	data := &response.Auth{
-		Token:       token,
-		Id:          user.UserId,
-		FullName:    user.FullName,
-		Email:       user.Email,
-		PhoneNumber: user.PhoneNumber,
-		DateBirth:   user.DateBirth,
-		TimeBirth:   user.BirthTime,
-		BloodType:   user.BloodType,
-		Shio:        user.Shio,
-		Horoscope:   user.Horoscope,
-		Sex:         user.Sex,
-		Language:    user.Language,
-	}
-
-	HttpSuccess(c, headers, data)
-	return
 }
 
 func verifyPassword(password, hashPassword string) bool {
