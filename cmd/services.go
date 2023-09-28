@@ -6,7 +6,9 @@ import (
 	"Sesuai/internal/api/services/bloodType"
 	"Sesuai/internal/api/services/category"
 	"Sesuai/internal/api/services/generateToken"
+	"Sesuai/internal/api/services/horoscope"
 	"Sesuai/internal/api/services/question"
+	"Sesuai/internal/api/services/shio"
 	"Sesuai/internal/api/services/submission"
 	"Sesuai/internal/api/services/user"
 	"Sesuai/pkg/alog"
@@ -21,6 +23,8 @@ func InitServices() {
 		Category:      category.Init(app),
 		Question:      question.Init(app),
 		Submission:    submission.Init(app),
+		Shio:          shio.Init(app),
+		Horoscope:     horoscope.Init(app),
 	}
 
 	alog.Logger.Printf("Initializing Services: Pass")

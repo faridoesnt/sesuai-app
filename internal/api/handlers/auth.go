@@ -202,6 +202,39 @@ func Register(c iris.Context) {
 
 	params.Password = string(hashPassword)
 
+	// get year on date birth
+	t, err := time.Parse(constants.FormatDate, params.BirthDate)
+	if err != nil {
+		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	year := t.Year()
+
+	// get all shio
+	shio, err := app.Services.Shio.GetShio()
+	if err != nil {
+		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	shioYear := (year - 4) % 12
+
+	// set shio
+	params.Shio = shio[shioYear].Id
+
+	// get horoscope from date birth
+	horoscopeName := helpers.GetHoroscope(t)
+
+	// set horoscope
+	horoscope, err := app.Services.Horoscope.GetHoroscopeByName(horoscopeName)
+	if err != nil {
+		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	params.Horoscope = horoscope.Id
+
 	// insert user
 	err = app.Services.User.InsertUser(params)
 	if err != nil {

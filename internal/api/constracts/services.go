@@ -8,4 +8,6 @@ type Services struct {
 	Category      CategoryService
 	Question      QuestionService
 	Submission    SubmissionService
+	Shio          ShioService
+	Horoscope     HoroscopeService
 }
