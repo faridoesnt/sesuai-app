@@ -9,10 +9,6 @@ import (
 
 func Init(app *constracts.App, crs iris.Handler) {
 
-	app.Iris.Get("/healthcheck", func(c iris.Context) {
-		_, _ = c.WriteString("OK")
-	})
-
 	v1 := app.Iris.Party("/v1", crs)
 	{
 		// auth
