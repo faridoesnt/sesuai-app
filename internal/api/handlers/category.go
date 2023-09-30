@@ -5,6 +5,7 @@ import (
 	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/helpers"
 	"Sesuai/internal/api/libs"
+	"Sesuai/internal/api/models/response"
 	"Sesuai/pkg/ahttp"
 	"errors"
 	"fmt"
@@ -17,8 +18,14 @@ func GetCategory(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	categories := app.Services.Category.GetCategory()
+	data := make(map[string]interface{})
+	data["list_category"] = []response.Category{}
 
-	HttpSuccess(c, headers, categories)
+	if len(categories) > 0 {
+		data["list_category"] = categories
+	}
+
+	HttpSuccess(c, headers, data)
 	return
 }
 
