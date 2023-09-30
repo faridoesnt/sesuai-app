@@ -21,6 +21,23 @@ func Init(a *constracts.App) (svc constracts.HoroscopeService) {
 	return
 }
 
+func (s Service) GetHoroscopes() (horoscopes []response.Horoscope, err error) {
+	horoscope, err := s.repo.FindHoroscopes()
+
+	if len(horoscope) > 0 {
+		for _, val := range horoscope {
+			horoscopes = append(horoscopes, response.Horoscope{
+				Id:   val.Id,
+				Name: val.Name,
+			})
+		}
+	} else {
+		horoscopes = []response.Horoscope{}
+	}
+
+	return
+}
+
 func (s Service) GetHoroscopeByName(horoscopeName string) (horoscope response.Horoscope, err error) {
 	data, err := s.repo.FindHoroscopeByName(horoscopeName)
 

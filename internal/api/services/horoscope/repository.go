@@ -15,11 +15,13 @@ type Repository struct {
 }
 
 type Statement struct {
+	findHoroscopes      *sqlx.Stmt
 	findHoroscopeByName *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.HoroscopeRepository {
 	stmts := Statement{
+		findHoroscopes:      datasources.Prepare(dbReader, findHoroscopes),
 		findHoroscopeByName: datasources.Prepare(dbReader, findHoroscopeByName),
 	}
 
@@ -30,6 +32,15 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.HoroscopeRe
 	}
 
 	return &r
+}
+
+func (r Repository) FindHoroscopes() (horoscopes []entities.Horoscope, err error) {
+	err = r.stmt.findHoroscopes.Select(&horoscopes)
+	if err != nil {
+		log.Println("error while find horoscopes ", err)
+	}
+
+	return
 }
 
 func (r Repository) FindHoroscopeByName(horoscopeName string) (horoscope entities.Horoscope, err error) {
