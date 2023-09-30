@@ -10,6 +10,9 @@ func BloodType(c iris.Context) {
 
 	bloodType := app.Services.BloodType.GetBloodType()
 
-	HttpSuccess(c, headers, bloodType)
+	data := make(map[string]interface{})
+	data["blood_type_list"] = bloodType
+
+	HttpSuccess(c, headers, data)
 	return
 }
