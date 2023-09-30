@@ -54,6 +54,12 @@ func HttpSuccess(c iris.Context, headers *models.Headers, data interface{}) {
 	response.Data = data
 	response.Status = "success"
 
+	if data == nil {
+		if headers.OS == constants.IOS {
+			response.Data = ""
+		}
+	}
+
 	_, err := json.Marshal(response) // _ : res
 	if err != nil {
 		logrus.Error("HTTP Result Error ("+c.Path()+"): ", err)
