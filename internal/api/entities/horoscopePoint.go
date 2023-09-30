@@ -6,3 +6,9 @@ type HoroscopePoint struct {
 	HoroscopeName string `db:"horoscope_name"`
 	Point         string `db:"point"`
 }
+
+type RequestHoroscopePoint struct {
+	HoroscopeId []string `json:"horoscope_id"`
+	CategoryId  string   `json:"category_id"`
+	Point       []string `json:"point"`
+}

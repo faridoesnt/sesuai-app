@@ -46,5 +46,6 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// horoscope point
 		v1.Get("/horoscope-point/{categoryId}", middlewares.Auth, handlers.GetHoroscopePoint)
+		v1.Put("/horoscope-point", middlewares.Auth, handlers.UpdateHoroscopePoint)
 	}
 }

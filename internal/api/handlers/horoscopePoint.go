@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/helpers"
 	"Sesuai/internal/api/models/response"
 	"Sesuai/pkg/ahttp"
@@ -27,5 +28,46 @@ func GetHoroscopePoint(c iris.Context) {
 	}
 
 	HttpSuccess(c, headers, data)
+	return
+}
+
+func UpdateHoroscopePoint(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	params := entities.RequestHoroscopePoint{}
+
+	err := c.ReadJSON(&params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if len(params.Point) == 0 {
+		HttpError(c, headers, fmt.Errorf("point cant empty"), ahttp.ErrFailure("point_cant_empty"))
+		return
+	}
+
+	if len(params.HoroscopeId) == 0 {
+		HttpError(c, headers, fmt.Errorf("horoscope id cant empty"), ahttp.ErrFailure("horoscope_id_cant_empty"))
+		return
+	}
+
+	if params.CategoryId == "" {
+		HttpError(c, headers, fmt.Errorf("category id cant empty"), ahttp.ErrFailure("category_id_cant_empty"))
+		return
+	}
+
+	if len(params.Point) < len(params.HoroscopeId) || len(params.Point) > len(params.HoroscopeId) {
+		HttpError(c, headers, fmt.Errorf("length point and horoscope not same"), ahttp.ErrFailure("length_point_and_horoscope_not_same"))
+		return
+	}
+
+	err = app.Services.HoroscopePoint.UpdateHoroscopePoint(params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf("error update horoscope point"), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
 	return
 }

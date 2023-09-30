@@ -17,4 +17,8 @@ const (
 		    c.id_category = ?
 		ORDER BY h.name ASC
 	`
+
+	updateHoroscopePoint = `
+		UPDATE horoscope_point SET point = :point WHERE id_horoscope = :id_horoscope AND id_category = :id_category 
+	`
 )

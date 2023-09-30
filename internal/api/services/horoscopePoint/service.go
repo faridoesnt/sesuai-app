@@ -2,6 +2,7 @@ package horoscopePoint
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -36,6 +37,12 @@ func (s Service) GetHoroscopePoint(categoryId string) (horoscopePoint []response
 	} else {
 		horoscopePoint = []response.HoroscopePoint{}
 	}
+
+	return
+}
+
+func (s Service) UpdateHoroscopePoint(params entities.RequestHoroscopePoint) (err error) {
+	err = s.repo.UpdateHoroscopePoint(params)
 
 	return
 }
