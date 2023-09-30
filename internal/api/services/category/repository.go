@@ -102,47 +102,50 @@ func (r Repository) InsertCategory(category entities.RequestCategory) (err error
 	categoryId := strconv.FormatInt(resId, 10)
 
 	shios, err := r.service.Shio.GetShio()
+	if len(shios) > 0 {
+		for _, shio := range shios {
+			data := map[string]interface{}{
+				"id_shio":     shio.Id,
+				"id_category": categoryId,
+				"point":       "0",
+			}
 
-	for _, shio := range shios {
-		data := map[string]interface{}{
-			"id_shio":     shio.Id,
-			"id_category": categoryId,
-			"point":       "0",
-		}
-
-		_, err = tx.NamedStmt(r.stmt.insertShioPoint).Exec(data)
-		if err != nil {
-			log.Println("error while insert shio point")
+			_, err = tx.NamedStmt(r.stmt.insertShioPoint).Exec(data)
+			if err != nil {
+				log.Println("error while insert shio point")
+			}
 		}
 	}
 
 	horoscopes, err := r.service.Horoscope.GetHoroscopes()
+	if len(horoscopes) > 0 {
+		for _, horoscope := range horoscopes {
+			data := map[string]interface{}{
+				"id_horoscope": horoscope.Id,
+				"id_category":  categoryId,
+				"point":        "0",
+			}
 
-	for _, horoscope := range horoscopes {
-		data := map[string]interface{}{
-			"id_horoscope": horoscope.Id,
-			"id_category":  categoryId,
-			"point":        "0",
-		}
-
-		_, err = tx.NamedStmt(r.stmt.insertHoroscopePoint).Exec(data)
-		if err != nil {
-			log.Println("error while insert horoscope point ", err)
+			_, err = tx.NamedStmt(r.stmt.insertHoroscopePoint).Exec(data)
+			if err != nil {
+				log.Println("error while insert horoscope point ", err)
+			}
 		}
 	}
 
 	bloodTypes := r.service.BloodType.GetBloodType()
+	if len(bloodTypes) > 0 {
+		for _, bloodType := range bloodTypes {
+			data := map[string]interface{}{
+				"id_blood_type": bloodType.Id,
+				"id_category":   categoryId,
+				"point":         "0",
+			}
 
-	for _, bloodType := range bloodTypes {
-		data := map[string]interface{}{
-			"id_blood_type": bloodType.Id,
-			"id_category":   categoryId,
-			"point":         "0",
-		}
-
-		_, err = tx.NamedStmt(r.stmt.insertBloodTypePoint).Exec(data)
-		if err != nil {
-			log.Println("error while blood type point ", err)
+			_, err = tx.NamedStmt(r.stmt.insertBloodTypePoint).Exec(data)
+			if err != nil {
+				log.Println("error while blood type point ", err)
+			}
 		}
 	}
 
