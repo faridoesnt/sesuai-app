@@ -41,4 +41,16 @@ const (
 	deleteCategory = `
 		DELETE FROM category WHERE id_category = ?
 	`
+
+	insertShioPoint = `
+		INSERT INTO shio_point (id_shio, id_category, point) VALUES (:id_shio, :id_category, :point)
+	`
+
+	insertHoroscopePoint = `
+		INSERT INTO horoscope_point (id_horoscope, id_category, point) VALUES (:id_horoscope, :id_category, :point)
+	`
+
+	insertBloodTypePoint = `
+		INSERT INTO blood_type_point (id_blood_type, id_category, point) VALUES (:id_blood_type, :id_category, :point)
+	`
 )
