@@ -3,12 +3,14 @@ package libs
 import (
 	"bytes"
 	"crypto/tls"
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/sirupsen/logrus"
 	"mime/multipart"
 	"net/http"
@@ -18,6 +20,37 @@ const (
 	maxPartSize = int64(2048 * 1000)
 	maxRetries  = 3
 )
+
+func S3BiznetUpload(bucket, access_key, secret, key string, file multipart.File, info *multipart.FileHeader) (filename string, err error) {
+	config := aws.NewConfig().
+		WithRegion("idn").
+		WithEndpoint("https://nos.jkt-1.neo.id").
+		WithCredentials(credentials.NewStaticCredentials(access_key, secret, ""))
+
+	sess, err := session.NewSession(config)
+	if err != nil {
+		fmt.Println("Error creating session:", err)
+		return
+	}
+
+	client := s3.New(sess)
+	uploader := s3manager.NewUploaderWithClient(client)
+
+	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket:      aws.String(bucket),
+		Key:         aws.String(key),
+		ContentType: aws.String(info.Header.Get("Content-Type")),
+		ACL:         aws.String("public-read"),
+		Body:        file,
+	})
+
+	if err != nil {
+		fmt.Println("Error uploading object:", err)
+		return
+	}
+
+	return key, err
+}
 
 func AWSMultipartUpload(bucket, access_key, secret, key string, file multipart.File, info *multipart.FileHeader) (filename string, err error) {
 	creds := credentials.NewStaticCredentials(access_key, secret, "")

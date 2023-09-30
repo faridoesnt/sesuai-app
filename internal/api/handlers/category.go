@@ -95,7 +95,11 @@ func SaveCategory(c iris.Context) {
 			access_key := app.Config[constants.AwsS3Key]
 			secret := app.Config[constants.AwsS3Secret]
 
-			go libs.AWSMultipartUpload(bucket, access_key, secret, filename, file, info)
+			_, err := libs.S3BiznetUpload(bucket, access_key, secret, filename, file, info)
+			if err != nil {
+				HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+				return
+			}
 
 			params.FileName = filename
 		}
