@@ -43,5 +43,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 		// submission
 		v1.Get("/submissions", middlewares.Auth, handlers.GetSubmissions)
 		v1.Get("/submissions/result/{submissionId}", middlewares.Auth, handlers.GetResultSubmission)
+
+		// horoscope point
+		v1.Get("/horoscope-point/{categoryId}", middlewares.Auth, handlers.GetHoroscopePoint)
 	}
 }

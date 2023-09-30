@@ -7,6 +7,7 @@ import (
 	"Sesuai/internal/api/services/category"
 	"Sesuai/internal/api/services/generateToken"
 	"Sesuai/internal/api/services/horoscope"
+	"Sesuai/internal/api/services/horoscopePoint"
 	"Sesuai/internal/api/services/question"
 	"Sesuai/internal/api/services/shio"
 	"Sesuai/internal/api/services/submission"
@@ -16,15 +17,16 @@ import (
 
 func InitServices() {
 	app.Services = &constracts.Services{
-		User:          user.Init(app),
-		Admin:         admin.Init(app),
-		BloodType:     bloodType.Init(app),
-		GenerateToken: generateToken.Init(app),
-		Category:      category.Init(app),
-		Question:      question.Init(app),
-		Submission:    submission.Init(app),
-		Shio:          shio.Init(app),
-		Horoscope:     horoscope.Init(app),
+		User:           user.Init(app),
+		Admin:          admin.Init(app),
+		BloodType:      bloodType.Init(app),
+		GenerateToken:  generateToken.Init(app),
+		Category:       category.Init(app),
+		Question:       question.Init(app),
+		Submission:     submission.Init(app),
+		Shio:           shio.Init(app),
+		Horoscope:      horoscope.Init(app),
+		HoroscopePoint: horoscopePoint.Init(app),
 	}
 
 	alog.Logger.Printf("Initializing Services: Pass")
