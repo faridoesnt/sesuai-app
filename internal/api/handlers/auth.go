@@ -271,6 +271,7 @@ func Register(c iris.Context) {
 			Horoscope:   user.Horoscope,
 			Sex:         user.Sex,
 			Language:    user.Language,
+			Type:        "user",
 		}
 
 		HttpSuccess(c, headers, data)
