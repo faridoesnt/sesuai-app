@@ -17,4 +17,8 @@ const (
 		    c.id_category = ?
 		ORDER BY s.name ASC
 	`
+
+	updateShioPoint = `
+		UPDATE shio_point SET point = :point WHERE id_shio = :id_shio AND id_category = :id_category 
+	`
 )

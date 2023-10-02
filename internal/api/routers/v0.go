@@ -50,5 +50,6 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// shio point
 		v1.Get("/shio-point/{categoryId}", middlewares.Auth, handlers.GetShioPoint)
+		v1.Put("/shio-point", middlewares.Auth, handlers.UpdateShioPoint)
 	}
 }

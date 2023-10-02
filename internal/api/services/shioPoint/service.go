@@ -26,3 +26,9 @@ func (s Service) GetShioPoint(categoryId string) (shioPoint []entities.ShioPoint
 
 	return
 }
+
+func (s Service) UpdateShioPoint(params entities.RequestShioPoint) (err error) {
+	err = s.repo.UpdateShioPoint(params)
+
+	return
+}

@@ -4,6 +4,7 @@ import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/datasources"
 	"Sesuai/internal/api/entities"
+	"Sesuai/pkg/asql"
 	"github.com/jmoiron/sqlx"
 	"log"
 )
@@ -15,12 +16,14 @@ type Repository struct {
 }
 
 type Statement struct {
-	findShioPoint *sqlx.Stmt
+	findShioPoint   *sqlx.Stmt
+	updateShioPoint *sqlx.NamedStmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ShioPointRepository {
 	stmts := Statement{
-		findShioPoint: datasources.Prepare(dbReader, findShioPoint),
+		findShioPoint:   datasources.Prepare(dbReader, findShioPoint),
+		updateShioPoint: datasources.PrepareNamed(dbWriter, updateShioPoint),
 	}
 
 	r := Repository{
@@ -36,6 +39,30 @@ func (r Repository) FindShioPoint(categoryId string) (shioPoint []entities.ShioP
 	err = r.stmt.findShioPoint.Select(&shioPoint, categoryId)
 	if err != nil {
 		log.Println("error while find shio point ", err)
+	}
+
+	return
+}
+
+func (r Repository) UpdateShioPoint(params entities.RequestShioPoint) (err error) {
+	tx, err := r.dbWriter.Beginx()
+	if err != nil {
+		return err
+	}
+
+	defer asql.ReleaseTx(tx, &err)
+
+	for index, shioId := range params.ShioId {
+		data := map[string]interface{}{
+			"point":       params.Point[index],
+			"id_shio":     shioId,
+			"id_category": params.CategoryId,
+		}
+
+		_, err = tx.NamedStmt(r.stmt.updateShioPoint).Exec(data)
+		if err != nil {
+			log.Println("error while update shio point ", err)
+		}
 	}
 
 	return
