@@ -26,3 +26,9 @@ func (s Service) GetPointAnswer() (pointAnswer []entities.PointAnswer, err error
 
 	return
 }
+
+func (s Service) UpdatePointAnswer(params entities.RequestPointAnswer) (err error) {
+	err = s.repo.UpdatePointAnswer(params)
+
+	return
+}

@@ -9,4 +9,8 @@ const (
 		FROM
 		    answer
 	`
+
+	updatePointAnswer = `
+		UPDATE answer SET point = :point WHERE id_answer = :id_answer 
+	`
 )

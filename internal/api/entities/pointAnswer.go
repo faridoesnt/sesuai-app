@@ -5,3 +5,8 @@ type PointAnswer struct {
 	Name  string `db:"name" json:"name"`
 	Point string `db:"point" json:"point"`
 }
+
+type RequestPointAnswer struct {
+	PointAnswerId []string `json:"point_answer_id"`
+	Point         []string `json:"point"`
+}
