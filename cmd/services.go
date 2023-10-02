@@ -4,6 +4,7 @@ import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/services/admin"
 	"Sesuai/internal/api/services/bloodType"
+	"Sesuai/internal/api/services/bloodTypePoint"
 	"Sesuai/internal/api/services/category"
 	"Sesuai/internal/api/services/generateToken"
 	"Sesuai/internal/api/services/horoscope"
@@ -21,6 +22,7 @@ func InitServices() {
 		User:           user.Init(app),
 		Admin:          admin.Init(app),
 		BloodType:      bloodType.Init(app),
+		BloodTypePoint: bloodTypePoint.Init(app),
 		GenerateToken:  generateToken.Init(app),
 		Category:       category.Init(app),
 		Question:       question.Init(app),

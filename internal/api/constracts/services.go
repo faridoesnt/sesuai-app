@@ -4,6 +4,7 @@ type Services struct {
 	User           UserService
 	Admin          AdminService
 	BloodType      BloodTypeService
+	BloodTypePoint BloodTypePointService
 	GenerateToken  GenerateTokenService
 	Category       CategoryService
 	Question       QuestionService
