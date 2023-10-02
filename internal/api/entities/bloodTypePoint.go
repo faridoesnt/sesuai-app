@@ -6,3 +6,9 @@ type BloodTypePoint struct {
 	BloodTypeName string `db:"blood_type_name" json:"blood_type_name"`
 	Point         string `db:"point" json:"point"`
 }
+
+type RequestBloodTypePoint struct {
+	BloodTypeId []string `json:"blood_type_id"`
+	CategoryId  string   `json:"category_id"`
+	Point       []string `json:"point"`
+}

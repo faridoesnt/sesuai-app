@@ -17,4 +17,8 @@ const (
 		    c.id_category = ?
 		ORDER BY b.name ASC
 	`
+
+	updateBloodTypePoint = `
+		UPDATE blood_type_point SET point = :point WHERE id_blood_type = :id_blood_type AND id_category = :id_category 
+	`
 )

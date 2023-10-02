@@ -54,5 +54,6 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// blood type point
 		v1.Get("/blood-type-point/{categoryId}", middlewares.Auth, handlers.GetBloodTypePoint)
+		v1.Put("/blood-type-point", middlewares.Auth, handlers.UpdateBloodTypePoint)
 	}
 }

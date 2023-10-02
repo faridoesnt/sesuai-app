@@ -26,3 +26,9 @@ func (s Service) GetBloodTypePoint(categoryId string) (bloodTypePoint []entities
 
 	return
 }
+
+func (s Service) UpdateBloodTypePoint(params entities.RequestBloodTypePoint) (err error) {
+	err = s.repo.UpdateBloodTypePoint(params)
+
+	return
+}

@@ -4,6 +4,7 @@ import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/datasources"
 	"Sesuai/internal/api/entities"
+	"Sesuai/pkg/asql"
 	"github.com/jmoiron/sqlx"
 	"log"
 )
@@ -15,12 +16,14 @@ type Repository struct {
 }
 
 type Statement struct {
-	findBloodTypePoint *sqlx.Stmt
+	findBloodTypePoint   *sqlx.Stmt
+	updateBloodTypePoint *sqlx.NamedStmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.BloodTypePointRepository {
 	stmts := Statement{
-		findBloodTypePoint: datasources.Prepare(dbReader, findBloodTypePoint),
+		findBloodTypePoint:   datasources.Prepare(dbReader, findBloodTypePoint),
+		updateBloodTypePoint: datasources.PrepareNamed(dbWriter, updateBloodTypePoint),
 	}
 
 	r := Repository{
@@ -36,6 +39,30 @@ func (r Repository) FindBloodTypePoint(categoryId string) (bloodTypePoint []enti
 	err = r.stmt.findBloodTypePoint.Select(&bloodTypePoint, categoryId)
 	if err != nil {
 		log.Println("error while find blood type point ", err)
+	}
+
+	return
+}
+
+func (r Repository) UpdateBloodTypePoint(params entities.RequestBloodTypePoint) (err error) {
+	tx, err := r.dbWriter.Beginx()
+	if err != nil {
+		return err
+	}
+
+	defer asql.ReleaseTx(tx, &err)
+
+	for index, bloodTypeId := range params.BloodTypeId {
+		data := map[string]interface{}{
+			"point":         params.Point[index],
+			"id_blood_type": bloodTypeId,
+			"id_category":   params.CategoryId,
+		}
+
+		_, err = tx.NamedStmt(r.stmt.updateBloodTypePoint).Exec(data)
+		if err != nil {
+			log.Println("error while update horoscope point ", err)
+		}
 	}
 
 	return
