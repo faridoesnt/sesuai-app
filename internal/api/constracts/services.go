@@ -13,4 +13,5 @@ type Services struct {
 	ShioPoint      ShioPointService
 	Horoscope      HoroscopeService
 	HoroscopePoint HoroscopePointService
+	PointAnswer    PointAnswerService
 }
