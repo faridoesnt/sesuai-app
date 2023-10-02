@@ -10,6 +10,7 @@ import (
 	"Sesuai/internal/api/services/horoscopePoint"
 	"Sesuai/internal/api/services/question"
 	"Sesuai/internal/api/services/shio"
+	"Sesuai/internal/api/services/shioPoint"
 	"Sesuai/internal/api/services/submission"
 	"Sesuai/internal/api/services/user"
 	"Sesuai/pkg/alog"
@@ -25,6 +26,7 @@ func InitServices() {
 		Question:       question.Init(app),
 		Submission:     submission.Init(app),
 		Shio:           shio.Init(app),
+		ShioPoint:      shioPoint.Init(app),
 		Horoscope:      horoscope.Init(app),
 		HoroscopePoint: horoscopePoint.Init(app),
 	}

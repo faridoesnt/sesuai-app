@@ -9,6 +9,7 @@ type Services struct {
 	Question       QuestionService
 	Submission     SubmissionService
 	Shio           ShioService
+	ShioPoint      ShioPointService
 	Horoscope      HoroscopeService
 	HoroscopePoint HoroscopePointService
 }
