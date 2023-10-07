@@ -131,6 +131,43 @@ func SaveQuestion(c iris.Context) {
 	return
 }
 
+func UpdateQuestion(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	questionId := c.Params().GetString("questionId")
+
+	adminId := c.Values().GetString(constants.AuthUserId)
+
+	params := entities.RequestQuestion{}
+
+	err := c.ReadJSON(&params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	params.AdminId = adminId
+
+	if questionId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Question Id Is Empty"}, ahttp.ErrFailure("question_id_is_empty"))
+		return
+	}
+
+	if existQuestion := app.Services.Question.IsExistQuestion(questionId); !existQuestion {
+		HttpError(c, headers, ahttp.Error{Message: "Question Not Found"}, ahttp.ErrFailure("question_not_found"))
+		return
+	}
+
+	err = app.Services.Question.UpdateQuestion(questionId, params)
+	if err != nil {
+		HttpError(c, headers, ahttp.Error{Message: "error update question"}, ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
+	return
+}
+
 func DeleteQuestion(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 

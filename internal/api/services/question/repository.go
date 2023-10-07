@@ -18,6 +18,7 @@ type Statement struct {
 	findQuestionsByCategoryId *sqlx.Stmt
 	findQuestion              *sqlx.Stmt
 	insertQuestion            *sqlx.NamedStmt
+	updateQuestion            *sqlx.NamedStmt
 	deleteQuestion            *sqlx.Stmt
 }
 
@@ -26,6 +27,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionRep
 		findQuestionsByCategoryId: datasources.Prepare(dbReader, findQuestionsByCategoryId),
 		findQuestion:              datasources.Prepare(dbReader, findQuestion),
 		insertQuestion:            datasources.PrepareNamed(dbWriter, insertQuestion),
+		updateQuestion:            datasources.PrepareNamed(dbWriter, updateQuestion),
 		deleteQuestion:            datasources.Prepare(dbWriter, deleteQuestion),
 	}
 
@@ -60,6 +62,22 @@ func (r Repository) InsertQuestion(params entities.RequestQuestion) (err error) 
 	_, err = r.stmt.insertQuestion.Exec(params)
 	if err != nil {
 		log.Println("error while insert question ", err)
+	}
+
+	return
+}
+
+func (r Repository) UpdateQuestion(questionId string, params entities.RequestQuestion) (err error) {
+	data := map[string]interface{}{
+		"id_category":  params.CategoryId,
+		"question_ina": params.QuestionIna,
+		"question_eng": params.QuestionEn,
+		"id_question":  questionId,
+	}
+
+	_, err = r.stmt.updateQuestion.Exec(data)
+	if err != nil {
+		log.Println("error while update question ", err)
 	}
 
 	return

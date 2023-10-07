@@ -48,6 +48,12 @@ func (s Service) IsExistQuestion(questionId string) bool {
 	return true
 }
 
+func (s Service) UpdateQuestion(questionId string, params entities.RequestQuestion) (err error) {
+	err = s.repo.UpdateQuestion(questionId, params)
+
+	return
+}
+
 func (s Service) DeleteQuestion(questionId string) (err error) {
 	err = s.repo.DeleteQuestion(questionId)
 

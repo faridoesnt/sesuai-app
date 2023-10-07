@@ -38,6 +38,7 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Get("/question", middlewares.Auth, handlers.GetQuestions)
 		v1.Get("/question/{questionId}", middlewares.Auth, handlers.GetQuestion)
 		v1.Post("/question", middlewares.Auth, handlers.SaveQuestion)
+		v1.Put("/question/{questionId}", middlewares.Auth, handlers.UpdateQuestion)
 		v1.Delete("/question/{questionId}", middlewares.Auth, handlers.DeleteQuestion)
 
 		// submission
