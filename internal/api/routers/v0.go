@@ -66,5 +66,6 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Get("/admins/{adminId}", middlewares.Auth, handlers.GetAdmin)
 		v1.Post("/admins", middlewares.Auth, handlers.SaveAdmin)
 		v1.Put("/admins/{adminId}", middlewares.Auth, handlers.UpdateAdmin)
+		v1.Delete("/admins/{adminId}", middlewares.Auth, handlers.DeleteAdmin)
 	}
 }

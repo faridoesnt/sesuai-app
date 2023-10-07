@@ -200,3 +200,29 @@ func UpdateAdmin(c iris.Context) {
 	HttpSuccess(c, headers, nil)
 	return
 }
+
+func DeleteAdmin(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	adminId := c.Params().GetString("adminId")
+
+	if adminId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Admin Id Empty"}, ahttp.ErrFailure("admin_id_empty"))
+		return
+	}
+
+	adminExist := app.Services.Admin.IsAdminExist(adminId)
+	if !adminExist {
+		HttpError(c, headers, ahttp.Error{Message: "Admin Not Found"}, ahttp.ErrFailure("admin_not_found"))
+		return
+	}
+
+	err := app.Services.Admin.DeleteAdmin(adminId)
+	if err != nil {
+		HttpError(c, headers, ahttp.Error{Message: "error delete admin"}, ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
+	return
+}
