@@ -48,3 +48,13 @@ func (s Service) GetAdminLoggedIn(adminId, token string) (admin entities.Admin, 
 
 	return
 }
+
+func (s Service) IsEmailExist(email string) bool {
+	total, _ := s.repo.CountEmail(email)
+
+	if total > 0 {
+		return true
+	}
+
+	return false
+}

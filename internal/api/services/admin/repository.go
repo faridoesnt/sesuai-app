@@ -19,6 +19,7 @@ type Statement struct {
 	findAdminByEmail  *sqlx.Stmt
 	refreshToken      *sqlx.Stmt
 	findAdminLoggedIn *sqlx.Stmt
+	countEmail        *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
@@ -27,6 +28,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 		findAdminByEmail:  datasources.Prepare(dbReader, findAdminByEmail),
 		refreshToken:      datasources.Prepare(dbWriter, refreshToken),
 		findAdminLoggedIn: datasources.Prepare(dbReader, findAdminLoggedIn),
+		countEmail:        datasources.Prepare(dbReader, countEmail),
 	}
 
 	r := Repository{
@@ -69,6 +71,15 @@ func (r Repository) FindAdminLoggedIn(adminId, token string) (admin entities.Adm
 	err = r.stmt.findAdminLoggedIn.Get(&admin, adminId, token)
 	if err != nil {
 		log.Println("error while find admin logged in ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountEmail(email string) (total int64, err error) {
+	err = r.stmt.countEmail.Get(&total, email)
+	if err != nil {
+		log.Println("error while count email ", err)
 	}
 
 	return

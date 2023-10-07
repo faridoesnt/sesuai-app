@@ -40,4 +40,13 @@ const (
 		WHERE 
 			id_admin = ? AND token = ?
 	`
+
+	countEmail = `
+		SELECT
+			count(email) as total
+		FROM
+		    admin
+		WHERE
+		    email = ?
+	`
 )

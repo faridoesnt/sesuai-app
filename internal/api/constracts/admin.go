@@ -7,6 +7,7 @@ type AdminRepository interface {
 	FindAdminByEmail(email string) (admin entities.Admin, err error)
 	RefreshToken(email, token string) (err error)
 	FindAdminLoggedIn(adminId, token string) (admin entities.Admin, err error)
+	CountEmail(email string) (total int64, err error)
 }
 
 type AdminService interface {
@@ -14,4 +15,5 @@ type AdminService interface {
 	GetAdminByEmail(email string) (admin entities.Admin, err error)
 	RefreshToken(email, token string) (err error)
 	GetAdminLoggedIn(adminId, token string) (admin entities.Admin, err error)
+	IsEmailExist(email string) bool
 }
