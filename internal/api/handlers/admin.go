@@ -146,6 +146,17 @@ func UpdateAdmin(c iris.Context) {
 
 	adminId := c.Params().GetString("adminId")
 
+	if adminId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Admin Id Empty"}, ahttp.ErrFailure("admin_id_empty"))
+		return
+	}
+
+	adminExist := app.Services.Admin.IsAdminExist(adminId)
+	if !adminExist {
+		HttpError(c, headers, ahttp.Error{Message: "Admin Not Found"}, ahttp.ErrFailure("admin_not_found"))
+		return
+	}
+
 	params := entities.RequestAdmin{}
 
 	err := c.ReadJSON(&params)
