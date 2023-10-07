@@ -20,6 +20,7 @@ type Statement struct {
 	refreshToken      *sqlx.Stmt
 	findAdminLoggedIn *sqlx.Stmt
 	countEmail        *sqlx.Stmt
+	countPhoneNumber  *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
@@ -29,6 +30,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 		refreshToken:      datasources.Prepare(dbWriter, refreshToken),
 		findAdminLoggedIn: datasources.Prepare(dbReader, findAdminLoggedIn),
 		countEmail:        datasources.Prepare(dbReader, countEmail),
+		countPhoneNumber:  datasources.Prepare(dbReader, countPhoneNumber),
 	}
 
 	r := Repository{
@@ -80,6 +82,15 @@ func (r Repository) CountEmail(email string) (total int64, err error) {
 	err = r.stmt.countEmail.Get(&total, email)
 	if err != nil {
 		log.Println("error while count email ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountPhoneNumber(phoneNumber string) (total int64, err error) {
+	err = r.stmt.countPhoneNumber.Get(&total, phoneNumber)
+	if err != nil {
+		log.Println("error while count phone number ", err)
 	}
 
 	return

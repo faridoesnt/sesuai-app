@@ -49,4 +49,13 @@ const (
 		WHERE
 		    email = ?
 	`
+
+	countPhoneNumber = `
+		SELECT
+			count(phone_number) as total
+		FROM
+		    admin
+		WHERE
+		    phone_number = ?
+	`
 )

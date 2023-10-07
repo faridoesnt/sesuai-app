@@ -58,3 +58,13 @@ func (s Service) IsEmailExist(email string) bool {
 
 	return false
 }
+
+func (s Service) IsPhoneNumberExist(phoneNumber string) bool {
+	total, _ := s.repo.CountPhoneNumber(phoneNumber)
+
+	if total > 0 {
+		return true
+	}
+
+	return false
+}
