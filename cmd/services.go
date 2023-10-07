@@ -2,6 +2,7 @@ package main
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/services/accessMenu"
 	"Sesuai/internal/api/services/admin"
 	"Sesuai/internal/api/services/bloodType"
 	"Sesuai/internal/api/services/bloodTypePoint"
@@ -33,6 +34,7 @@ func InitServices() {
 		Horoscope:      horoscope.Init(app),
 		HoroscopePoint: horoscopePoint.Init(app),
 		PointAnswer:    pointAnswer.Init(app),
+		AccessMenu:     accessMenu.Init(app),
 	}
 
 	alog.Logger.Printf("Initializing Services: Pass")
