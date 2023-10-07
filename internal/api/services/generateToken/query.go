@@ -14,6 +14,7 @@ const (
 					ON a.id_admin = g.id_admin
 				WHERE
 				    g.id_admin = ?
+				ORDER BY created_at DESC
 	`
 
 	insertNewToken = `
