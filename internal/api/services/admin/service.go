@@ -31,6 +31,12 @@ func (s Service) GetAdmins() (admins []entities.AdminList, err error) {
 	return
 }
 
+func (s Service) GetAdminById(adminId string) (admin entities.AdminList, err error) {
+	admin, err = s.repo.FindAdminById(adminId)
+
+	return
+}
+
 func (s Service) GetAdminByEmail(email string) (admin entities.Admin, err error) {
 	admin, err = s.repo.FindAdminByEmail(email)
 

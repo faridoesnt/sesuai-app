@@ -14,6 +14,19 @@ const (
 		ORDER BY fullname ASC
 	`
 
+	findAdminById = `
+		SELECT
+			id_admin as admin_id,
+			fullname as full_name,
+			email,
+			IFNULL(phone_number, '') as phone_number
+		FROM 
+			admin 
+		WHERE 
+			id_admin = ? 
+		LIMIT 1
+	`
+
 	findAdminByEmail = `
 		SELECT
 			id_admin,
