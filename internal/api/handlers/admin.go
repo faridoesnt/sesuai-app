@@ -46,6 +46,40 @@ func GetAdmins(c iris.Context) {
 	return
 }
 
+func GetAdmin(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	adminId := c.Params().GetString("adminId")
+
+	admin, err := app.Services.Admin.GetAdminById(adminId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	accessMenu, err := app.Services.AccessMenu.GetAccessMenuByAdminId(admin.AdminId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	admin.AccessMenu = []entities.AccessMenu{}
+
+	if len(accessMenu) > 0 {
+		for _, val := range accessMenu {
+			admin.AccessMenu = append(admin.AccessMenu, entities.AccessMenu{
+				AccessId: val.AccessId,
+				MenuId:   val.MenuId,
+				MenuName: val.MenuName,
+				Status:   val.Status,
+			})
+		}
+	}
+
+	HttpSuccess(c, headers, admin)
+	return
+}
+
 func SaveAdmin(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 

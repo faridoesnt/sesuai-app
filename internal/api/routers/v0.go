@@ -63,6 +63,7 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// admin list
 		v1.Get("/admins", middlewares.Auth, handlers.GetAdmins)
+		v1.Get("/admins/{adminId}", middlewares.Auth, handlers.GetAdmin)
 		v1.Post("/admins", middlewares.Auth, handlers.SaveAdmin)
 	}
 }
