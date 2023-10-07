@@ -80,3 +80,9 @@ func (s Service) InsertAdmin(params entities.RequestAdmin) (err error) {
 
 	return
 }
+
+func (s Service) UpdateAdmin(adminId string, params entities.RequestAdmin) (err error) {
+	err = s.repo.UpdateAdmin(adminId, params)
+
+	return
+}

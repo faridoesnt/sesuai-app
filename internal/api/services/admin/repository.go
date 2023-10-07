@@ -26,6 +26,8 @@ type Statement struct {
 	countPhoneNumber  *sqlx.Stmt
 	insertAdmin       *sqlx.NamedStmt
 	insertAccessMenu  *sqlx.NamedStmt
+	updateAdmin       *sqlx.NamedStmt
+	deleteAccessMenu  *sqlx.NamedStmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
@@ -39,6 +41,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 		countPhoneNumber:  datasources.Prepare(dbReader, countPhoneNumber),
 		insertAdmin:       datasources.PrepareNamed(dbWriter, insertAdmin),
 		insertAccessMenu:  datasources.PrepareNamed(dbWriter, insertAccessMenu),
+		updateAdmin:       datasources.PrepareNamed(dbWriter, updateAdmin),
+		deleteAccessMenu:  datasources.PrepareNamed(dbWriter, deleteAccessMenu),
 	}
 
 	r := Repository{
@@ -148,6 +152,47 @@ func (r Repository) InsertAdmin(params entities.RequestAdmin) (err error) {
 		_, err = tx.NamedStmt(r.stmt.insertAccessMenu).Exec(data)
 		if err != nil {
 			log.Println("error while insert access menu admin ", err)
+		}
+	}
+
+	return
+}
+
+func (r Repository) UpdateAdmin(adminId string, params entities.RequestAdmin) (err error) {
+	tx, err := r.dbWriter.Beginx()
+	if err != nil {
+		return err
+	}
+
+	defer asql.ReleaseTx(tx, &err)
+
+	data := map[string]interface{}{
+		"fullname":     params.FullName,
+		"email":        params.Email,
+		"phone_number": params.PhoneNumber,
+		"id_admin":     adminId,
+	}
+
+	_, err = tx.NamedStmt(r.stmt.updateAdmin).Exec(data)
+	if err != nil {
+		log.Println("error while update admin ", err)
+	}
+
+	_, err = tx.NamedStmt(r.stmt.deleteAccessMenu).Exec(data)
+	if err != nil {
+		log.Println("error while delete access menu admin ", err)
+	}
+
+	for _, val := range params.Access {
+		data = map[string]interface{}{
+			"id_menu":  val,
+			"id_admin": adminId,
+			"status":   "write",
+		}
+
+		_, err = tx.NamedStmt(r.stmt.insertAccessMenu).Exec(data)
+		if err != nil {
+			log.Println("error while update insert menu admin ", err)
 		}
 	}
 

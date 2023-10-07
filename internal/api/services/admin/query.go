@@ -85,4 +85,12 @@ const (
 		VALUES
 		    (:id_menu, :id_admin, :status)
 	`
+
+	updateAdmin = `
+		UPDATE admin SET fullname = :fullname, email = :email, phone_number = :phone_number WHERE id_admin = :id_admin
+	`
+
+	deleteAccessMenu = `
+		DELETE FROM access WHERE id_admin = :id_admin
+	`
 )
