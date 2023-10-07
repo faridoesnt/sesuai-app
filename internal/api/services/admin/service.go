@@ -96,3 +96,9 @@ func (s Service) IsAdminExist(adminId string) bool {
 
 	return false
 }
+
+func (s Service) DeleteAdmin(adminId string) (err error) {
+	err = s.repo.DeleteAdmin(adminId)
+
+	return
+}

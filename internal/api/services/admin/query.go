@@ -102,4 +102,8 @@ const (
 		WHERE
 		    id_admin = ?
 	`
+
+	deleteAdmin = `
+		DELETE FROM admin WHERE id_admin = :id_admin
+	`
 )

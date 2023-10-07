@@ -29,6 +29,7 @@ type Statement struct {
 	updateAdmin       *sqlx.NamedStmt
 	deleteAccessMenu  *sqlx.NamedStmt
 	countAdmin        *sqlx.Stmt
+	deleteAdmin       *sqlx.NamedStmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
@@ -45,6 +46,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 		updateAdmin:       datasources.PrepareNamed(dbWriter, updateAdmin),
 		deleteAccessMenu:  datasources.PrepareNamed(dbWriter, deleteAccessMenu),
 		countAdmin:        datasources.Prepare(dbReader, countAdmin),
+		deleteAdmin:       datasources.PrepareNamed(dbWriter, deleteAdmin),
 	}
 
 	r := Repository{
@@ -205,6 +207,31 @@ func (r Repository) CountAdmin(adminId string) (total int64, err error) {
 	err = r.stmt.countAdmin.Get(&total, adminId)
 	if err != nil {
 		log.Println("error while count admin ", err)
+	}
+
+	return
+}
+
+func (r Repository) DeleteAdmin(adminId string) (err error) {
+	tx, err := r.dbWriter.Beginx()
+	if err != nil {
+		return err
+	}
+
+	defer asql.ReleaseTx(tx, &err)
+
+	data := map[string]interface{}{
+		"id_admin": adminId,
+	}
+
+	_, err = tx.NamedStmt(r.stmt.deleteAccessMenu).Exec(data)
+	if err != nil {
+		log.Println("error while delete access menu admin ", err)
+	}
+
+	_, err = tx.NamedStmt(r.stmt.deleteAdmin).Exec(data)
+	if err != nil {
+		log.Println("error while delete admin ", err)
 	}
 
 	return
