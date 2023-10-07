@@ -28,6 +28,7 @@ type Statement struct {
 	insertAccessMenu  *sqlx.NamedStmt
 	updateAdmin       *sqlx.NamedStmt
 	deleteAccessMenu  *sqlx.NamedStmt
+	countAdmin        *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
@@ -43,6 +44,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 		insertAccessMenu:  datasources.PrepareNamed(dbWriter, insertAccessMenu),
 		updateAdmin:       datasources.PrepareNamed(dbWriter, updateAdmin),
 		deleteAccessMenu:  datasources.PrepareNamed(dbWriter, deleteAccessMenu),
+		countAdmin:        datasources.Prepare(dbReader, countAdmin),
 	}
 
 	r := Repository{
@@ -194,6 +196,15 @@ func (r Repository) UpdateAdmin(adminId string, params entities.RequestAdmin) (e
 		if err != nil {
 			log.Println("error while update insert menu admin ", err)
 		}
+	}
+
+	return
+}
+
+func (r Repository) CountAdmin(adminId string) (total int64, err error) {
+	err = r.stmt.countAdmin.Get(&total, adminId)
+	if err != nil {
+		log.Println("error while count admin ", err)
 	}
 
 	return

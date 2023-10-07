@@ -86,3 +86,13 @@ func (s Service) UpdateAdmin(adminId string, params entities.RequestAdmin) (err 
 
 	return
 }
+
+func (s Service) IsAdminExist(adminId string) bool {
+	total, _ := s.repo.CountAdmin(adminId)
+
+	if total > 0 {
+		return true
+	}
+
+	return false
+}

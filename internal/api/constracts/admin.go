@@ -12,6 +12,7 @@ type AdminRepository interface {
 	CountPhoneNumber(phoneNumber string) (total int64, err error)
 	InsertAdmin(params entities.RequestAdmin) (err error)
 	UpdateAdmin(adminId string, params entities.RequestAdmin) (err error)
+	CountAdmin(adminId string) (total int64, err error)
 }
 
 type AdminService interface {
@@ -24,4 +25,5 @@ type AdminService interface {
 	IsPhoneNumberExist(phoneNumber string) bool
 	InsertAdmin(params entities.RequestAdmin) (err error)
 	UpdateAdmin(adminId string, params entities.RequestAdmin) (err error)
+	IsAdminExist(adminId string) bool
 }

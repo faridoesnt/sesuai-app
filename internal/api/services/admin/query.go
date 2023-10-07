@@ -93,4 +93,13 @@ const (
 	deleteAccessMenu = `
 		DELETE FROM access WHERE id_admin = :id_admin
 	`
+
+	countAdmin = `
+		SELECT
+			count(id_admin) as total
+		FROM
+		    admin
+		WHERE
+		    id_admin = ?
+	`
 )
