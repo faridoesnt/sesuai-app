@@ -4,7 +4,6 @@ import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/datasources"
 	"Sesuai/internal/api/entities"
-	"fmt"
 	"github.com/jmoiron/sqlx"
 	"log"
 )
@@ -16,16 +15,18 @@ type Repository struct {
 }
 
 type Statement struct {
-	findQuestion   *sqlx.Stmt
-	insertQuestion *sqlx.NamedStmt
-	deleteQuestion *sqlx.Stmt
+	findQuestionsByCategoryId *sqlx.Stmt
+	findQuestion              *sqlx.Stmt
+	insertQuestion            *sqlx.NamedStmt
+	deleteQuestion            *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionRepository {
 	stmts := Statement{
-		findQuestion:   datasources.Prepare(dbReader, findQuestion),
-		insertQuestion: datasources.PrepareNamed(dbWriter, insertQuestion),
-		deleteQuestion: datasources.Prepare(dbWriter, deleteQuestion),
+		findQuestionsByCategoryId: datasources.Prepare(dbReader, findQuestionsByCategoryId),
+		findQuestion:              datasources.Prepare(dbReader, findQuestion),
+		insertQuestion:            datasources.PrepareNamed(dbWriter, insertQuestion),
+		deleteQuestion:            datasources.Prepare(dbWriter, deleteQuestion),
 	}
 
 	r := Repository{
@@ -37,29 +38,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionRep
 	return &r
 }
 
-func (r Repository) FindQuestions(category string) (questions []entities.Question, err error) {
-	query := `
-		SELECT
-			q.id_question,
-			c.id_category,
-			c.name as category,
-			c.photo,
-			q.question_ina,
-			q.question_eng
-		FROM
-		    question q
-		LEFT JOIN category c
-			ON q.id_category = c.id_category
-	`
-
-	if category != "" {
-		categoryLike := fmt.Sprintf("'%s%%'", category)
-		query += fmt.Sprintf(`
-			WHERE c.name LIKE %s
-		`, categoryLike)
-	}
-
-	err = r.dbReader.Select(&questions, query)
+func (r Repository) FindQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error) {
+	err = r.stmt.findQuestionsByCategoryId.Select(&questions, categoryId)
 	if err != nil {
 		log.Println("error while find questions ", err)
 	}

@@ -21,8 +21,8 @@ func Init(a *constracts.App) (svc constracts.QuestionService) {
 	return
 }
 
-func (s Service) GetQuestions(category string) (questions []entities.Question) {
-	questions, _ = s.repo.FindQuestions(category)
+func (s Service) GetQuestionsByCategoryId(categoryId string) (questions []entities.Question) {
+	questions, _ = s.repo.FindQuestionsByCategoryId(categoryId)
 
 	return
 }

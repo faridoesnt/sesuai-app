@@ -4,54 +4,73 @@ import (
 	"Sesuai/internal/api/constants"
 	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/helpers"
+	"Sesuai/internal/api/models/response"
 	"Sesuai/pkg/ahttp"
-	"Sesuai/pkg/autils"
 	"errors"
+	"fmt"
 	"github.com/kataras/iris/v12"
 )
+
+type QuestionList struct {
+	QuestionId  string `json:"question_id"`
+	QuestionIna string `json:"question_ina"`
+	QuestionEng string `json:"question_eng"`
+}
+
+type ResponseQuestions struct {
+	ElementName  string         `json:"element_name"`
+	ElementImage string         `json:"element_image"`
+	QuestionList []QuestionList `json:"question_list"`
+}
 
 func GetQuestions(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	category := c.FormValue("category")
+	categoryId := c.FormValue("element_id")
+
+	categories := []response.Category{}
+	result := []ResponseQuestions{}
+
+	if categoryId == "" {
+		categories = app.Services.Category.GetCategory()
+	} else {
+		category := app.Services.Category.GetCategoryDetail(categoryId)
+
+		categories = append(categories, response.Category{
+			Id:    category.Id,
+			Name:  category.Name,
+			Photo: category.Photo,
+		})
+	}
+
+	if len(categories) == 0 {
+		HttpError(c, headers, fmt.Errorf("no category found"), ahttp.ErrFailure("no_category_found"))
+		return
+	}
+
+	for _, category := range categories {
+		questions := app.Services.Question.GetQuestionsByCategoryId(category.Id)
+		questionList := []QuestionList{}
+
+		for _, question := range questions {
+			questionList = append(questionList, QuestionList{
+				QuestionId:  question.Id,
+				QuestionIna: question.QuestionIna,
+				QuestionEng: question.QuestionEn,
+			})
+		}
+
+		result = append(result, ResponseQuestions{
+			ElementName:  category.Name,
+			ElementImage: category.Photo,
+			QuestionList: questionList,
+		})
+	}
 
 	data := make(map[string]interface{})
-
-	setCategoryData := func(category string) {
-
-		questions := app.Services.Question.GetQuestions(category)
-
-		if len(questions) > 0 {
-			categoryData := make([]map[string]interface{}, len(questions))
-			for i, question := range questions {
-				categoryData[i] = map[string]interface{}{
-					"id":           question.Id,
-					"question_ina": question.QuestionIna,
-					"question_eng": question.QuestionEn,
-				}
-			}
-
-			result := map[string]interface{}{
-				"photo": questions[0].Photo,
-				"data":  categoryData,
-			}
-
-			data[autils.UncapitalizedInitialLetter(category)] = result
-		}
-	}
-
-	if category == "" {
-		allCategories := app.Services.Category.GetCategory()
-
-		for _, category := range allCategories {
-			setCategoryData(category.Name)
-		}
-	} else {
-		setCategoryData(category)
-	}
+	data["questions"] = result
 
 	HttpSuccess(c, headers, data)
-	return
 }
 
 func GetQuestion(c iris.Context) {
