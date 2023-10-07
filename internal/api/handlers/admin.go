@@ -140,3 +140,63 @@ func SaveAdmin(c iris.Context) {
 	HttpSuccess(c, headers, nil)
 	return
 }
+
+func UpdateAdmin(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	adminId := c.Params().GetString("adminId")
+
+	params := entities.RequestAdmin{}
+
+	err := c.ReadJSON(&params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if params.FullName == "" {
+		HttpError(c, headers, fmt.Errorf("Full Name empty"), ahttp.ErrFailure("full_name_empty"))
+		return
+	}
+
+	if params.Email == "" {
+		HttpError(c, headers, fmt.Errorf("Email empty"), ahttp.ErrFailure("email_empty"))
+		return
+	}
+
+	if params.PhoneNumber == "" {
+		HttpError(c, headers, fmt.Errorf("Phone Number empty"), ahttp.ErrFailure("phone_number_empty"))
+		return
+	}
+
+	admin, err := app.Services.Admin.GetAdminById(adminId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if admin.PhoneNumber != params.PhoneNumber {
+		phoneNumberExist := app.Services.Admin.IsPhoneNumberExist(params.PhoneNumber)
+		if phoneNumberExist {
+			HttpError(c, headers, fmt.Errorf("Phone number already registered"), ahttp.ErrFailure("phone_number_already_registered"))
+			return
+		}
+	}
+
+	if admin.Email != params.Email {
+		emailExist := app.Services.Admin.IsEmailExist(params.Email)
+		if emailExist {
+			HttpError(c, headers, fmt.Errorf("Email already registered"), ahttp.ErrFailure("email_already_registered"))
+			return
+		}
+	}
+
+	err = app.Services.Admin.UpdateAdmin(adminId, params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
+	return
+}
