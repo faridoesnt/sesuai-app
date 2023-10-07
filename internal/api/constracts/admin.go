@@ -9,6 +9,7 @@ type AdminRepository interface {
 	FindAdminLoggedIn(adminId, token string) (admin entities.Admin, err error)
 	CountEmail(email string) (total int64, err error)
 	CountPhoneNumber(phoneNumber string) (total int64, err error)
+	InsertAdmin(params entities.RequestAdmin) (err error)
 }
 
 type AdminService interface {
@@ -18,4 +19,5 @@ type AdminService interface {
 	GetAdminLoggedIn(adminId, token string) (admin entities.Admin, err error)
 	IsEmailExist(email string) bool
 	IsPhoneNumberExist(phoneNumber string) bool
+	InsertAdmin(params entities.RequestAdmin) (err error)
 }

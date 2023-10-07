@@ -58,4 +58,18 @@ const (
 		WHERE
 		    phone_number = ?
 	`
+
+	insertAdmin = `
+		INSERT INTO admin 
+		    (fullname, email, password, phone_number, is_super_admin)
+		VALUES
+		    (:fullname, :email, :password, :phone_number, :is_super_admin)
+	`
+
+	insertAccessMenu = `
+		INSERT INTO access
+			(id_menu, id_admin, status)
+		VALUES
+		    (:id_menu, :id_admin, :status)
+	`
 )

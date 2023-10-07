@@ -68,3 +68,9 @@ func (s Service) IsPhoneNumberExist(phoneNumber string) bool {
 
 	return false
 }
+
+func (s Service) InsertAdmin(params entities.RequestAdmin) (err error) {
+	err = s.repo.InsertAdmin(params)
+
+	return
+}
