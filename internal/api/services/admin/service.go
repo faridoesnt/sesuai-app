@@ -21,6 +21,16 @@ func Init(a *constracts.App) (svc constracts.AdminService) {
 	return
 }
 
+func (s Service) GetAdmins() (admins []entities.AdminList, err error) {
+	admins, err = s.repo.FindAdmins()
+
+	if len(admins) == 0 {
+		return []entities.AdminList{}, err
+	}
+
+	return
+}
+
 func (s Service) GetAdminByEmail(email string) (admin entities.Admin, err error) {
 	admin, err = s.repo.FindAdminByEmail(email)
 

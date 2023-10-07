@@ -15,6 +15,7 @@ type Repository struct {
 }
 
 type Statement struct {
+	findAdmins        *sqlx.Stmt
 	findAdminByEmail  *sqlx.Stmt
 	refreshToken      *sqlx.Stmt
 	findAdminLoggedIn *sqlx.Stmt
@@ -22,6 +23,7 @@ type Statement struct {
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
 	stmts := Statement{
+		findAdmins:        datasources.Prepare(dbReader, findAdmins),
 		findAdminByEmail:  datasources.Prepare(dbReader, findAdminByEmail),
 		refreshToken:      datasources.Prepare(dbWriter, refreshToken),
 		findAdminLoggedIn: datasources.Prepare(dbReader, findAdminLoggedIn),
@@ -34,6 +36,15 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 	}
 
 	return &r
+}
+
+func (r Repository) FindAdmins() (admins []entities.AdminList, err error) {
+	err = r.stmt.findAdmins.Select(&admins)
+	if err != nil {
+		log.Println("error while find admins ", err)
+	}
+
+	return
 }
 
 func (r Repository) FindAdminByEmail(email string) (admin entities.Admin, err error) {
