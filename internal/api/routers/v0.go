@@ -61,6 +61,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Get("/point-answer", middlewares.Auth, handlers.GetPointAnswer)
 		v1.Put("/point-answer", middlewares.Auth, handlers.UpdatePointAnswer)
 
+		// admin list
 		v1.Get("/admins", middlewares.Auth, handlers.GetAdmins)
+		v1.Post("/admins", middlewares.Auth, handlers.SaveAdmin)
 	}
 }

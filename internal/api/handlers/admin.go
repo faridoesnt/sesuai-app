@@ -6,6 +6,7 @@ import (
 	"Sesuai/pkg/ahttp"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetAdmins(c iris.Context) {
@@ -42,5 +43,66 @@ func GetAdmins(c iris.Context) {
 	data["admin_list"] = admins
 
 	HttpSuccess(c, headers, data)
+	return
+}
+
+func SaveAdmin(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	params := entities.RequestAdmin{}
+
+	err := c.ReadJSON(&params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if params.FullName == "" {
+		HttpError(c, headers, fmt.Errorf("Full Name empty"), ahttp.ErrFailure("full_name_empty"))
+		return
+	}
+
+	if params.Email == "" {
+		HttpError(c, headers, fmt.Errorf("Email empty"), ahttp.ErrFailure("email_empty"))
+		return
+	}
+
+	if params.Password == "" {
+		HttpError(c, headers, fmt.Errorf("Password empty"), ahttp.ErrFailure("password_empty"))
+		return
+	}
+
+	if params.PhoneNumber == "" {
+		HttpError(c, headers, fmt.Errorf("Phone Number empty"), ahttp.ErrFailure("phone_number_empty"))
+		return
+	}
+
+	phoneNumberExist := app.Services.Admin.IsPhoneNumberExist(params.PhoneNumber)
+	if phoneNumberExist {
+		HttpError(c, headers, fmt.Errorf("Phone number already registered"), ahttp.ErrFailure("phone_number_already_registered"))
+		return
+	}
+
+	emailExist := app.Services.Admin.IsEmailExist(params.Email)
+	if emailExist {
+		HttpError(c, headers, fmt.Errorf("Email already registered"), ahttp.ErrFailure("email_already_registered"))
+		return
+	}
+
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(params.Password), 16)
+	if err != nil {
+		HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	params.Password = string(hashPassword)
+
+	err = app.Services.Admin.InsertAdmin(params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
 	return
 }
