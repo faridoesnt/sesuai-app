@@ -8,6 +8,7 @@ const (
 				    IFNULL(photo, "") as photo
 				FROM 
 				    category
+				ORDER BY name ASC
 	`
 
 	findCategoryById = `
