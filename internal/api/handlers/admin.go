@@ -25,17 +25,10 @@ func GetAdmins(c iris.Context) {
 			return
 		}
 
-		admins[index].AccessMenu = []entities.AccessMenu{}
+		admins[index].AccessMenu = []string{}
 
 		if len(accessMenu) > 0 {
-			for _, val := range accessMenu {
-				admins[index].AccessMenu = append(admins[index].AccessMenu, entities.AccessMenu{
-					AccessId: val.AccessId,
-					MenuId:   val.MenuId,
-					MenuName: val.MenuName,
-					Status:   val.Status,
-				})
-			}
+			admins[index].AccessMenu = accessMenu
 		}
 	}
 
@@ -63,17 +56,10 @@ func GetAdmin(c iris.Context) {
 		return
 	}
 
-	admin.AccessMenu = []entities.AccessMenu{}
+	admin.AccessMenu = []string{}
 
 	if len(accessMenu) > 0 {
-		for _, val := range accessMenu {
-			admin.AccessMenu = append(admin.AccessMenu, entities.AccessMenu{
-				AccessId: val.AccessId,
-				MenuId:   val.MenuId,
-				MenuName: val.MenuName,
-				Status:   val.Status,
-			})
-		}
+		admin.AccessMenu = accessMenu
 	}
 
 	HttpSuccess(c, headers, admin)
