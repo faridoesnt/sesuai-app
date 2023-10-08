@@ -7,5 +7,5 @@ type AccessMenuRepository interface {
 }
 
 type AccessMenuService interface {
-	GetAccessMenuByAdminId(adminId string) (accessMenus []entities.AccessMenu, err error)
+	GetAccessMenuByAdminId(adminId string) (accessMenus []string, err error)
 }

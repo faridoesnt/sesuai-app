@@ -3,10 +3,7 @@ package accessMenu
 const (
 	findAccessMenuByAdminId = `
 		SELECT
-			a.id_access as access_id,
-			a.id_menu as menu_id,
-			m.menu as menu_name,
-			a.status
+			m.menu as menu_name
 		FROM
 		    access as a
 		LEFT JOIN menu as m

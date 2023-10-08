@@ -1,8 +1,8 @@
 package accessMenu
 
 import (
+	"Sesuai/internal/api/constants"
 	"Sesuai/internal/api/constracts"
-	"Sesuai/internal/api/entities"
 )
 
 type Service struct {
@@ -21,8 +21,30 @@ func Init(a *constracts.App) (svc constracts.AccessMenuService) {
 	return
 }
 
-func (s Service) GetAccessMenuByAdminId(adminId string) (accessMenus []entities.AccessMenu, err error) {
-	accessMenus, err = s.repo.FindAccessMenuByAdminId(adminId)
+func (s Service) GetAccessMenuByAdminId(adminId string) (accessMenus []string, err error) {
+	menus, err := s.repo.FindAccessMenuByAdminId(adminId)
+
+	if len(menus) > 0 {
+		for _, menu := range menus {
+			var result string
+
+			switch menu.MenuName {
+			case constants.GenerateToken:
+				result = constants.EnumGenerateToken
+			case constants.Element:
+				result = constants.EnumElement
+			case constants.QuestionList:
+				result = constants.EnumQuestionList
+			case constants.Submition:
+				result = constants.EnumSubmition
+			case constants.PointAnswer:
+				result = constants.EnumPointAnswer
+			case constants.AdminList:
+				result = constants.EnumAdminList
+			}
+			accessMenus = append(accessMenus, result)
+		}
+	}
 
 	return
 }
