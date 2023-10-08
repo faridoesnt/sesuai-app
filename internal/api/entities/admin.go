@@ -8,11 +8,11 @@ type Admin struct {
 }
 
 type AdminList struct {
-	AdminId     string       `db:"admin_id" json:"admin_id"`
-	FullName    string       `db:"full_name" json:"full_name"`
-	Email       string       `db:"email" json:"email"`
-	PhoneNumber string       `db:"phone_number" json:"phone_number"`
-	AccessMenu  []AccessMenu `json:"access_menu"`
+	AdminId     string   `db:"admin_id" json:"admin_id"`
+	FullName    string   `db:"full_name" json:"full_name"`
+	Email       string   `db:"email" json:"email"`
+	PhoneNumber string   `db:"phone_number" json:"phone_number"`
+	AccessMenu  []string `json:"access_menu"`
 }
 
 type RequestAdmin struct {
