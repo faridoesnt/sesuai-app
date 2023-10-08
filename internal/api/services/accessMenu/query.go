@@ -3,7 +3,7 @@ package accessMenu
 const (
 	findAccessMenuByAdminId = `
 		SELECT
-			m.menu as menu_name
+			IFNULL(m.menu, "") as menu_name
 		FROM
 		    access as a
 		LEFT JOIN menu as m

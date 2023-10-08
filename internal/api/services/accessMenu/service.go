@@ -26,23 +26,25 @@ func (s Service) GetAccessMenuByAdminId(adminId string) (accessMenus []string, e
 
 	if len(menus) > 0 {
 		for _, menu := range menus {
-			var result string
+			if menu.MenuName != "" {
+				var result string
 
-			switch menu.MenuName {
-			case constants.GenerateToken:
-				result = constants.EnumGenerateToken
-			case constants.Element:
-				result = constants.EnumElement
-			case constants.QuestionList:
-				result = constants.EnumQuestionList
-			case constants.Submition:
-				result = constants.EnumSubmition
-			case constants.PointAnswer:
-				result = constants.EnumPointAnswer
-			case constants.AdminList:
-				result = constants.EnumAdminList
+				switch menu.MenuName {
+				case constants.GenerateToken:
+					result = constants.EnumGenerateToken
+				case constants.Element:
+					result = constants.EnumElement
+				case constants.QuestionList:
+					result = constants.EnumQuestionList
+				case constants.Submition:
+					result = constants.EnumSubmition
+				case constants.PointAnswer:
+					result = constants.EnumPointAnswer
+				case constants.AdminList:
+					result = constants.EnumAdminList
+				}
+				accessMenus = append(accessMenus, result)
 			}
-			accessMenus = append(accessMenus, result)
 		}
 	}
 
