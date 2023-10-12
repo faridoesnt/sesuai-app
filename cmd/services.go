@@ -10,6 +10,7 @@ import (
 	"Sesuai/internal/api/services/generateToken"
 	"Sesuai/internal/api/services/horoscope"
 	"Sesuai/internal/api/services/horoscopePoint"
+	"Sesuai/internal/api/services/menu"
 	"Sesuai/internal/api/services/pointAnswer"
 	"Sesuai/internal/api/services/question"
 	"Sesuai/internal/api/services/shio"
@@ -35,6 +36,7 @@ func InitServices() {
 		HoroscopePoint: horoscopePoint.Init(app),
 		PointAnswer:    pointAnswer.Init(app),
 		AccessMenu:     accessMenu.Init(app),
+		Menu:           menu.Init(app),
 	}
 
 	alog.Logger.Printf("Initializing Services: Pass")

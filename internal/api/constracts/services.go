@@ -15,4 +15,5 @@ type Services struct {
 	HoroscopePoint HoroscopePointService
 	PointAnswer    PointAnswerService
 	AccessMenu     AccessMenuService
+	Menu           MenuService
 }
