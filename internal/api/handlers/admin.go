@@ -182,6 +182,8 @@ func SaveAdmin(c iris.Context) {
 func UpdateAdmin(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
+	var accessId []string
+
 	adminId := c.Params().GetString("adminId")
 
 	if adminId == "" {
@@ -239,6 +241,55 @@ func UpdateAdmin(c iris.Context) {
 			return
 		}
 	}
+
+	if len(params.Access) > 0 {
+		for _, val := range params.Access {
+			var id string
+
+			switch val {
+			case constants.EnumGenerateToken:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.GenerateToken)
+				if err != nil {
+					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
+					return
+				}
+			case constants.EnumAdminList:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.AdminList)
+				if err != nil {
+					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
+					return
+				}
+			case constants.EnumQuestionList:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.QuestionList)
+				if err != nil {
+					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
+					return
+				}
+			case constants.EnumSubmition:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.Submition)
+				if err != nil {
+					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
+					return
+				}
+			case constants.EnumElement:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.Element)
+				if err != nil {
+					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
+					return
+				}
+			case constants.EnumPointAnswer:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.PointAnswer)
+				if err != nil {
+					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
+					return
+				}
+			}
+
+			accessId = append(accessId, id)
+		}
+	}
+
+	params.Access = accessId
 
 	err = app.Services.Admin.UpdateAdmin(adminId, params)
 	if err != nil {
