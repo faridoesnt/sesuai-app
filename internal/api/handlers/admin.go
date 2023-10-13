@@ -155,8 +155,8 @@ func SaveAdmin(c iris.Context) {
 					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
 					return
 				}
-			case constants.EnumPointAnswer:
-				id, err = app.Services.Menu.GetMenuIdByName(constants.PointAnswer)
+			case constants.EnumPoint:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.Point)
 				if err != nil {
 					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
 					return
@@ -277,8 +277,8 @@ func UpdateAdmin(c iris.Context) {
 					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
 					return
 				}
-			case constants.EnumPointAnswer:
-				id, err = app.Services.Menu.GetMenuIdByName(constants.PointAnswer)
+			case constants.EnumPoint:
+				id, err = app.Services.Menu.GetMenuIdByName(constants.Point)
 				if err != nil {
 					HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrBadRequest)
 					return

@@ -38,8 +38,8 @@ func (s Service) GetAccessMenuByAdminId(adminId string) (accessMenus []string, e
 					result = constants.EnumQuestionList
 				case constants.Submition:
 					result = constants.EnumSubmition
-				case constants.PointAnswer:
-					result = constants.EnumPointAnswer
+				case constants.Point:
+					result = constants.EnumPoint
 				case constants.AdminList:
 					result = constants.EnumAdminList
 				}

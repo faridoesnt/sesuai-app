@@ -5,7 +5,7 @@ const (
 	Element       = "Element"
 	QuestionList  = "Question List"
 	Submition     = "Submition"
-	PointAnswer   = "Point Answer"
+	Point         = "Point Answer"
 	AdminList     = "Admin List"
 )
 
@@ -14,6 +14,6 @@ const (
 	EnumElement       = "element"
 	EnumQuestionList  = "question_list"
 	EnumSubmition     = "submition"
-	EnumPointAnswer   = "point_answer"
+	EnumPoint         = "point"
 	EnumAdminList     = "admin_list"
 )
