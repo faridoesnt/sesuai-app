@@ -15,20 +15,22 @@ type Repository struct {
 }
 
 type Statement struct {
-	findQuestionsByCategoryId *sqlx.Stmt
-	findQuestion              *sqlx.Stmt
-	insertQuestion            *sqlx.NamedStmt
-	updateQuestion            *sqlx.NamedStmt
-	deleteQuestion            *sqlx.Stmt
+	findQuestionsByCategoryId    *sqlx.Stmt
+	findAllQuestionsByCategoryId *sqlx.Stmt
+	findQuestion                 *sqlx.Stmt
+	insertQuestion               *sqlx.NamedStmt
+	updateQuestion               *sqlx.NamedStmt
+	deleteQuestion               *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionRepository {
 	stmts := Statement{
-		findQuestionsByCategoryId: datasources.Prepare(dbReader, findQuestionsByCategoryId),
-		findQuestion:              datasources.Prepare(dbReader, findQuestion),
-		insertQuestion:            datasources.PrepareNamed(dbWriter, insertQuestion),
-		updateQuestion:            datasources.PrepareNamed(dbWriter, updateQuestion),
-		deleteQuestion:            datasources.Prepare(dbWriter, deleteQuestion),
+		findQuestionsByCategoryId:    datasources.Prepare(dbReader, findQuestionsByCategoryId),
+		findAllQuestionsByCategoryId: datasources.Prepare(dbReader, findAllQuestionsByCategoryId),
+		findQuestion:                 datasources.Prepare(dbReader, findQuestion),
+		insertQuestion:               datasources.PrepareNamed(dbWriter, insertQuestion),
+		updateQuestion:               datasources.PrepareNamed(dbWriter, updateQuestion),
+		deleteQuestion:               datasources.Prepare(dbWriter, deleteQuestion),
 	}
 
 	r := Repository{
@@ -44,6 +46,15 @@ func (r Repository) FindQuestionsByCategoryId(categoryId string) (questions []en
 	err = r.stmt.findQuestionsByCategoryId.Select(&questions, categoryId)
 	if err != nil {
 		log.Println("error while find questions ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindAllQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error) {
+	err = r.stmt.findAllQuestionsByCategoryId.Select(&questions, categoryId)
+	if err != nil {
+		log.Println("error while find all questions by category id ", err)
 	}
 
 	return

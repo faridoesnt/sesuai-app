@@ -27,6 +27,12 @@ func (s Service) GetQuestionsByCategoryId(categoryId string) (questions []entiti
 	return
 }
 
+func (s Service) GetAllQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error) {
+	questions, err = s.repo.FindAllQuestionsByCategoryId(categoryId)
+
+	return
+}
+
 func (s Service) GetQuestion(categoryId string) (question entities.Question) {
 	question, _ = s.repo.FindQuestion(categoryId)
 
