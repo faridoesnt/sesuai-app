@@ -15,6 +15,7 @@ const (
 			ON q.id_category = c.id_category
 		WHERE
 		    c.id_category = ?
+		ORDER BY q.created_at DESC
 	`
 
 	findQuestion = `
