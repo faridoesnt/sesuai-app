@@ -36,6 +36,7 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// question
 		v1.Get("/question", middlewares.Auth, handlers.GetQuestions)
+		v1.Get("/question/all/{categoryId}", middlewares.Auth, handlers.GetAllQuestionsByCategoryId)
 		v1.Get("/question/{questionId}", middlewares.Auth, handlers.GetQuestion)
 		v1.Post("/question", middlewares.Auth, handlers.SaveQuestion)
 		v1.Put("/question/{questionId}", middlewares.Auth, handlers.UpdateQuestion)

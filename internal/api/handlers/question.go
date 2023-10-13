@@ -75,6 +75,52 @@ func GetQuestions(c iris.Context) {
 	HttpSuccess(c, headers, data)
 }
 
+func GetAllQuestionsByCategoryId(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	categoryId := c.Params().GetString("categoryId")
+
+	if categoryId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Category Id Is Empty"}, ahttp.ErrFailure("category_id_is_empty"))
+		return
+	}
+
+	category := app.Services.Category.GetCategoryDetail(categoryId)
+	result := []ResponseQuestions{}
+
+	questions, err := app.Services.Question.GetAllQuestionsByCategoryId(categoryId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	questionList := []QuestionList{}
+
+	if len(questions) > 0 {
+		for _, question := range questions {
+			questionList = append(questionList, QuestionList{
+				QuestionId:  question.Id,
+				QuestionIna: question.QuestionIna,
+				QuestionEng: question.QuestionEn,
+			})
+		}
+
+		result = append(result, ResponseQuestions{
+			ElementName:  category.Name,
+			ElementImage: category.Photo,
+			QuestionList: questionList,
+		})
+	} else {
+		HttpError(c, headers, fmt.Errorf("No Questions Found"), ahttp.ErrFailure("no_questions_found"))
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["questions"] = result
+
+	HttpSuccess(c, headers, data)
+}
+
 func GetQuestion(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
