@@ -36,15 +36,17 @@ func GetQuestions(c iris.Context) {
 	} else {
 		category := app.Services.Category.GetCategoryDetail(categoryId)
 
-		categories = append(categories, response.Category{
-			Id:    category.Id,
-			Name:  category.Name,
-			Photo: category.Photo,
-		})
+		if category.Id != "" {
+			categories = append(categories, response.Category{
+				Id:    category.Id,
+				Name:  category.Name,
+				Photo: category.Photo,
+			})
+		}
 	}
 
 	if len(categories) == 0 {
-		HttpError(c, headers, fmt.Errorf("no category found"), ahttp.ErrFailure("no_category_found"))
+		HttpError(c, headers, fmt.Errorf("Element Not Found"), ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
@@ -81,7 +83,12 @@ func GetAllQuestionsByCategoryId(c iris.Context) {
 	categoryId := c.Params().GetString("categoryId")
 
 	if categoryId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Category Id Is Empty"}, ahttp.ErrFailure("category_id_is_empty"))
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
+		return
+	}
+
+	if existCategory := app.Services.Category.IsExistCategory(categoryId); !existCategory {
+		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
@@ -111,7 +118,7 @@ func GetAllQuestionsByCategoryId(c iris.Context) {
 			QuestionList: questionList,
 		})
 	} else {
-		HttpError(c, headers, fmt.Errorf("No Questions Found"), ahttp.ErrFailure("no_questions_found"))
+		HttpError(c, headers, fmt.Errorf("Questions Not Found"), ahttp.ErrFailure("questions_not_found"))
 		return
 	}
 
@@ -127,13 +134,13 @@ func GetQuestion(c iris.Context) {
 	questionId := c.Params().GetString("questionId")
 
 	if questionId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Question Id Is Empty"}, ahttp.ErrFailure("Question Id Is Empty"))
+		HttpError(c, headers, ahttp.Error{Message: "Question Id Is Empty"}, ahttp.ErrFailure("question_id_is_empty"))
 		return
 	}
 
 	question := app.Services.Question.GetQuestion(questionId)
 	if question.Id == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Question Not Found"}, ahttp.ErrNotFound("Question Not Found"))
+		HttpError(c, headers, ahttp.Error{Message: "Question Not Found"}, ahttp.ErrNotFound("question_not_found"))
 		return
 	}
 
@@ -164,8 +171,13 @@ func SaveQuestion(c iris.Context) {
 
 	params.AdminId = adminId
 
+	if params.CategoryId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
+		return
+	}
+
 	if existCategory := app.Services.Category.IsExistCategory(params.CategoryId); !existCategory {
-		HttpError(c, headers, ahttp.Error{Message: "Category Not Found"}, ahttp.ErrFailure("Category Not Found"))
+		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
@@ -197,12 +209,17 @@ func UpdateQuestion(c iris.Context) {
 	params.AdminId = adminId
 
 	if questionId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Question Id Is Empty"}, ahttp.ErrFailure("question_id_is_empty"))
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
 	if existQuestion := app.Services.Question.IsExistQuestion(questionId); !existQuestion {
 		HttpError(c, headers, ahttp.Error{Message: "Question Not Found"}, ahttp.ErrFailure("question_not_found"))
+		return
+	}
+
+	if params.CategoryId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
@@ -222,12 +239,12 @@ func DeleteQuestion(c iris.Context) {
 	questionId := c.Params().GetString("questionId")
 
 	if questionId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Question Id Is Empty"}, ahttp.ErrFailure("Question Id Is Empty"))
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
 	if existQuestion := app.Services.Question.IsExistQuestion(questionId); !existQuestion {
-		HttpError(c, headers, ahttp.Error{Message: "Question Not Found"}, ahttp.ErrFailure("Question Not Found"))
+		HttpError(c, headers, ahttp.Error{Message: "Question Not Found"}, ahttp.ErrFailure("question_not_found"))
 		return
 	}
 
