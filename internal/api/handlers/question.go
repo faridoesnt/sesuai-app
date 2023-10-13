@@ -52,19 +52,21 @@ func GetQuestions(c iris.Context) {
 		questions := app.Services.Question.GetQuestionsByCategoryId(category.Id)
 		questionList := []QuestionList{}
 
-		for _, question := range questions {
-			questionList = append(questionList, QuestionList{
-				QuestionId:  question.Id,
-				QuestionIna: question.QuestionIna,
-				QuestionEng: question.QuestionEn,
+		if len(questions) > 0 {
+			for _, question := range questions {
+				questionList = append(questionList, QuestionList{
+					QuestionId:  question.Id,
+					QuestionIna: question.QuestionIna,
+					QuestionEng: question.QuestionEn,
+				})
+			}
+
+			result = append(result, ResponseQuestions{
+				ElementName:  category.Name,
+				ElementImage: category.Photo,
+				QuestionList: questionList,
 			})
 		}
-
-		result = append(result, ResponseQuestions{
-			ElementName:  category.Name,
-			ElementImage: category.Photo,
-			QuestionList: questionList,
-		})
 	}
 
 	data := make(map[string]interface{})
