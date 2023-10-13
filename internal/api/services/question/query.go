@@ -16,6 +16,7 @@ const (
 		WHERE
 		    c.id_category = ?
 		ORDER BY q.created_at DESC
+		LIMIT 3
 	`
 
 	findQuestion = `
