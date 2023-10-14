@@ -53,7 +53,7 @@ func UpdateHoroscopePoint(c iris.Context) {
 	}
 
 	if params.ElementId == "" {
-		HttpError(c, headers, fmt.Errorf("element id cant empty"), ahttp.ErrFailure("element	_id_cant_empty"))
+		HttpError(c, headers, fmt.Errorf("element id cant empty"), ahttp.ErrFailure("element_id_cant_empty"))
 		return
 	}
 

@@ -80,7 +80,7 @@ func (r Repository) InsertQuestion(params entities.RequestQuestion) (err error) 
 
 func (r Repository) UpdateQuestion(questionId string, params entities.RequestQuestion) (err error) {
 	data := map[string]interface{}{
-		"id_category":  params.ElementId,
+		"element_id":   params.ElementId,
 		"question_ina": params.QuestionIna,
 		"question_eng": params.QuestionEn,
 		"id_question":  questionId,

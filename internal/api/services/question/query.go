@@ -4,8 +4,8 @@ const (
 	findQuestionsByElementId = `
 		SELECT
 			q.id_question,
-			c.id_category,
-			c.name as category,
+			c.id_category as element_id,
+			c.name as element,
 			c.photo,
 			q.question_ina,
 			q.question_eng
@@ -22,8 +22,8 @@ const (
 	findAllQuestionsByElementId = `
 		SELECT
 			q.id_question,
-			c.id_category,
-			c.name as category,
+			c.id_category as element_id,
+			c.name as element,
 			c.photo,
 			q.question_ina,
 			q.question_eng
@@ -39,8 +39,8 @@ const (
 	findQuestion = `
 		SELECT
 			q.id_question,
-			c.id_category,
-			c.name as category,
+			c.id_category as element_id,
+			c.name as element,
 			c.photo,
 			q.question_ina,
 			q.question_eng
@@ -55,12 +55,12 @@ const (
 		INSERT INTO question (
 		    id_category, question_ina, question_eng, created_by
 		) VALUES (
-		    :id_category, :question_ina, :question_eng, :admin_id
+		    :element_id, :question_ina, :question_eng, :admin_id
 		)
 	`
 
 	updateQuestion = `
-		UPDATE question SET id_category = :id_category, question_ina = :question_ina, question_eng = :question_eng WHERE id_question = :id_question
+		UPDATE question SET id_category = :element_id, question_ina = :question_ina, question_eng = :question_eng WHERE id_question = :id_question
 	`
 
 	deleteQuestion = `
