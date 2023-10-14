@@ -47,7 +47,7 @@ func GetAdmin(c iris.Context) {
 
 	admin, err := app.Services.Admin.GetAdminById(adminId)
 	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		HttpError(c, headers, fmt.Errorf("Admin Not Found"), ahttp.ErrFailure("admin_not_found"))
 		return
 	}
 
