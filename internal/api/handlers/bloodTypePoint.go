@@ -11,9 +11,9 @@ import (
 func GetBloodTypePoint(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categoryId := c.Params().GetString("categoryId")
+	elementId := c.Params().GetString("elementId")
 
-	bloodTypePoint, err := app.Services.BloodTypePoint.GetBloodTypePoint(categoryId)
+	bloodTypePoint, err := app.Services.BloodTypePoint.GetBloodTypePoint(elementId)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return
@@ -51,8 +51,8 @@ func UpdateBloodTypePoint(c iris.Context) {
 		return
 	}
 
-	if params.CategoryId == "" {
-		HttpError(c, headers, fmt.Errorf("category id cant empty"), ahttp.ErrFailure("category_id_cant_empty"))
+	if params.ElementId == "" {
+		HttpError(c, headers, fmt.Errorf("element id cant empty"), ahttp.ErrFailure("element_id_cant_empty"))
 		return
 	}
 

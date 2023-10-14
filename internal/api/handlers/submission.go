@@ -21,7 +21,7 @@ func GetResultSubmission(c iris.Context) {
 	submissionId := c.Params().GetString("submissionId")
 
 	if submissionId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Submission Id Is Empty"}, ahttp.ErrFailure("Submission Id Is Empty"))
+		HttpError(c, headers, ahttp.Error{Message: "Submission Id Is Empty"}, ahttp.ErrFailure("submission_id_is_empty"))
 		return
 	}
 

@@ -1,7 +1,7 @@
 package response
 
-type Category struct {
-	Id    string `json:"id_category"`
+type Element struct {
+	Id    string `json:"element_id"`
 	Name  string `json:"name"`
 	Photo string `json:"photo"`
 }

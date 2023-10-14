@@ -1,12 +1,12 @@
 package entities
 
-type Category struct {
+type Element struct {
 	Id    string `db:"id_category"`
 	Name  string `db:"name"`
 	Photo string `db:"photo"`
 }
 
-type RequestCategory struct {
+type RequestElement struct {
 	Name     string `db:"name" json:"name"`
 	FileName string `db:"photo" json:"filename"`
 	Image    string `db:"-" json:"image"`

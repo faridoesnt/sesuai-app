@@ -21,8 +21,8 @@ func Init(a *constracts.App) (svc constracts.ShioPointService) {
 	return
 }
 
-func (s Service) GetShioPoint(categoryId string) (shioPoint []entities.ShioPoint, err error) {
-	shioPoint, err = s.repo.FindShioPoint(categoryId)
+func (s Service) GetShioPoint(elementId string) (shioPoint []entities.ShioPoint, err error) {
+	shioPoint, err = s.repo.FindShioPoint(elementId)
 
 	return
 }

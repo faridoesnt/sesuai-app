@@ -35,8 +35,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ShioPointRe
 	return &r
 }
 
-func (r Repository) FindShioPoint(categoryId string) (shioPoint []entities.ShioPoint, err error) {
-	err = r.stmt.findShioPoint.Select(&shioPoint, categoryId)
+func (r Repository) FindShioPoint(elementId string) (shioPoint []entities.ShioPoint, err error) {
+	err = r.stmt.findShioPoint.Select(&shioPoint, elementId)
 	if err != nil {
 		log.Println("error while find shio point ", err)
 	}
@@ -56,7 +56,7 @@ func (r Repository) UpdateShioPoint(params entities.RequestShioPoint) (err error
 		data := map[string]interface{}{
 			"point":       params.Point[index],
 			"id_shio":     shioId,
-			"id_category": params.CategoryId,
+			"id_category": params.ElementId,
 		}
 
 		_, err = tx.NamedStmt(r.stmt.updateShioPoint).Exec(data)

@@ -21,8 +21,8 @@ func Init(a *constracts.App) (svc constracts.BloodTypePointService) {
 	return
 }
 
-func (s Service) GetBloodTypePoint(categoryId string) (bloodTypePoint []entities.BloodTypePoint, err error) {
-	bloodTypePoint, err = s.repo.FindBloodTypePoint(categoryId)
+func (s Service) GetBloodTypePoint(elementId string) (bloodTypePoint []entities.BloodTypePoint, err error) {
+	bloodTypePoint, err = s.repo.FindBloodTypePoint(elementId)
 
 	return
 }

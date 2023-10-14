@@ -1,7 +1,7 @@
 package question
 
 const (
-	findQuestionsByCategoryId = `
+	findQuestionsByElementId = `
 		SELECT
 			q.id_question,
 			c.id_category,
@@ -19,7 +19,7 @@ const (
 		LIMIT 3
 	`
 
-	findAllQuestionsByCategoryId = `
+	findAllQuestionsByElementId = `
 		SELECT
 			q.id_question,
 			c.id_category,

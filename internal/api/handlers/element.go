@@ -14,47 +14,47 @@ import (
 	"time"
 )
 
-func GetCategory(c iris.Context) {
+func GetElements(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categories := app.Services.Category.GetCategory()
+	elements := app.Services.Element.GetElements()
 	data := make(map[string]interface{})
-	data["list_category"] = []response.Category{}
+	data["list_element"] = []response.Element{}
 
-	if len(categories) > 0 {
-		data["list_category"] = categories
+	if len(elements) > 0 {
+		data["list_element"] = elements
 	}
 
 	HttpSuccess(c, headers, data)
 	return
 }
 
-func GetCategoryDetail(c iris.Context) {
+func GetElementDetail(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categoryId := c.Params().GetString("categoryId")
+	elementId := c.Params().GetString("elementId")
 
-	if categoryId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Category Id Is Empty"}, ahttp.ErrFailure("Category Id Is Empty"))
+	if elementId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
-	category := app.Services.Category.GetCategoryDetail(categoryId)
-	if category.Id == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Category Not Found"}, ahttp.ErrNotFound("Category Not Found"))
+	element := app.Services.Element.GetElementDetail(elementId)
+	if element.Id == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
-	HttpSuccess(c, headers, category)
+	HttpSuccess(c, headers, element)
 	return
 }
 
-func SaveCategory(c iris.Context) {
+func SaveElement(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	adminId := c.Values().GetString(constants.AuthUserId)
 
-	params := &entities.RequestCategory{}
+	params := &entities.RequestElement{}
 	file := constants.IMAGE_MULTIPART
 	parsed := false
 
@@ -67,10 +67,10 @@ func SaveCategory(c iris.Context) {
 			return
 		}
 	} else {
-		parsed, params = parseSaveCategory(c.FormValues())
+		parsed, params = parseSaveElement(c.FormValues())
 
 		if !parsed {
-			HttpError(c, headers, fmt.Errorf("error parsed params save category"), ahttp.ErrFailure("error_while_parsing_params"))
+			HttpError(c, headers, fmt.Errorf("error parsed params save element"), ahttp.ErrFailure("error_while_parsing_params"))
 			return
 		}
 	}
@@ -101,9 +101,9 @@ func SaveCategory(c iris.Context) {
 		}
 	}
 
-	err := app.Services.Category.InsertCategory(*params)
+	err := app.Services.Element.InsertElement(*params)
 	if err != nil {
-		HttpError(c, headers, errors.New("error insert category"), ahttp.ErrFailure(err.Error()))
+		HttpError(c, headers, errors.New("error insert element"), ahttp.ErrFailure(err.Error()))
 		return
 	}
 
@@ -111,14 +111,14 @@ func SaveCategory(c iris.Context) {
 	return
 }
 
-func UpdateCategory(c iris.Context) {
+func UpdateElement(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	adminId := c.Values().GetString(constants.AuthUserId)
 
-	categoryId := c.Params().GetString("categoryId")
+	elementId := c.Params().GetString("elementId")
 
-	params := &entities.RequestCategory{}
+	params := &entities.RequestElement{}
 	file := constants.IMAGE_MULTIPART
 	parsed := false
 
@@ -131,23 +131,23 @@ func UpdateCategory(c iris.Context) {
 			return
 		}
 	} else {
-		parsed, params = parseSaveCategory(c.FormValues())
+		parsed, params = parseSaveElement(c.FormValues())
 
 		if !parsed {
-			HttpError(c, headers, fmt.Errorf("error parsed params update category"), ahttp.ErrFailure("error_while_parsing_params"))
+			HttpError(c, headers, fmt.Errorf("error parsed params update element"), ahttp.ErrFailure("error_while_parsing_params"))
 			return
 		}
 	}
 
 	params.AdminId = adminId
 
-	if categoryId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Category Id Is Empty"}, ahttp.ErrFailure("Category Id Is Empty"))
+	if elementId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
-	if existCategory := app.Services.Category.IsExistCategory(categoryId); !existCategory {
-		HttpError(c, headers, ahttp.Error{Message: "Category Not Found"}, ahttp.ErrFailure("Category Not Found"))
+	if existElement := app.Services.Element.IsExistElement(elementId); !existElement {
+		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
@@ -175,9 +175,9 @@ func UpdateCategory(c iris.Context) {
 		}
 	}
 
-	err := app.Services.Category.UpdateCategory(categoryId, *params)
+	err := app.Services.Element.UpdateElement(elementId, *params)
 	if err != nil {
-		HttpError(c, headers, ahttp.Error{Message: "error update category"}, ahttp.ErrFailure(err.Error()))
+		HttpError(c, headers, ahttp.Error{Message: "error update element"}, ahttp.ErrFailure(err.Error()))
 		return
 	}
 
@@ -185,24 +185,24 @@ func UpdateCategory(c iris.Context) {
 	return
 }
 
-func DeleteCategory(c iris.Context) {
+func DeleteElement(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categoryId := c.Params().GetString("categoryId")
+	elementId := c.Params().GetString("elementId")
 
-	if categoryId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Category Id Is Empty"}, ahttp.ErrFailure("Category Id Is Empty"))
+	if elementId == "" {
+		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
-	if existCategory := app.Services.Category.IsExistCategory(categoryId); !existCategory {
-		HttpError(c, headers, ahttp.Error{Message: "Category Not Found"}, ahttp.ErrFailure("Category Not Found"))
+	if existElement := app.Services.Element.IsExistElement(elementId); !existElement {
+		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
-	err := app.Services.Category.DeleteCategory(categoryId)
+	err := app.Services.Element.DeleteElement(elementId)
 	if err != nil {
-		HttpError(c, headers, ahttp.Error{Message: "error delete category"}, ahttp.ErrFailure(err.Error()))
+		HttpError(c, headers, ahttp.Error{Message: "error delete element"}, ahttp.ErrFailure(err.Error()))
 		return
 	}
 
@@ -210,9 +210,9 @@ func DeleteCategory(c iris.Context) {
 	return
 }
 
-func parseSaveCategory(values map[string][]string) (parsed bool, params *entities.RequestCategory) {
+func parseSaveElement(values map[string][]string) (parsed bool, params *entities.RequestElement) {
 	parsed = false
-	tmp := &entities.RequestCategory{}
+	tmp := &entities.RequestElement{}
 	params = tmp
 
 	if len(values["name"]) > 0 {

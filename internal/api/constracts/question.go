@@ -4,17 +4,17 @@ import "Sesuai/internal/api/entities"
 
 type QuestionRepository interface {
 	InsertQuestion(params entities.RequestQuestion) (err error)
-	FindQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error)
-	FindAllQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error)
-	FindQuestion(categoryId string) (question entities.Question, err error)
+	FindQuestionsByElementId(elementId string) (questions []entities.Question, err error)
+	FindAllQuestionsByElementId(elementId string) (questions []entities.Question, err error)
+	FindQuestion(elementId string) (question entities.Question, err error)
 	UpdateQuestion(questionId string, params entities.RequestQuestion) (err error)
-	DeleteQuestion(categoryId string) (err error)
+	DeleteQuestion(elementId string) (err error)
 }
 
 type QuestionService interface {
-	GetQuestionsByCategoryId(categoryId string) (questions []entities.Question)
-	GetAllQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error)
-	GetQuestion(categoryId string) (question entities.Question)
+	GetQuestionsByElementId(elementId string) (questions []entities.Question)
+	GetAllQuestionsByElementId(elementId string) (questions []entities.Question, err error)
+	GetQuestion(elementId string) (question entities.Question)
 	InsertQuestion(params entities.RequestQuestion) (err error)
 	IsExistQuestion(questionId string) bool
 	UpdateQuestion(questionId string, params entities.RequestQuestion) (err error)

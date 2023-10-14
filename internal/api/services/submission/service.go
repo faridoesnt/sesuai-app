@@ -48,9 +48,9 @@ func (s Service) GetResultSubmission(submissionId string) (resultSubmission []re
 	if len(resultSubmission) > 0 {
 		for _, result := range results {
 			resultSubmission = append(resultSubmission, response.ResultSubmission{
-				CategoryId:   result.CategoryId,
-				CategoryName: result.CategoryName,
-				Point:        result.Point,
+				ElementId:   result.ElementId,
+				ElementName: result.ElementName,
+				Point:       result.Point,
 			})
 		}
 	} else {

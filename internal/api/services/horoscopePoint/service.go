@@ -22,14 +22,14 @@ func Init(a *constracts.App) (svc constracts.HoroscopePointService) {
 	return
 }
 
-func (s Service) GetHoroscopePoint(categoryId string) (horoscopePoint []response.HoroscopePoint, err error) {
-	horoscopesPoint, err := s.repo.FindHoroscopePoint(categoryId)
+func (s Service) GetHoroscopePoint(elementId string) (horoscopePoint []response.HoroscopePoint, err error) {
+	horoscopesPoint, err := s.repo.FindHoroscopePoint(elementId)
 
 	if len(horoscopesPoint) > 0 {
 		for _, horoscope := range horoscopesPoint {
 			horoscopePoint = append(horoscopePoint, response.HoroscopePoint{
 				HoroscopeId:   horoscope.HoroscopeId,
-				CategoryId:    horoscope.CategoryId,
+				ElementId:     horoscope.ElementId,
 				HoroscopeName: horoscope.HoroscopeName,
 				Point:         horoscope.Point,
 			})

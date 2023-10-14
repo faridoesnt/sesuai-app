@@ -21,20 +21,20 @@ func Init(a *constracts.App) (svc constracts.QuestionService) {
 	return
 }
 
-func (s Service) GetQuestionsByCategoryId(categoryId string) (questions []entities.Question) {
-	questions, _ = s.repo.FindQuestionsByCategoryId(categoryId)
+func (s Service) GetQuestionsByElementId(elementId string) (questions []entities.Question) {
+	questions, _ = s.repo.FindQuestionsByElementId(elementId)
 
 	return
 }
 
-func (s Service) GetAllQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error) {
-	questions, err = s.repo.FindAllQuestionsByCategoryId(categoryId)
+func (s Service) GetAllQuestionsByElementId(elementId string) (questions []entities.Question, err error) {
+	questions, err = s.repo.FindAllQuestionsByElementId(elementId)
 
 	return
 }
 
-func (s Service) GetQuestion(categoryId string) (question entities.Question) {
-	question, _ = s.repo.FindQuestion(categoryId)
+func (s Service) GetQuestion(elementId string) (question entities.Question) {
+	question, _ = s.repo.FindQuestion(elementId)
 
 	return
 }

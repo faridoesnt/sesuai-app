@@ -1,4 +1,4 @@
-package category
+package element
 
 import (
 	"Sesuai/internal/api/constracts"
@@ -21,23 +21,23 @@ type Repository struct {
 }
 
 type Statement struct {
-	findCategory         *sqlx.Stmt
-	findCategoryById     *sqlx.Stmt
-	insertCategory       *sqlx.NamedStmt
-	updateCategory       *sqlx.Stmt
-	deleteCategory       *sqlx.Stmt
+	findElements         *sqlx.Stmt
+	findElementById      *sqlx.Stmt
+	insertElement        *sqlx.NamedStmt
+	updateElement        *sqlx.Stmt
+	deleteElement        *sqlx.Stmt
 	insertShioPoint      *sqlx.NamedStmt
 	insertHoroscopePoint *sqlx.NamedStmt
 	insertBloodTypePoint *sqlx.NamedStmt
 }
 
-func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.CategoryRepository {
+func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ElementRepository {
 	stmts := Statement{
-		findCategory:         datasources.Prepare(dbReader, findCategory),
-		findCategoryById:     datasources.Prepare(dbReader, findCategoryById),
-		insertCategory:       datasources.PrepareNamed(dbWriter, insertCategory),
-		updateCategory:       datasources.Prepare(dbWriter, updateCategory),
-		deleteCategory:       datasources.Prepare(dbWriter, deleteCategory),
+		findElements:         datasources.Prepare(dbReader, findElements),
+		findElementById:      datasources.Prepare(dbReader, findElementById),
+		insertElement:        datasources.PrepareNamed(dbWriter, insertElement),
+		updateElement:        datasources.Prepare(dbWriter, updateElement),
+		deleteElement:        datasources.Prepare(dbWriter, deleteElement),
 		insertShioPoint:      datasources.PrepareNamed(dbWriter, insertShioPoint),
 		insertHoroscopePoint: datasources.PrepareNamed(dbWriter, insertHoroscopePoint),
 		insertBloodTypePoint: datasources.PrepareNamed(dbWriter, insertBloodTypePoint),
@@ -66,25 +66,25 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.CategoryRep
 	return &r
 }
 
-func (r Repository) FindCategory() (categories []entities.Category, err error) {
-	err = r.stmt.findCategory.Select(&categories)
+func (r Repository) FindElements() (categories []entities.Element, err error) {
+	err = r.stmt.findElements.Select(&categories)
 	if err != nil {
-		log.Println("error while find category ", err)
+		log.Println("error while find element ", err)
 	}
 
 	return
 }
 
-func (r Repository) FindCategoryById(categoryId string) (category entities.Category, err error) {
-	err = r.stmt.findCategoryById.Get(&category, categoryId)
+func (r Repository) FindElementById(elementId string) (element entities.Element, err error) {
+	err = r.stmt.findElementById.Get(&element, elementId)
 	if err != nil {
-		log.Println("error while find category by id ", err)
+		log.Println("error while find element by id ", err)
 	}
 
 	return
 }
 
-func (r Repository) InsertCategory(category entities.RequestCategory) (err error) {
+func (r Repository) InsertElement(element entities.RequestElement) (err error) {
 	tx, err := r.dbWriter.Beginx()
 	if err != nil {
 		return err
@@ -92,21 +92,21 @@ func (r Repository) InsertCategory(category entities.RequestCategory) (err error
 
 	defer asql.ReleaseTx(tx, &err)
 
-	res, err := tx.NamedStmt(r.stmt.insertCategory).Exec(category)
+	res, err := tx.NamedStmt(r.stmt.insertElement).Exec(element)
 	if err != nil {
-		log.Println("error while insert category ", err)
+		log.Println("error while insert element ", err)
 	}
 
 	resId, _ := res.LastInsertId()
 
-	categoryId := strconv.FormatInt(resId, 10)
+	elementId := strconv.FormatInt(resId, 10)
 
 	shios, err := r.service.Shio.GetShio()
 	if len(shios) > 0 {
 		for _, shio := range shios {
 			data := map[string]interface{}{
 				"id_shio":     shio.Id,
-				"id_category": categoryId,
+				"id_category": elementId,
 				"point":       "0",
 			}
 
@@ -122,7 +122,7 @@ func (r Repository) InsertCategory(category entities.RequestCategory) (err error
 		for _, horoscope := range horoscopes {
 			data := map[string]interface{}{
 				"id_horoscope": horoscope.Id,
-				"id_category":  categoryId,
+				"id_category":  elementId,
 				"point":        "0",
 			}
 
@@ -138,7 +138,7 @@ func (r Repository) InsertCategory(category entities.RequestCategory) (err error
 		for _, bloodType := range bloodTypes {
 			data := map[string]interface{}{
 				"id_blood_type": bloodType.Id,
-				"id_category":   categoryId,
+				"id_category":   elementId,
 				"point":         "0",
 			}
 
@@ -152,19 +152,19 @@ func (r Repository) InsertCategory(category entities.RequestCategory) (err error
 	return
 }
 
-func (r Repository) UpdateCategory(categoryId string, params entities.RequestCategory) (err error) {
-	_, err = r.stmt.updateCategory.Exec(params.Name, params.FileName, params.AdminId, categoryId)
+func (r Repository) UpdateElement(elementId string, params entities.RequestElement) (err error) {
+	_, err = r.stmt.updateElement.Exec(params.Name, params.FileName, params.AdminId, elementId)
 	if err != nil {
-		log.Println("error while update category ", err)
+		log.Println("error while update element ", err)
 	}
 
 	return
 }
 
-func (r Repository) DeleteCategory(categoryId string) (err error) {
-	_, err = r.stmt.deleteCategory.Exec(categoryId)
+func (r Repository) DeleteElement(elementId string) (err error) {
+	_, err = r.stmt.deleteElement.Exec(elementId)
 	if err != nil {
-		log.Println("error while delete category ", err)
+		log.Println("error while delete element ", err)
 	}
 
 	return

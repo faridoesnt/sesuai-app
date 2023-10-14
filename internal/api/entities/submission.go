@@ -11,7 +11,7 @@ type Submission struct {
 }
 
 type ResultSubmission struct {
-	CategoryId   string `db:"category_id"`
-	CategoryName string `db:"category_name"`
-	Point        string `db:"point"`
+	ElementId   string `db:"category_id"`
+	ElementName string `db:"category_name"`
+	Point       string `db:"point"`
 }

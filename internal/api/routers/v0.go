@@ -27,16 +27,16 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Post("/generate-token", middlewares.Auth, handlers.GenerateNewToken)
 		v1.Post("/generate-token/use", middlewares.Auth, handlers.UseToken)
 
-		// category
-		v1.Get("/category", middlewares.Auth, handlers.GetCategory)
-		v1.Get("/category/{categoryId}", middlewares.Auth, handlers.GetCategoryDetail)
-		v1.Post("/category", middlewares.Auth, handlers.SaveCategory)
-		v1.Put("/category/{categoryId}", middlewares.Auth, handlers.UpdateCategory)
-		v1.Delete("/category/{categoryId}", middlewares.Auth, handlers.DeleteCategory)
+		// element
+		v1.Get("/element", middlewares.Auth, handlers.GetElements)
+		v1.Get("/element/{elementId}", middlewares.Auth, handlers.GetElementDetail)
+		v1.Post("/element", middlewares.Auth, handlers.SaveElement)
+		v1.Put("/element/{elementId}", middlewares.Auth, handlers.UpdateElement)
+		v1.Delete("/element/{elementId}", middlewares.Auth, handlers.DeleteElement)
 
 		// question
 		v1.Get("/question", middlewares.Auth, handlers.GetQuestions)
-		v1.Get("/question/all/{categoryId}", middlewares.Auth, handlers.GetAllQuestionsByCategoryId)
+		v1.Get("/question/all/{elementId}", middlewares.Auth, handlers.GetAllQuestionsByElementId)
 		v1.Get("/question/{questionId}", middlewares.Auth, handlers.GetQuestion)
 		v1.Post("/question", middlewares.Auth, handlers.SaveQuestion)
 		v1.Put("/question/{questionId}", middlewares.Auth, handlers.UpdateQuestion)
@@ -47,15 +47,15 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Get("/submissions/result/{submissionId}", middlewares.Auth, handlers.GetResultSubmission)
 
 		// horoscope point
-		v1.Get("/horoscope-point/{categoryId}", middlewares.Auth, handlers.GetHoroscopePoint)
+		v1.Get("/horoscope-point/{elementId}", middlewares.Auth, handlers.GetHoroscopePoint)
 		v1.Put("/horoscope-point", middlewares.Auth, handlers.UpdateHoroscopePoint)
 
 		// shio point
-		v1.Get("/shio-point/{categoryId}", middlewares.Auth, handlers.GetShioPoint)
+		v1.Get("/shio-point/{elementId}", middlewares.Auth, handlers.GetShioPoint)
 		v1.Put("/shio-point", middlewares.Auth, handlers.UpdateShioPoint)
 
 		// blood type point
-		v1.Get("/blood-type-point/{categoryId}", middlewares.Auth, handlers.GetBloodTypePoint)
+		v1.Get("/blood-type-point/{elementId}", middlewares.Auth, handlers.GetBloodTypePoint)
 		v1.Put("/blood-type-point", middlewares.Auth, handlers.UpdateBloodTypePoint)
 
 		// point answer

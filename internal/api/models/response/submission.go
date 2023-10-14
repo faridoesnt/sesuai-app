@@ -10,7 +10,7 @@ type Submission struct {
 }
 
 type ResultSubmission struct {
-	CategoryId   string `json:"category_id"`
-	CategoryName string `json:"category_name"`
-	Point        string `json:"point"`
+	ElementId   string `json:"element_id"`
+	ElementName string `json:"element_name"`
+	Point       string `json:"point"`
 }

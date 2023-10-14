@@ -12,9 +12,9 @@ import (
 func GetHoroscopePoint(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categoryId := c.Params().GetString("categoryId")
+	elementId := c.Params().GetString("elementId")
 
-	horoscopePoint, err := app.Services.HoroscopePoint.GetHoroscopePoint(categoryId)
+	horoscopePoint, err := app.Services.HoroscopePoint.GetHoroscopePoint(elementId)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return
@@ -52,8 +52,8 @@ func UpdateHoroscopePoint(c iris.Context) {
 		return
 	}
 
-	if params.CategoryId == "" {
-		HttpError(c, headers, fmt.Errorf("category id cant empty"), ahttp.ErrFailure("category_id_cant_empty"))
+	if params.ElementId == "" {
+		HttpError(c, headers, fmt.Errorf("element id cant empty"), ahttp.ErrFailure("element	_id_cant_empty"))
 		return
 	}
 

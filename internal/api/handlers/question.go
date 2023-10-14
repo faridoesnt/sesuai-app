@@ -31,32 +31,32 @@ type ResponseAllQuestions struct {
 func GetQuestions(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categoryId := c.FormValue("element_id")
+	elementId := c.FormValue("element_id")
 
-	categories := []response.Category{}
+	elements := []response.Element{}
 	result := []ResponseQuestions{}
 
-	if categoryId == "" {
-		categories = app.Services.Category.GetCategory()
+	if elementId == "" {
+		elements = app.Services.Element.GetElements()
 	} else {
-		category := app.Services.Category.GetCategoryDetail(categoryId)
+		element := app.Services.Element.GetElementDetail(elementId)
 
-		if category.Id != "" {
-			categories = append(categories, response.Category{
-				Id:    category.Id,
-				Name:  category.Name,
-				Photo: category.Photo,
+		if element.Id != "" {
+			elements = append(elements, response.Element{
+				Id:    element.Id,
+				Name:  element.Name,
+				Photo: element.Photo,
 			})
 		}
 	}
 
-	if len(categories) == 0 {
+	if len(elements) == 0 {
 		HttpError(c, headers, fmt.Errorf("Element Not Found"), ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
-	for _, category := range categories {
-		questions := app.Services.Question.GetQuestionsByCategoryId(category.Id)
+	for _, element := range elements {
+		questions := app.Services.Question.GetQuestionsByElementId(element.Id)
 		questionList := []QuestionList{}
 
 		if len(questions) > 0 {
@@ -69,9 +69,9 @@ func GetQuestions(c iris.Context) {
 			}
 
 			result = append(result, ResponseQuestions{
-				ElementId:    category.Id,
-				ElementName:  category.Name,
-				ElementImage: category.Photo,
+				ElementId:    element.Id,
+				ElementName:  element.Name,
+				ElementImage: element.Photo,
 				QuestionList: questionList,
 			})
 		}
@@ -83,24 +83,24 @@ func GetQuestions(c iris.Context) {
 	HttpSuccess(c, headers, data)
 }
 
-func GetAllQuestionsByCategoryId(c iris.Context) {
+func GetAllQuestionsByElementId(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	categoryId := c.Params().GetString("categoryId")
+	elementId := c.Params().GetString("elementId")
 
-	if categoryId == "" {
+	if elementId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
-	if existCategory := app.Services.Category.IsExistCategory(categoryId); !existCategory {
+	if existElement := app.Services.Element.IsExistElement(elementId); !existElement {
 		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
 
 	result := ResponseAllQuestions{}
 
-	questions, err := app.Services.Question.GetAllQuestionsByCategoryId(categoryId)
+	questions, err := app.Services.Question.GetAllQuestionsByElementId(elementId)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return
@@ -144,8 +144,8 @@ func GetQuestion(c iris.Context) {
 
 	data := make(map[string]interface{})
 	data["id_question"] = question.Id
-	data["id_category"] = question.CategoryId
-	data["category"] = question.Category
+	data["element_id"] = question.ElementId
+	data["element_name"] = question.Element
 	data["photo"] = question.Photo
 	data["question_ina"] = question.QuestionIna
 	data["question_eng"] = question.QuestionEn
@@ -169,12 +169,12 @@ func SaveQuestion(c iris.Context) {
 
 	params.AdminId = adminId
 
-	if params.CategoryId == "" {
+	if params.ElementId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}
 
-	if existCategory := app.Services.Category.IsExistCategory(params.CategoryId); !existCategory {
+	if existElement := app.Services.Element.IsExistElement(params.ElementId); !existElement {
 		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
 		return
 	}
@@ -216,7 +216,7 @@ func UpdateQuestion(c iris.Context) {
 		return
 	}
 
-	if params.CategoryId == "" {
+	if params.ElementId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
 		return
 	}

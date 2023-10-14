@@ -1,7 +1,7 @@
-package category
+package element
 
 const (
-	findCategory = `
+	findElements = `
 				SELECT
 				    id_category,
 				    name,
@@ -11,7 +11,7 @@ const (
 				ORDER BY name ASC
 	`
 
-	findCategoryById = `
+	findElementById = `
 				SELECT
 				    id_category,
 				    name,
@@ -22,7 +22,7 @@ const (
 				    id_category = ?
 	`
 
-	insertCategory = `
+	insertElement = `
 		INSERT INTO category (
 		    name, photo, created_by
 		) VALUES (
@@ -30,7 +30,7 @@ const (
 		)
 	`
 
-	updateCategory = `
+	updateElement = `
 		UPDATE
 			category
 		SET
@@ -39,7 +39,7 @@ const (
 		    id_category = ?
 	`
 
-	deleteCategory = `
+	deleteElement = `
 		DELETE FROM category WHERE id_category = ?
 	`
 

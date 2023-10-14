@@ -35,8 +35,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.BloodTypePo
 	return &r
 }
 
-func (r Repository) FindBloodTypePoint(categoryId string) (bloodTypePoint []entities.BloodTypePoint, err error) {
-	err = r.stmt.findBloodTypePoint.Select(&bloodTypePoint, categoryId)
+func (r Repository) FindBloodTypePoint(elementId string) (bloodTypePoint []entities.BloodTypePoint, err error) {
+	err = r.stmt.findBloodTypePoint.Select(&bloodTypePoint, elementId)
 	if err != nil {
 		log.Println("error while find blood type point ", err)
 	}
@@ -56,7 +56,7 @@ func (r Repository) UpdateBloodTypePoint(params entities.RequestBloodTypePoint) 
 		data := map[string]interface{}{
 			"point":         params.Point[index],
 			"id_blood_type": bloodTypeId,
-			"id_category":   params.CategoryId,
+			"id_category":   params.ElementId,
 		}
 
 		_, err = tx.NamedStmt(r.stmt.updateBloodTypePoint).Exec(data)

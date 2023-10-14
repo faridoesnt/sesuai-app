@@ -6,7 +6,7 @@ type Services struct {
 	BloodType      BloodTypeService
 	BloodTypePoint BloodTypePointService
 	GenerateToken  GenerateTokenService
-	Category       CategoryService
+	Element        ElementService
 	Question       QuestionService
 	Submission     SubmissionService
 	Shio           ShioService

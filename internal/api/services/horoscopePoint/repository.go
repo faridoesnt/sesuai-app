@@ -35,8 +35,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.HoroscopePo
 	return &r
 }
 
-func (r Repository) FindHoroscopePoint(categoryId string) (horoscopePoint []entities.HoroscopePoint, err error) {
-	err = r.stmt.findHoroscopePoint.Select(&horoscopePoint, categoryId)
+func (r Repository) FindHoroscopePoint(elementId string) (horoscopePoint []entities.HoroscopePoint, err error) {
+	err = r.stmt.findHoroscopePoint.Select(&horoscopePoint, elementId)
 	if err != nil {
 		log.Println("error while find horoscope point ", err)
 	}
@@ -56,7 +56,7 @@ func (r Repository) UpdateHoroscopePoint(params entities.RequestHoroscopePoint) 
 		data := map[string]interface{}{
 			"point":        params.Point[index],
 			"id_horoscope": horoscopeId,
-			"id_category":  params.CategoryId,
+			"id_category":  params.ElementId,
 		}
 
 		_, err = tx.NamedStmt(r.stmt.updateHoroscopePoint).Exec(data)

@@ -15,22 +15,22 @@ type Repository struct {
 }
 
 type Statement struct {
-	findQuestionsByCategoryId    *sqlx.Stmt
-	findAllQuestionsByCategoryId *sqlx.Stmt
-	findQuestion                 *sqlx.Stmt
-	insertQuestion               *sqlx.NamedStmt
-	updateQuestion               *sqlx.NamedStmt
-	deleteQuestion               *sqlx.Stmt
+	findQuestionsByElementId    *sqlx.Stmt
+	findAllQuestionsByElementId *sqlx.Stmt
+	findQuestion                *sqlx.Stmt
+	insertQuestion              *sqlx.NamedStmt
+	updateQuestion              *sqlx.NamedStmt
+	deleteQuestion              *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionRepository {
 	stmts := Statement{
-		findQuestionsByCategoryId:    datasources.Prepare(dbReader, findQuestionsByCategoryId),
-		findAllQuestionsByCategoryId: datasources.Prepare(dbReader, findAllQuestionsByCategoryId),
-		findQuestion:                 datasources.Prepare(dbReader, findQuestion),
-		insertQuestion:               datasources.PrepareNamed(dbWriter, insertQuestion),
-		updateQuestion:               datasources.PrepareNamed(dbWriter, updateQuestion),
-		deleteQuestion:               datasources.Prepare(dbWriter, deleteQuestion),
+		findQuestionsByElementId:    datasources.Prepare(dbReader, findQuestionsByElementId),
+		findAllQuestionsByElementId: datasources.Prepare(dbReader, findAllQuestionsByElementId),
+		findQuestion:                datasources.Prepare(dbReader, findQuestion),
+		insertQuestion:              datasources.PrepareNamed(dbWriter, insertQuestion),
+		updateQuestion:              datasources.PrepareNamed(dbWriter, updateQuestion),
+		deleteQuestion:              datasources.Prepare(dbWriter, deleteQuestion),
 	}
 
 	r := Repository{
@@ -42,8 +42,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionRep
 	return &r
 }
 
-func (r Repository) FindQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error) {
-	err = r.stmt.findQuestionsByCategoryId.Select(&questions, categoryId)
+func (r Repository) FindQuestionsByElementId(elementId string) (questions []entities.Question, err error) {
+	err = r.stmt.findQuestionsByElementId.Select(&questions, elementId)
 	if err != nil {
 		log.Println("error while find questions ", err)
 	}
@@ -51,17 +51,17 @@ func (r Repository) FindQuestionsByCategoryId(categoryId string) (questions []en
 	return
 }
 
-func (r Repository) FindAllQuestionsByCategoryId(categoryId string) (questions []entities.Question, err error) {
-	err = r.stmt.findAllQuestionsByCategoryId.Select(&questions, categoryId)
+func (r Repository) FindAllQuestionsByElementId(elementId string) (questions []entities.Question, err error) {
+	err = r.stmt.findAllQuestionsByElementId.Select(&questions, elementId)
 	if err != nil {
-		log.Println("error while find all questions by category id ", err)
+		log.Println("error while find all questions by element id ", err)
 	}
 
 	return
 }
 
-func (r Repository) FindQuestion(categoryId string) (question entities.Question, err error) {
-	err = r.stmt.findQuestion.Get(&question, categoryId)
+func (r Repository) FindQuestion(elementId string) (question entities.Question, err error) {
+	err = r.stmt.findQuestion.Get(&question, elementId)
 	if err != nil {
 		log.Println("error while find question ", err)
 	}
@@ -80,7 +80,7 @@ func (r Repository) InsertQuestion(params entities.RequestQuestion) (err error) 
 
 func (r Repository) UpdateQuestion(questionId string, params entities.RequestQuestion) (err error) {
 	data := map[string]interface{}{
-		"id_category":  params.CategoryId,
+		"id_category":  params.ElementId,
 		"question_ina": params.QuestionIna,
 		"question_eng": params.QuestionEn,
 		"id_question":  questionId,
