@@ -24,6 +24,10 @@ type ResponseQuestions struct {
 	QuestionList []QuestionList `json:"question_list"`
 }
 
+type ResponseAllQuestions struct {
+	QuestionList []QuestionList `json:"question_list"`
+}
+
 func GetQuestions(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
@@ -94,8 +98,7 @@ func GetAllQuestionsByCategoryId(c iris.Context) {
 		return
 	}
 
-	category := app.Services.Category.GetCategoryDetail(categoryId)
-	result := []ResponseQuestions{}
+	result := ResponseAllQuestions{}
 
 	questions, err := app.Services.Question.GetAllQuestionsByCategoryId(categoryId)
 	if err != nil {
@@ -114,20 +117,13 @@ func GetAllQuestionsByCategoryId(c iris.Context) {
 			})
 		}
 
-		result = append(result, ResponseQuestions{
-			ElementName:  category.Name,
-			ElementImage: category.Photo,
-			QuestionList: questionList,
-		})
+		result.QuestionList = questionList
 	} else {
 		HttpError(c, headers, fmt.Errorf("Questions Not Found"), ahttp.ErrFailure("questions_not_found"))
 		return
 	}
 
-	data := make(map[string]interface{})
-	data["questions"] = result
-
-	HttpSuccess(c, headers, data)
+	HttpSuccess(c, headers, result)
 }
 
 func GetQuestion(c iris.Context) {
