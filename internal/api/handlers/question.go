@@ -18,6 +18,7 @@ type QuestionList struct {
 }
 
 type ResponseQuestions struct {
+	ElementId    string         `json:"element_id"`
 	ElementName  string         `json:"element_name"`
 	ElementImage string         `json:"element_image"`
 	QuestionList []QuestionList `json:"question_list"`
@@ -64,6 +65,7 @@ func GetQuestions(c iris.Context) {
 			}
 
 			result = append(result, ResponseQuestions{
+				ElementId:    category.Id,
 				ElementName:  category.Name,
 				ElementImage: category.Photo,
 				QuestionList: questionList,
