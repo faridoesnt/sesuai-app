@@ -26,7 +26,6 @@ func GetElements(c iris.Context) {
 	}
 
 	HttpSuccess(c, headers, data)
-	return
 }
 
 func GetElementDetail(c iris.Context) {
