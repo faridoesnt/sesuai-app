@@ -35,17 +35,14 @@ func GetElementDetail(c iris.Context) {
 
 	if elementId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
-		return
 	}
 
 	element := app.Services.Element.GetElementDetail(elementId)
 	if element.Id == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
-		return
 	}
 
 	HttpSuccess(c, headers, element)
-	return
 }
 
 func SaveElement(c iris.Context) {
@@ -63,14 +60,12 @@ func SaveElement(c iris.Context) {
 		err := c.ReadJSON(params)
 		if err != nil {
 			HttpError(c, headers, err, ahttp.ErrInvalid(err.Error()))
-			return
 		}
 	} else {
 		parsed, params = parseSaveElement(c.FormValues())
 
 		if !parsed {
 			HttpError(c, headers, fmt.Errorf("error parsed params save element"), ahttp.ErrFailure("error_while_parsing_params"))
-			return
 		}
 	}
 
@@ -103,11 +98,9 @@ func SaveElement(c iris.Context) {
 	err := app.Services.Element.InsertElement(*params)
 	if err != nil {
 		HttpError(c, headers, errors.New("error insert element"), ahttp.ErrFailure(err.Error()))
-		return
 	}
 
 	HttpSuccess(c, headers, nil)
-	return
 }
 
 func UpdateElement(c iris.Context) {
@@ -127,14 +120,12 @@ func UpdateElement(c iris.Context) {
 		err := c.ReadJSON(params)
 		if err != nil {
 			HttpError(c, headers, err, ahttp.ErrInvalid(err.Error()))
-			return
 		}
 	} else {
 		parsed, params = parseSaveElement(c.FormValues())
 
 		if !parsed {
 			HttpError(c, headers, fmt.Errorf("error parsed params update element"), ahttp.ErrFailure("error_while_parsing_params"))
-			return
 		}
 	}
 
@@ -142,12 +133,10 @@ func UpdateElement(c iris.Context) {
 
 	if elementId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
-		return
 	}
 
 	if existElement := app.Services.Element.IsExistElement(elementId); !existElement {
 		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
-		return
 	}
 
 	if file == constants.IMAGE_MULTIPART {
@@ -177,11 +166,9 @@ func UpdateElement(c iris.Context) {
 	err := app.Services.Element.UpdateElement(elementId, *params)
 	if err != nil {
 		HttpError(c, headers, ahttp.Error{Message: "error update element"}, ahttp.ErrFailure(err.Error()))
-		return
 	}
 
 	HttpSuccess(c, headers, nil)
-	return
 }
 
 func DeleteElement(c iris.Context) {
@@ -191,22 +178,18 @@ func DeleteElement(c iris.Context) {
 
 	if elementId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Element Id Is Empty"}, ahttp.ErrFailure("element_id_is_empty"))
-		return
 	}
 
 	if existElement := app.Services.Element.IsExistElement(elementId); !existElement {
 		HttpError(c, headers, ahttp.Error{Message: "Element Not Found"}, ahttp.ErrFailure("element_not_found"))
-		return
 	}
 
 	err := app.Services.Element.DeleteElement(elementId)
 	if err != nil {
 		HttpError(c, headers, ahttp.Error{Message: "error delete element"}, ahttp.ErrFailure(err.Error()))
-		return
 	}
 
 	HttpSuccess(c, headers, nil)
-	return
 }
 
 func parseSaveElement(values map[string][]string) (parsed bool, params *entities.RequestElement) {
