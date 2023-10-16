@@ -21,6 +21,15 @@ func GetHeaders(c iris.Context) *models.Headers {
 		DateTime:      c.GetHeader("Device-Time"),
 	}
 
+	if headers.ID != "" {
+		headers.User = "User"
+
+		isAdmin := app.Services.Admin.IsAdminExist(headers.ID)
+		if isAdmin {
+			headers.User = "Admin"
+		}
+	}
+
 	headers.InitParams(c)
 
 	return &headers
