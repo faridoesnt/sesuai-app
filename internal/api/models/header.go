@@ -7,6 +7,7 @@ import (
 )
 
 type Headers struct {
+	User          string
 	IP            string
 	Params        string
 	Endpoint      string
