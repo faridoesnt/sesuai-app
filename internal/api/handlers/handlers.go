@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"Sesuai/internal/api/constants"
+	"Sesuai/internal/api/helpers"
 	"Sesuai/internal/api/models"
 	"Sesuai/pkg/ahttp"
 	"Sesuai/pkg/alog"
@@ -19,15 +20,33 @@ func HttpError(c iris.Context, headers *models.Headers, err error, httpError aht
 	alog.Logger.Errorf("%s %s error (%d): %s", c.Method(), c.Path(), httpError.Status, err)
 
 	if httpError.Message == "DATETIME_VALIDATION" {
-		//helpers.LogAction("DATETIME_VALIDATION", constants.ResponseInvalid, err.Error(), headers, err.Error())
+		if headers.User != "" {
+			if headers.User == "Admin" {
+				helpers.LogActionAdmin("DATETIME_VALIDATION", constants.ResponseInvalid, err.Error(), headers, err.Error())
+			} else {
+				helpers.LogActionUser("DATETIME_VALIDATION", constants.ResponseInvalid, err.Error(), headers, err.Error())
+			}
+		}
 	} else {
-		_, errJson := json.Marshal(httpError) // _ : response
+		response, errJson := json.Marshal(httpError)
 		if errJson != nil {
 			logrus.Error("HTTP Result Error ("+c.Path()+"): ", err)
-			//helpers.LogAction("HTTP_RESPONSE", "fail", "", headers, errJson.Error())
+			if headers.User != "" {
+				if headers.User == "Admin" {
+					helpers.LogActionAdmin("HTTP_RESPONSE", "fail", "", headers, errJson.Error())
+				} else {
+					helpers.LogActionUser("HTTP_RESPONSE", "fail", "", headers, errJson.Error())
+				}
+			}
 		}
 
-		//helpers.LogAction("HTTP_RESPONSE", "fail", err.Error(), headers, string(response))
+		if headers.User != "" {
+			if headers.User == "Admin" {
+				helpers.LogActionAdmin("HTTP_RESPONSE", "fail", err.Error(), headers, string(response))
+			} else {
+				helpers.LogActionAdmin("HTTP_RESPONSE", "fail", err.Error(), headers, string(response))
+			}
+		}
 	}
 
 	apiError := ahttp.CastError(httpError, headers)
@@ -60,13 +79,25 @@ func HttpSuccess(c iris.Context, headers *models.Headers, data interface{}) {
 		}
 	}
 
-	_, err := json.Marshal(response) // _ : res
+	res, err := json.Marshal(response)
 	if err != nil {
 		logrus.Error("HTTP Result Error ("+c.Path()+"): ", err)
-		//helpers.LogAction("HTTP_RESPONSE", "fail", response.Message, headers, err.Error())
+		if headers.User != "" {
+			if headers.User == "Admin" {
+				helpers.LogActionAdmin("HTTP_RESPONSE", "fail", "", headers, err.Error())
+			} else {
+				helpers.LogActionUser("HTTP_RESPONSE", "fail", "", headers, err.Error())
+			}
+		}
 	}
 
-	//helpers.LogAction("HTTP_RESPONSE", response.Status, response.Message, headers, string(res))
+	if headers.User != "" {
+		if headers.User == "Admin" {
+			helpers.LogActionAdmin("HTTP_RESPONSE", response.Status, response.Message, headers, string(res))
+		} else {
+			helpers.LogActionUser("HTTP_RESPONSE", response.Status, response.Message, headers, string(res))
+		}
+	}
 
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Request().Header.Set("Access-Control-Allow-Origin", "*")
