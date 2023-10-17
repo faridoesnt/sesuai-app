@@ -16,4 +16,5 @@ type Services struct {
 	PointAnswer    PointAnswerService
 	AccessMenu     AccessMenuService
 	Menu           MenuService
+	Logging        LoggingService
 }
