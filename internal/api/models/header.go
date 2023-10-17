@@ -9,6 +9,7 @@ import (
 type Headers struct {
 	User          string
 	IP            string
+	Header        string
 	Params        string
 	Endpoint      string
 	ID            string
@@ -33,6 +34,23 @@ func (p *Headers) InitParams(c iris.Context) {
 
 		p.Params = "{" + result + "}"
 	}
+}
+
+func (p *Headers) InitHeader(c iris.Context) {
+	headers := c.Request().Header
+
+	result := ""
+	for key, values := range headers {
+		for _, value := range values {
+			if key != "Accept" && key != "User-Agent" && key != "Accept-Encoding" && key != "Postman-Token" && key != "Connection" {
+				result += key + ": " + value + ", "
+			}
+		}
+	}
+
+	result = strings.TrimRight(result, ", ")
+
+	p.Header = "{" + result + "}"
 }
 
 func (p *Headers) GetDateTime() (datetime string) {

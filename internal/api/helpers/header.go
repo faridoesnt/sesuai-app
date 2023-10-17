@@ -31,6 +31,7 @@ func GetHeaders(c iris.Context) *models.Headers {
 	}
 
 	headers.InitParams(c)
+	headers.InitHeader(c)
 
 	return &headers
 }
