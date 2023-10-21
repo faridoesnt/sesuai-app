@@ -16,11 +16,13 @@ type Repository struct {
 
 type Statement struct {
 	findAccessMenuByAdminId *sqlx.Stmt
+	countAdminAccessMenu    *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AccessMenuRepository {
 	stmts := Statement{
 		findAccessMenuByAdminId: datasources.Prepare(dbReader, findAccessMenuByAdminId),
+		countAdminAccessMenu:    datasources.Prepare(dbReader, countAdminAccessMenu),
 	}
 
 	r := Repository{
@@ -36,6 +38,15 @@ func (r Repository) FindAccessMenuByAdminId(adminId string) (accessMenus []entit
 	err = r.stmt.findAccessMenuByAdminId.Select(&accessMenus, adminId)
 	if err != nil {
 		log.Println("error while find access menu by admin id ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountAdminAccessMenu(adminId, menu string) (count int64, err error) {
+	err = r.stmt.countAdminAccessMenu.Get(&count, adminId, menu)
+	if err != nil {
+		log.Println("error while count admin access menu ", err)
 	}
 
 	return

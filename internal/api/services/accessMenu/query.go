@@ -12,4 +12,17 @@ const (
 		    a.id_admin = ?
 		ORDER BY m.menu ASC
 	`
+
+	countAdminAccessMenu = `
+		SELECT
+			count(a.id_admin) as count
+		FROM
+		    menu as m
+		LEFT JOIN access as a
+			ON a.id_menu = m.id_menu
+		WHERE
+		    a.id_admin = ? AND
+		    m.menu = ?
+		LIMIT 1
+	`
 )

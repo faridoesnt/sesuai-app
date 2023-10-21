@@ -50,3 +50,9 @@ func (s Service) GetAccessMenuByAdminId(adminId string) (accessMenus []string, e
 
 	return
 }
+
+func (s Service) IsAdminHasAccessMenu(adminId, menu string) (hasAccess bool, err error) {
+	accessMenu, err := s.repo.CountAdminAccessMenu(adminId, menu)
+
+	return accessMenu > 0, err
+}
