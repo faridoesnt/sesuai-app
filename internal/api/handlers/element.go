@@ -17,7 +17,21 @@ import (
 func GetElements(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
+	adminId := c.Values().GetString(constants.AuthUserId)
+
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.Element)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
+
 	elements := app.Services.Element.GetElements()
+
 	data := make(map[string]interface{})
 	data["list_element"] = []response.Element{}
 
