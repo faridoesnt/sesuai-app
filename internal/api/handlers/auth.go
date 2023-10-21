@@ -156,6 +156,13 @@ func Login(c iris.Context) {
 			return
 		}
 
+		// get access menu admin
+		accessMenu, err := app.Services.AccessMenu.GetAccessMenuByAdminId(admin.AdminId)
+		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
+
 		err = app.Services.Admin.RefreshToken(admin.Email, newToken)
 		if err != nil {
 			HttpError(c, headers, err, ahttp.ErrFailure("error while refresh token admin"))
@@ -168,6 +175,11 @@ func Login(c iris.Context) {
 		data["full_name"] = admin.FullName
 		data["email"] = admin.Email
 		data["type"] = params.Type
+		data["access_menu"] = []string{}
+
+		if len(accessMenu) > 0 {
+			data["access_menu"] = accessMenu
+		}
 
 		HttpSuccess(c, headers, data)
 		return
