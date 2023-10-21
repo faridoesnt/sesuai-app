@@ -41,9 +41,20 @@ func GenerateNewToken(c iris.Context) {
 
 	adminId := c.Values().GetString(constants.AuthUserId)
 
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.GenerateToken)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
+
 	newToken := autils.RandomString(5)
 
-	err := app.Services.GenerateToken.InsertNewToken(adminId, newToken)
+	err = app.Services.GenerateToken.InsertNewToken(adminId, newToken)
 	if err != nil {
 		HttpError(c, headers, errors.New("error generate new token"), ahttp.ErrFailure(err.Error()))
 		return
