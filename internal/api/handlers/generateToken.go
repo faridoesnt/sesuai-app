@@ -7,6 +7,7 @@ import (
 	"Sesuai/pkg/ahttp"
 	"Sesuai/pkg/autils"
 	"errors"
+	"fmt"
 	"github.com/kataras/iris/v12"
 )
 
@@ -14,6 +15,17 @@ func GetGenerateToken(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	adminId := c.Values().GetString(constants.AuthUserId)
+
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.GenerateToken)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
 
 	tokens := app.Services.GenerateToken.GetGenerateToken(adminId)
 
