@@ -155,6 +155,19 @@ func GetAllQuestionsByElementId(c iris.Context) {
 func GetQuestion(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
+	adminId := c.Values().GetString(constants.AuthUserId)
+
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.QuestionList)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
+
 	questionId := c.Params().GetString("questionId")
 
 	if questionId == "" {
