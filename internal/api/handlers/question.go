@@ -198,9 +198,20 @@ func SaveQuestion(c iris.Context) {
 
 	adminId := c.Values().GetString(constants.AuthUserId)
 
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.QuestionList)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
+
 	params := entities.RequestQuestion{}
 
-	err := c.ReadJSON(&params)
+	err = c.ReadJSON(&params)
 	if err != nil {
 		HttpError(c, headers, err, ahttp.ErrInvalid(err.Error()))
 		return
