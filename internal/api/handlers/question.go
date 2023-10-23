@@ -63,35 +63,34 @@ func GetQuestions(c iris.Context) {
 		}
 	}
 
-	if len(elements) == 0 {
-		HttpError(c, headers, fmt.Errorf("Element Not Found"), ahttp.ErrFailure("element_not_found"))
-		return
-	}
-
-	for _, element := range elements {
-		questions := app.Services.Question.GetQuestionsByElementId(element.Id)
-		questionList := []QuestionList{}
-
-		if len(questions) > 0 {
-			for _, question := range questions {
-				questionList = append(questionList, QuestionList{
-					QuestionId:  question.Id,
-					QuestionIna: question.QuestionIna,
-					QuestionEng: question.QuestionEn,
-				})
-			}
-
-			result = append(result, ResponseQuestions{
-				ElementId:    element.Id,
-				ElementName:  element.Name,
-				ElementImage: element.Photo,
-				QuestionList: questionList,
-			})
-		}
-	}
-
 	data := make(map[string]interface{})
 	data["questions"] = result
+
+	if len(elements) > 0 {
+		for _, element := range elements {
+			questions := app.Services.Question.GetQuestionsByElementId(element.Id)
+			questionList := []QuestionList{}
+
+			if len(questions) > 0 {
+				for _, question := range questions {
+					questionList = append(questionList, QuestionList{
+						QuestionId:  question.Id,
+						QuestionIna: question.QuestionIna,
+						QuestionEng: question.QuestionEn,
+					})
+				}
+
+				result = append(result, ResponseQuestions{
+					ElementId:    element.Id,
+					ElementName:  element.Name,
+					ElementImage: element.Photo,
+					QuestionList: questionList,
+				})
+			}
+		}
+
+		data["questions"] = result
+	}
 
 	HttpSuccess(c, headers, data)
 }
