@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -262,7 +263,7 @@ func parseSaveElement(values map[string][]string) (parsed bool, params *entities
 	params = tmp
 
 	if len(values["name"]) > 0 {
-		tmp.Name = values["name"][0]
+		tmp.Name = strings.Trim(values["name"][0], `"'`)
 	}
 
 	if len(values["filename"]) > 0 {
