@@ -133,6 +133,8 @@ func SaveElement(c iris.Context) {
 		}
 	}
 
+	fmt.Println(*params)
+
 	err = app.Services.Element.InsertElement(*params)
 	if err != nil {
 		HttpError(c, headers, errors.New("error insert element"), ahttp.ErrFailure(err.Error()))
