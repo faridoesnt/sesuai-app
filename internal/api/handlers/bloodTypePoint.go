@@ -47,9 +47,22 @@ func GetBloodTypePoint(c iris.Context) {
 func UpdateBloodTypePoint(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
+	adminId := c.Values().GetString(constants.AuthUserId)
+
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.Point)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
+
 	params := entities.RequestBloodTypePoint{}
 
-	err := c.ReadJSON(&params)
+	err = c.ReadJSON(&params)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return
