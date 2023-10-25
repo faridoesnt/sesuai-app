@@ -1,14 +1,22 @@
 package main
 
 import (
-	"Sesuai/pkg/alog"
-	"github.com/joho/godotenv"
+	"Sesuai/pkg/asm"
+	"log"
+	"os"
 )
 
 func InitConfig() {
-	config, err := godotenv.Read()
+	env := "prod"
+	secretName := "sesuai-prod"
+	region := "ap-southeast-3"
+
+	config, err := asm.GetSecret(secretName, region)
 	if err != nil {
-		alog.Logger.Fatalf(err.Error())
+		log.Fatalf("Load Secret %s (%s) Failed, err: %s", secretName, env, err.Error())
+		os.Exit(0)
+	} else {
+		log.Printf("Secret Loaded: %s (%s)", secretName, env)
 	}
 
 	app.Config = config
