@@ -221,9 +221,22 @@ func SaveAdmin(c iris.Context) {
 func UpdateAdmin(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
+	adminId := c.Values().GetString(constants.AuthUserId)
+
+	hasAccess, err := app.Services.AccessMenu.IsAdminHasAccessMenu(adminId, constants.AdminList)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !hasAccess {
+		HttpError(c, headers, fmt.Errorf("admin doesn't have access"), ahttp.ErrFailure("admin_doesn't_have_access"))
+		return
+	}
+
 	var accessId []string
 
-	adminId := c.Params().GetString("adminId")
+	adminId = c.Params().GetString("adminId")
 
 	if adminId == "" {
 		HttpError(c, headers, ahttp.Error{Message: "Admin Id Empty"}, ahttp.ErrFailure("admin_id_empty"))
@@ -238,7 +251,7 @@ func UpdateAdmin(c iris.Context) {
 
 	params := entities.RequestAdmin{}
 
-	err := c.ReadJSON(&params)
+	err = c.ReadJSON(&params)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return
