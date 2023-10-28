@@ -97,6 +97,16 @@ func (s Service) IsAdminExist(adminId string) bool {
 	return false
 }
 
+func (s Service) IsAdminWithTokenExist(adminId, token string) bool {
+	total, _ := s.repo.CountAdminWithToken(adminId, token)
+
+	if total > 0 {
+		return true
+	}
+
+	return false
+}
+
 func (s Service) DeleteAdmin(adminId string) (err error) {
 	err = s.repo.DeleteAdmin(adminId)
 

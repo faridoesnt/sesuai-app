@@ -13,6 +13,7 @@ type AdminRepository interface {
 	InsertAdmin(params entities.RequestAdmin) (err error)
 	UpdateAdmin(adminId string, params entities.RequestAdmin) (err error)
 	CountAdmin(adminId string) (total int64, err error)
+	CountAdminWithToken(adminId, token string) (total int64, err error)
 	DeleteAdmin(adminId string) (err error)
 }
 
@@ -27,5 +28,6 @@ type AdminService interface {
 	InsertAdmin(params entities.RequestAdmin) (err error)
 	UpdateAdmin(adminId string, params entities.RequestAdmin) (err error)
 	IsAdminExist(adminId string) bool
+	IsAdminWithTokenExist(adminId, token string) bool
 	DeleteAdmin(adminId string) (err error)
 }

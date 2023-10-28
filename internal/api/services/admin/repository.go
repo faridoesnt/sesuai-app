@@ -17,36 +17,38 @@ type Repository struct {
 }
 
 type Statement struct {
-	findAdmins        *sqlx.Stmt
-	findAdminById     *sqlx.Stmt
-	findAdminByEmail  *sqlx.Stmt
-	refreshToken      *sqlx.Stmt
-	findAdminLoggedIn *sqlx.Stmt
-	countEmail        *sqlx.Stmt
-	countPhoneNumber  *sqlx.Stmt
-	insertAdmin       *sqlx.NamedStmt
-	insertAccessMenu  *sqlx.NamedStmt
-	updateAdmin       *sqlx.NamedStmt
-	deleteAccessMenu  *sqlx.NamedStmt
-	countAdmin        *sqlx.Stmt
-	deleteAdmin       *sqlx.NamedStmt
+	findAdmins          *sqlx.Stmt
+	findAdminById       *sqlx.Stmt
+	findAdminByEmail    *sqlx.Stmt
+	refreshToken        *sqlx.Stmt
+	findAdminLoggedIn   *sqlx.Stmt
+	countEmail          *sqlx.Stmt
+	countPhoneNumber    *sqlx.Stmt
+	insertAdmin         *sqlx.NamedStmt
+	insertAccessMenu    *sqlx.NamedStmt
+	updateAdmin         *sqlx.NamedStmt
+	deleteAccessMenu    *sqlx.NamedStmt
+	countAdmin          *sqlx.Stmt
+	countAdminWithToken *sqlx.Stmt
+	deleteAdmin         *sqlx.NamedStmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
 	stmts := Statement{
-		findAdmins:        datasources.Prepare(dbReader, findAdmins),
-		findAdminById:     datasources.Prepare(dbReader, findAdminById),
-		findAdminByEmail:  datasources.Prepare(dbReader, findAdminByEmail),
-		refreshToken:      datasources.Prepare(dbWriter, refreshToken),
-		findAdminLoggedIn: datasources.Prepare(dbReader, findAdminLoggedIn),
-		countEmail:        datasources.Prepare(dbReader, countEmail),
-		countPhoneNumber:  datasources.Prepare(dbReader, countPhoneNumber),
-		insertAdmin:       datasources.PrepareNamed(dbWriter, insertAdmin),
-		insertAccessMenu:  datasources.PrepareNamed(dbWriter, insertAccessMenu),
-		updateAdmin:       datasources.PrepareNamed(dbWriter, updateAdmin),
-		deleteAccessMenu:  datasources.PrepareNamed(dbWriter, deleteAccessMenu),
-		countAdmin:        datasources.Prepare(dbReader, countAdmin),
-		deleteAdmin:       datasources.PrepareNamed(dbWriter, deleteAdmin),
+		findAdmins:          datasources.Prepare(dbReader, findAdmins),
+		findAdminById:       datasources.Prepare(dbReader, findAdminById),
+		findAdminByEmail:    datasources.Prepare(dbReader, findAdminByEmail),
+		refreshToken:        datasources.Prepare(dbWriter, refreshToken),
+		findAdminLoggedIn:   datasources.Prepare(dbReader, findAdminLoggedIn),
+		countEmail:          datasources.Prepare(dbReader, countEmail),
+		countPhoneNumber:    datasources.Prepare(dbReader, countPhoneNumber),
+		insertAdmin:         datasources.PrepareNamed(dbWriter, insertAdmin),
+		insertAccessMenu:    datasources.PrepareNamed(dbWriter, insertAccessMenu),
+		updateAdmin:         datasources.PrepareNamed(dbWriter, updateAdmin),
+		deleteAccessMenu:    datasources.PrepareNamed(dbWriter, deleteAccessMenu),
+		countAdmin:          datasources.Prepare(dbReader, countAdmin),
+		countAdminWithToken: datasources.Prepare(dbReader, countAdminWithToken),
+		deleteAdmin:         datasources.PrepareNamed(dbWriter, deleteAdmin),
 	}
 
 	r := Repository{
@@ -207,6 +209,15 @@ func (r Repository) CountAdmin(adminId string) (total int64, err error) {
 	err = r.stmt.countAdmin.Get(&total, adminId)
 	if err != nil {
 		log.Println("error while count admin ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountAdminWithToken(adminId, token string) (total int64, err error) {
+	err = r.stmt.countAdminWithToken.Get(&total, adminId, token)
+	if err != nil {
+		log.Println("error while count admin with token ", err)
 	}
 
 	return

@@ -103,6 +103,16 @@ const (
 		    id_admin = ?
 	`
 
+	countAdminWithToken = `
+		SELECT
+			count(id_admin) as total
+		FROM
+		    admin
+		WHERE
+		    id_admin = ? AND
+		    token = ?
+	`
+
 	deleteAdmin = `
 		DELETE FROM admin WHERE id_admin = :id_admin
 	`

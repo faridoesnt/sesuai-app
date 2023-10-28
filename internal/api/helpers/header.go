@@ -24,10 +24,14 @@ func GetHeaders(c iris.Context) *models.Headers {
 	if headers.ID != "" {
 		headers.User = "User"
 
-		isAdmin := app.Services.Admin.IsAdminExist(headers.ID)
-		if isAdmin {
-			headers.User = "Admin"
+		status, token, _ := GetAuthToken(headers.Authorization)
+		if status == constants.SESSION_VALID {
+			isAdmin := app.Services.Admin.IsAdminWithTokenExist(headers.ID, token)
+			if isAdmin {
+				headers.User = "Admin"
+			}
 		}
+
 	}
 
 	headers.InitParams(c)
