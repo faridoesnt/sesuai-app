@@ -17,4 +17,5 @@ type Services struct {
 	AccessMenu     AccessMenuService
 	Menu           MenuService
 	Logging        LoggingService
+	QuestionTest   QuestionTestService
 }
