@@ -3,6 +3,7 @@ package handlers
 import (
 	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/helpers"
+	"Sesuai/internal/api/models/response"
 	"Sesuai/pkg/ahttp"
 	"fmt"
 	"github.com/kataras/iris/v12"
@@ -17,15 +18,23 @@ func GetQuestionsTest(c iris.Context) {
 		return
 	}
 
-	data := make(map[string]interface{})
-	data["questions_list"] = []entities.QuestionTest{}
-	data["total"] = 0
-
-	if len(questionsTest) > 0 {
-		data["questions_list"] = questionsTest
-		data["total"] = len(questionsTest)
+	answers, err := app.Services.PointAnswer.GetPointAnswer()
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf("Answers Not Found"), ahttp.ErrFailure("answers_not_found"))
+		return
 	}
 
-	HttpSuccess(c, headers, data)
+	result := response.QuestionTest{}
+	result.Questions = []entities.QuestionTest{}
+	result.Answers = []entities.PointAnswer{}
+	result.Total = 0
+
+	if len(questionsTest) > 0 {
+		result.Questions = questionsTest
+		result.Answers = answers
+		result.Total = len(questionsTest)
+	}
+
+	HttpSuccess(c, headers, result)
 	return
 }
