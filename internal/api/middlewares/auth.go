@@ -8,7 +8,29 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-func Auth(c iris.Context) {
+func AuthAdmin(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	token, status := handlers.ValidateToken(c, headers)
+	if status != constants.SESSION_VALID {
+		return
+	}
+
+	var id string
+
+	admin, err := app.Services.Admin.GetAdminLoggedIn(headers.ID, token)
+	if err == nil {
+		id = admin.AdminId
+	} else {
+		handlers.HttpError(c, headers, err, ahttp.ErrDenied(err.Error()))
+	}
+
+	c.Values().Set(constants.AuthUserId, id)
+
+	c.Next()
+}
+
+func AuthUser(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	token, status := handlers.ValidateToken(c, headers)
@@ -22,14 +44,7 @@ func Auth(c iris.Context) {
 	if err == nil {
 		id = user.UserId
 	} else {
-		if err.Error() == "sql: no rows in result set" {
-			admin, err := app.Services.Admin.GetAdminLoggedIn(headers.ID, token)
-			if err != nil {
-				handlers.HttpError(c, headers, err, ahttp.ErrDenied(err.Error()))
-			}
-
-			id = admin.AdminId
-		}
+		handlers.HttpError(c, headers, err, ahttp.ErrDenied(err.Error()))
 	}
 
 	c.Values().Set(constants.AuthUserId, id)

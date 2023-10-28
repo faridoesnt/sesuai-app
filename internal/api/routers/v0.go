@@ -17,62 +17,62 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Post("/auth/register", handlers.Register)
 
 		// user
-		v1.Get("/user", middlewares.Auth, handlers.GetUser)
+		v1.Get("/user", middlewares.AuthAdmin, handlers.GetUser)
 
 		// blood type
 		v1.Get("/blood-type", handlers.BloodType)
 
 		// generate token
-		v1.Get("/generate-token", middlewares.Auth, handlers.GetGenerateToken)
-		v1.Post("/generate-token", middlewares.Auth, handlers.GenerateNewToken)
-		v1.Post("/generate-token/use", middlewares.Auth, handlers.UseToken)
+		v1.Get("/generate-token", middlewares.AuthAdmin, handlers.GetGenerateToken)
+		v1.Post("/generate-token", middlewares.AuthAdmin, handlers.GenerateNewToken)
+		v1.Post("/generate-token/use", middlewares.AuthAdmin, handlers.UseToken)
 
 		// element
-		v1.Get("/element", middlewares.Auth, handlers.GetElements)
-		v1.Get("/element/{elementId}", middlewares.Auth, handlers.GetElementDetail)
-		v1.Post("/element", middlewares.Auth, handlers.SaveElement)
-		v1.Put("/element/{elementId}", middlewares.Auth, handlers.UpdateElement)
-		v1.Delete("/element/{elementId}", middlewares.Auth, handlers.DeleteElement)
+		v1.Get("/element", middlewares.AuthAdmin, handlers.GetElements)
+		v1.Get("/element/{elementId}", middlewares.AuthAdmin, handlers.GetElementDetail)
+		v1.Post("/element", middlewares.AuthAdmin, handlers.SaveElement)
+		v1.Put("/element/{elementId}", middlewares.AuthAdmin, handlers.UpdateElement)
+		v1.Delete("/element/{elementId}", middlewares.AuthAdmin, handlers.DeleteElement)
 
 		// question
-		v1.Get("/question", middlewares.Auth, handlers.GetQuestions)
-		v1.Get("/question/all/{elementId}", middlewares.Auth, handlers.GetAllQuestionsByElementId)
-		v1.Get("/question/{questionId}", middlewares.Auth, handlers.GetQuestion)
-		v1.Post("/question", middlewares.Auth, handlers.SaveQuestion)
-		v1.Put("/question/{questionId}", middlewares.Auth, handlers.UpdateQuestion)
-		v1.Delete("/question/{questionId}", middlewares.Auth, handlers.DeleteQuestion)
+		v1.Get("/question", middlewares.AuthAdmin, handlers.GetQuestions)
+		v1.Get("/question/all/{elementId}", middlewares.AuthAdmin, handlers.GetAllQuestionsByElementId)
+		v1.Get("/question/{questionId}", middlewares.AuthAdmin, handlers.GetQuestion)
+		v1.Post("/question", middlewares.AuthAdmin, handlers.SaveQuestion)
+		v1.Put("/question/{questionId}", middlewares.AuthAdmin, handlers.UpdateQuestion)
+		v1.Delete("/question/{questionId}", middlewares.AuthAdmin, handlers.DeleteQuestion)
 
 		// submission
-		v1.Get("/submissions", middlewares.Auth, handlers.GetSubmissions)
-		v1.Get("/submissions/result/{submissionId}", middlewares.Auth, handlers.GetResultSubmission)
+		v1.Get("/submissions", middlewares.AuthAdmin, handlers.GetSubmissions)
+		v1.Get("/submissions/result/{submissionId}", middlewares.AuthAdmin, handlers.GetResultSubmission)
 
 		// horoscope point
-		v1.Get("/horoscope-point/{elementId}", middlewares.Auth, handlers.GetHoroscopePoint)
-		v1.Put("/horoscope-point", middlewares.Auth, handlers.UpdateHoroscopePoint)
+		v1.Get("/horoscope-point/{elementId}", middlewares.AuthAdmin, handlers.GetHoroscopePoint)
+		v1.Put("/horoscope-point", middlewares.AuthAdmin, handlers.UpdateHoroscopePoint)
 
 		// shio point
-		v1.Get("/shio-point/{elementId}", middlewares.Auth, handlers.GetShioPoint)
-		v1.Put("/shio-point", middlewares.Auth, handlers.UpdateShioPoint)
+		v1.Get("/shio-point/{elementId}", middlewares.AuthAdmin, handlers.GetShioPoint)
+		v1.Put("/shio-point", middlewares.AuthAdmin, handlers.UpdateShioPoint)
 
 		// blood type point
-		v1.Get("/blood-type-point/{elementId}", middlewares.Auth, handlers.GetBloodTypePoint)
-		v1.Put("/blood-type-point", middlewares.Auth, handlers.UpdateBloodTypePoint)
+		v1.Get("/blood-type-point/{elementId}", middlewares.AuthAdmin, handlers.GetBloodTypePoint)
+		v1.Put("/blood-type-point", middlewares.AuthAdmin, handlers.UpdateBloodTypePoint)
 
 		// point answer
-		v1.Get("/point-answer", middlewares.Auth, handlers.GetPointAnswer)
-		v1.Put("/point-answer", middlewares.Auth, handlers.UpdatePointAnswer)
+		v1.Get("/point-answer", middlewares.AuthAdmin, handlers.GetPointAnswer)
+		v1.Put("/point-answer", middlewares.AuthAdmin, handlers.UpdatePointAnswer)
 
 		// admin list
-		v1.Get("/admins", middlewares.Auth, handlers.GetAdmins)
-		v1.Get("/admins/{adminId}", middlewares.Auth, handlers.GetAdmin)
-		v1.Post("/admins", middlewares.Auth, handlers.SaveAdmin)
-		v1.Put("/admins/{adminId}", middlewares.Auth, handlers.UpdateAdmin)
-		v1.Delete("/admins/{adminId}", middlewares.Auth, handlers.DeleteAdmin)
+		v1.Get("/admins", middlewares.AuthAdmin, handlers.GetAdmins)
+		v1.Get("/admins/{adminId}", middlewares.AuthAdmin, handlers.GetAdmin)
+		v1.Post("/admins", middlewares.AuthAdmin, handlers.SaveAdmin)
+		v1.Put("/admins/{adminId}", middlewares.AuthAdmin, handlers.UpdateAdmin)
+		v1.Delete("/admins/{adminId}", middlewares.AuthAdmin, handlers.DeleteAdmin)
 
 		// access menu by admin id
-		v1.Get("/access-menu/{adminId}", middlewares.Auth, handlers.GetAccessMenu)
+		v1.Get("/access-menu/{adminId}", middlewares.AuthAdmin, handlers.GetAccessMenu)
 
 		// question test
-		v1.Get("/question-test", middlewares.Auth, handlers.GetQuestionsTest)
+		v1.Get("/question-test", middlewares.AuthUser, handlers.GetQuestionsTest)
 	}
 }
