@@ -71,5 +71,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// access menu by admin id
 		v1.Get("/access-menu/{adminId}", middlewares.Auth, handlers.GetAccessMenu)
+
+		// question test
+		v1.Get("/question-test", middlewares.Auth, handlers.GetQuestionsTest)
 	}
 }
