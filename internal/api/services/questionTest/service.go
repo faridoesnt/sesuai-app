@@ -26,3 +26,9 @@ func (s Service) GetQuestionsTest() (questionsTest []entities.QuestionTest, err 
 
 	return
 }
+
+func (s Service) SubmitQuestionTest(params entities.SubmitQuestionTest, userId string, totalPointQuestionsByElement map[string]float64) (err error) {
+	err = s.repo.SubmitQuestionTest(params, userId, totalPointQuestionsByElement)
+
+	return
+}

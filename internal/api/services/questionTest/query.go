@@ -11,4 +11,16 @@ const (
 			question
 		ORDER BY RAND()
 	`
+
+	insertSubmission = `
+		INSERT INTO submission (id_user, time) VALUES (:id_user, :time)
+	`
+
+	insertSubSubmission = `
+		INSERT INTO sub_submission (id_submission, id_question, id_answer) VALUES (:id_submission, :id_question, :id_answer)
+	`
+
+	insertPointSubmission = `
+		INSERT INTO point_submission (id_submission, id_category, point) VALUES (:id_submission, :id_category, :point)
+	`
 )
