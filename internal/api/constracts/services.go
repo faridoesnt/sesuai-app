@@ -19,4 +19,5 @@ type Services struct {
 	Logging        LoggingService
 	QuestionTest   QuestionTestService
 	Result         ResultService
+	UsedToken      UsedTokenService
 }

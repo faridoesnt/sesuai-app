@@ -19,6 +19,7 @@ import (
 	"Sesuai/internal/api/services/shio"
 	"Sesuai/internal/api/services/shioPoint"
 	"Sesuai/internal/api/services/submission"
+	"Sesuai/internal/api/services/usedToken"
 	"Sesuai/internal/api/services/user"
 	"Sesuai/pkg/alog"
 )
@@ -43,6 +44,7 @@ func InitServices() {
 		Logging:        logging.Init(app),
 		QuestionTest:   questionTest.Init(app),
 		Result:         result.Init(app),
+		UsedToken:      usedToken.Init(app),
 	}
 
 	alog.Logger.Printf("Initializing Services: Pass")
