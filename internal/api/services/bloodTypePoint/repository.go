@@ -16,14 +16,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	findBloodTypePoint   *sqlx.Stmt
-	updateBloodTypePoint *sqlx.NamedStmt
+	findBloodTypePoint                 *sqlx.Stmt
+	updateBloodTypePoint               *sqlx.NamedStmt
+	findBloodTypePointByIdAndElementId *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.BloodTypePointRepository {
 	stmts := Statement{
-		findBloodTypePoint:   datasources.Prepare(dbReader, findBloodTypePoint),
-		updateBloodTypePoint: datasources.PrepareNamed(dbWriter, updateBloodTypePoint),
+		findBloodTypePoint:                 datasources.Prepare(dbReader, findBloodTypePoint),
+		updateBloodTypePoint:               datasources.PrepareNamed(dbWriter, updateBloodTypePoint),
+		findBloodTypePointByIdAndElementId: datasources.Prepare(dbReader, findBloodTypePointByIdAndElementId),
 	}
 
 	r := Repository{
@@ -63,6 +65,15 @@ func (r Repository) UpdateBloodTypePoint(params entities.RequestBloodTypePoint) 
 		if err != nil {
 			log.Println("error while update horoscope point ", err)
 		}
+	}
+
+	return
+}
+
+func (r Repository) FindBloodTypePointByIdAndElementId(bloodTypeId, elementId string) (bloodTypePoint entities.BloodTypePoint, err error) {
+	err = r.stmt.findBloodTypePointByIdAndElementId.Get(&bloodTypePoint, bloodTypeId, elementId)
+	if err != nil {
+		log.Println("error while find blood type point id and element id ", err)
 	}
 
 	return
