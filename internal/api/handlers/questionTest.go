@@ -156,6 +156,6 @@ func SubmitQuestionTest(c iris.Context) {
 		return
 	}
 
-	HttpSuccess(c, headers, totalPointQuestionsByElement)
+	HttpSuccess(c, headers, nil)
 	return
 }
