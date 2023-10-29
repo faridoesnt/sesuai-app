@@ -48,8 +48,8 @@ func (s Service) InsertNewToken(adminId, token string) (err error) {
 	return
 }
 
-func (s Service) UpdateToken(tokenId string) (err error) {
-	err = s.repo.UpdateToken(tokenId)
+func (s Service) ToggleInactiveToken(tokenId string) (err error) {
+	err = s.repo.ToggleInactiveToken(tokenId)
 
 	return
 }

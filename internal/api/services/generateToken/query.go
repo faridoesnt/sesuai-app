@@ -25,7 +25,7 @@ const (
 		)
 	`
 
-	updateToken = `
+	toggleInactiveToken = `
 		UPDATE
 			generate_token
 		SET

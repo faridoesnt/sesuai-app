@@ -17,7 +17,7 @@ type Repository struct {
 type Statement struct {
 	findGenerateToken        *sqlx.Stmt
 	insertNewToken           *sqlx.Stmt
-	updateToken              *sqlx.Stmt
+	toggleInactiveToken      *sqlx.Stmt
 	findGenerateTokenByToken *sqlx.Stmt
 }
 
@@ -25,7 +25,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.GenerateTok
 	stmts := Statement{
 		findGenerateToken:        datasources.Prepare(dbReader, findGenerateToken),
 		insertNewToken:           datasources.Prepare(dbWriter, insertNewToken),
-		updateToken:              datasources.Prepare(dbWriter, updateToken),
+		toggleInactiveToken:      datasources.Prepare(dbWriter, toggleInactiveToken),
 		findGenerateTokenByToken: datasources.Prepare(dbReader, findGenerateTokenByToken),
 	}
 
@@ -56,8 +56,8 @@ func (r Repository) InsertNewToken(adminId, token string) (err error) {
 	return
 }
 
-func (r Repository) UpdateToken(tokenId string) (err error) {
-	_, err = r.stmt.updateToken.Exec(tokenId)
+func (r Repository) ToggleInactiveToken(tokenId string) (err error) {
+	_, err = r.stmt.toggleInactiveToken.Exec(tokenId)
 	if err != nil {
 		log.Println("error while update token ", err)
 	}
