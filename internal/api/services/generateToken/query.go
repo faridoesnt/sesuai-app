@@ -2,19 +2,19 @@ package generateToken
 
 const (
 	findGenerateToken = `
-				SELECT
-				    g.id_token,
-				    a.fullname as admin,
-				    g.token,
-				    g.status,
-				    g.created_at
-				FROM 
-				    generate_token as g
-				LEFT JOIN admin as a 
-					ON a.id_admin = g.id_admin
-				WHERE
-				    g.id_admin = ?
-				ORDER BY created_at DESC
+		SELECT
+			g.id_token,
+			a.fullname as admin,
+			g.token,
+			g.status,
+			g.created_at
+		FROM 
+			generate_token as g
+		LEFT JOIN admin as a 
+			ON a.id_admin = g.id_admin
+		WHERE
+			g.id_admin = ?
+		ORDER BY created_at DESC
 	`
 
 	insertNewToken = `
@@ -33,5 +33,20 @@ const (
 		    updated_at = CURRENT_TIMESTAMP
 		WHERE
 		    id_token = ?
+	`
+
+	findGenerateTokenByToken = `
+		SELECT
+			g.id_token,
+			a.fullname as admin,
+			g.token,
+			g.status,
+			g.created_at
+		FROM 
+			generate_token as g
+		LEFT JOIN admin as a 
+			ON a.id_admin = g.id_admin
+		WHERE
+			g.token = ?
 	`
 )

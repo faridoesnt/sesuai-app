@@ -2,6 +2,7 @@ package generateToken
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -40,6 +41,7 @@ func (s Service) GetGenerateToken(adminId string) (listToken []response.Generate
 
 	return
 }
+
 func (s Service) InsertNewToken(adminId, token string) (err error) {
 	err = s.repo.InsertNewToken(adminId, token)
 
@@ -48,6 +50,12 @@ func (s Service) InsertNewToken(adminId, token string) (err error) {
 
 func (s Service) UpdateToken(tokenId string) (err error) {
 	err = s.repo.UpdateToken(tokenId)
+
+	return
+}
+
+func (s Service) GetGenerateTokenByToken(params string) (token entities.GenerateToken, err error) {
+	token, err = s.repo.FindGenerateTokenByToken(params)
 
 	return
 }
