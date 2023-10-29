@@ -26,3 +26,9 @@ func (s Service) GetResult(userId string) (results []entities.Result, err error)
 
 	return
 }
+
+func (s Service) GetAllResult(userId string) (results []entities.Result, err error) {
+	results, err = s.repo.FindAllResult(userId)
+
+	return
+}
