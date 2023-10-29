@@ -11,6 +11,26 @@ import (
 	"strconv"
 )
 
+func CheckQuestionTest(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	userId := c.Values().GetString(constants.AuthUserId)
+
+	questionTestExist, err := app.Services.QuestionTest.CheckQuestionTestUser(userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if questionTestExist {
+		HttpError(c, headers, fmt.Errorf("User Has Submit Question Test"), ahttp.ErrFailure("user_has_submit_question_test"))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
+	return
+}
+
 func GetQuestionsTest(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
