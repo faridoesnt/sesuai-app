@@ -18,4 +18,5 @@ type Services struct {
 	Menu           MenuService
 	Logging        LoggingService
 	QuestionTest   QuestionTestService
+	Result         ResultService
 }
