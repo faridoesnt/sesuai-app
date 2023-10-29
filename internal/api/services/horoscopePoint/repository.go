@@ -16,14 +16,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	findHoroscopePoint   *sqlx.Stmt
-	updateHoroscopePoint *sqlx.NamedStmt
+	findHoroscopePoint                 *sqlx.Stmt
+	updateHoroscopePoint               *sqlx.NamedStmt
+	findHoroscopePointByIdAndElementId *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.HoroscopePointRepository {
 	stmts := Statement{
-		findHoroscopePoint:   datasources.Prepare(dbReader, findHoroscopePoint),
-		updateHoroscopePoint: datasources.PrepareNamed(dbWriter, updateHoroscopePoint),
+		findHoroscopePoint:                 datasources.Prepare(dbReader, findHoroscopePoint),
+		updateHoroscopePoint:               datasources.PrepareNamed(dbWriter, updateHoroscopePoint),
+		findHoroscopePointByIdAndElementId: datasources.Prepare(dbReader, findHoroscopePointByIdAndElementId),
 	}
 
 	r := Repository{
@@ -63,6 +65,15 @@ func (r Repository) UpdateHoroscopePoint(params entities.RequestHoroscopePoint) 
 		if err != nil {
 			log.Println("error while update horoscope point ", err)
 		}
+	}
+
+	return
+}
+
+func (r Repository) FindHoroscopePointByIdAndElementId(horoscopeId, elementId string) (horoscopePoint entities.HoroscopePoint, err error) {
+	err = r.stmt.findHoroscopePointByIdAndElementId.Get(&horoscopePoint, horoscopeId, elementId)
+	if err != nil {
+		log.Println("error while find horoscope point by id and element id ", err)
 	}
 
 	return

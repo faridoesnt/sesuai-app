@@ -4,6 +4,7 @@ import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
+	"strconv"
 )
 
 type Service struct {
@@ -43,6 +44,14 @@ func (s Service) GetHoroscopePoint(elementId string) (horoscopePoint []response.
 
 func (s Service) UpdateHoroscopePoint(params entities.RequestHoroscopePoint) (err error) {
 	err = s.repo.UpdateHoroscopePoint(params)
+
+	return
+}
+
+func (s Service) GetPointHoroscopeByIdAndElementId(horoscopeId, elementId string) (pointHoroscope float64, err error) {
+	horoscopePoint, err := s.repo.FindHoroscopePointByIdAndElementId(horoscopeId, elementId)
+
+	pointHoroscope, _ = strconv.ParseFloat(horoscopePoint.Point, 64)
 
 	return
 }
