@@ -32,3 +32,9 @@ func (s Service) UpdatePointAnswer(params entities.RequestPointAnswer) (err erro
 
 	return
 }
+
+func (s Service) GetPointAnswerById(answerId string) (pointAnswer entities.PointAnswer, err error) {
+	pointAnswer, err = s.repo.FindPointAnswerById(answerId)
+
+	return
+}

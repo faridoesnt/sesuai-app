@@ -16,14 +16,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	findPointAnswer   *sqlx.Stmt
-	updatePointAnswer *sqlx.NamedStmt
+	findPointAnswer     *sqlx.Stmt
+	updatePointAnswer   *sqlx.NamedStmt
+	findPointAnswerById *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.PointAnswerRepository {
 	stmts := Statement{
-		findPointAnswer:   datasources.Prepare(dbReader, findPointAnswer),
-		updatePointAnswer: datasources.PrepareNamed(dbWriter, updatePointAnswer),
+		findPointAnswer:     datasources.Prepare(dbReader, findPointAnswer),
+		updatePointAnswer:   datasources.PrepareNamed(dbWriter, updatePointAnswer),
+		findPointAnswerById: datasources.Prepare(dbReader, findPointAnswerById),
 	}
 
 	r := Repository{
@@ -62,6 +64,15 @@ func (r Repository) UpdatePointAnswer(params entities.RequestPointAnswer) (err e
 		if err != nil {
 			log.Println("error while update point answer ", err)
 		}
+	}
+
+	return
+}
+
+func (r Repository) FindPointAnswerById(answerId string) (pointAnswer entities.PointAnswer, err error) {
+	err = r.stmt.findPointAnswerById.Get(&pointAnswer, answerId)
+	if err != nil {
+		log.Println("error while find point answer by id ", err)
 	}
 
 	return
