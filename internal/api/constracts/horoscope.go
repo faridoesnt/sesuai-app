@@ -8,9 +8,11 @@ import (
 type HoroscopeRepository interface {
 	FindHoroscopes() (horoscopes []entities.Horoscope, err error)
 	FindHoroscopeByName(horoscopeName string) (horoscope entities.Horoscope, err error)
+	FindHoroscopeUser(userId string) (horoscope entities.Horoscope, err error)
 }
 
 type HoroscopeService interface {
 	GetHoroscopes() (horoscopes []response.Horoscope, err error)
 	GetHoroscopeByName(horoscopeName string) (horoscope response.Horoscope, err error)
+	GetHoroscopeUser(userId string) (horoscope entities.Horoscope, err error)
 }

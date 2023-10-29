@@ -17,12 +17,14 @@ type Repository struct {
 type Statement struct {
 	findHoroscopes      *sqlx.Stmt
 	findHoroscopeByName *sqlx.Stmt
+	findHoroscopeUser   *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.HoroscopeRepository {
 	stmts := Statement{
 		findHoroscopes:      datasources.Prepare(dbReader, findHoroscopes),
 		findHoroscopeByName: datasources.Prepare(dbReader, findHoroscopeByName),
+		findHoroscopeUser:   datasources.Prepare(dbReader, findHoroscopeUser),
 	}
 
 	r := Repository{
@@ -47,6 +49,15 @@ func (r Repository) FindHoroscopeByName(horoscopeName string) (horoscope entitie
 	err = r.stmt.findHoroscopeByName.Get(&horoscope, horoscopeName)
 	if err != nil {
 		log.Println("error while find horoscope by name ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindHoroscopeUser(userId string) (horoscope entities.Horoscope, err error) {
+	err = r.stmt.findHoroscopeUser.Get(&horoscope, userId)
+	if err != nil {
+		log.Println("error while find horoscope user ", err)
 	}
 
 	return

@@ -2,6 +2,7 @@ package horoscope
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -43,6 +44,12 @@ func (s Service) GetHoroscopeByName(horoscopeName string) (horoscope response.Ho
 
 	horoscope.Id = data.Id
 	horoscope.Name = data.Name
+
+	return
+}
+
+func (s Service) GetHoroscopeUser(userId string) (horoscope entities.Horoscope, err error) {
+	horoscope, err = s.repo.FindHoroscopeUser(userId)
 
 	return
 }
