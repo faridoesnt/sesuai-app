@@ -80,5 +80,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// submit question test
 		v1.Post("/submit-question-test", middlewares.AuthUser, handlers.SubmitQuestionTest)
+
+		// result
+		v1.Get("/result", middlewares.AuthUser, handlers.GetResult)
 	}
 }
