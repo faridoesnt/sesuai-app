@@ -16,14 +16,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	findShioPoint   *sqlx.Stmt
-	updateShioPoint *sqlx.NamedStmt
+	findShioPoint                 *sqlx.Stmt
+	updateShioPoint               *sqlx.NamedStmt
+	findShioPointByIdAndElementId *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ShioPointRepository {
 	stmts := Statement{
-		findShioPoint:   datasources.Prepare(dbReader, findShioPoint),
-		updateShioPoint: datasources.PrepareNamed(dbWriter, updateShioPoint),
+		findShioPoint:                 datasources.Prepare(dbReader, findShioPoint),
+		updateShioPoint:               datasources.PrepareNamed(dbWriter, updateShioPoint),
+		findShioPointByIdAndElementId: datasources.Prepare(dbReader, findShioPointByIdAndElementId),
 	}
 
 	r := Repository{
@@ -63,6 +65,15 @@ func (r Repository) UpdateShioPoint(params entities.RequestShioPoint) (err error
 		if err != nil {
 			log.Println("error while update shio point ", err)
 		}
+	}
+
+	return
+}
+
+func (r Repository) FindShioPointByIdAndElementId(shioId, elementId string) (shioPoint entities.ShioPoint, err error) {
+	err = r.stmt.findShioPointByIdAndElementId.Get(&shioPoint, shioId, elementId)
+	if err != nil {
+		log.Println("error while find shio point by id and element id ", err)
 	}
 
 	return
