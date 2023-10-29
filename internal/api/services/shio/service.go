@@ -2,6 +2,7 @@ package shio
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -30,6 +31,12 @@ func (s Service) GetShio() (shio []response.Shio, err error) {
 			Name: val.Name,
 		})
 	}
+
+	return
+}
+
+func (s Service) GetShioUser(userId string) (shio entities.Shio, err error) {
+	shio, err = s.repo.FindShioUser(userId)
 
 	return
 }
