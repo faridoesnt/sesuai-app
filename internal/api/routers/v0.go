@@ -25,7 +25,6 @@ func Init(app *constracts.App, crs iris.Handler) {
 		// generate token
 		v1.Get("/generate-token", middlewares.AuthAdmin, handlers.GetGenerateToken)
 		v1.Post("/generate-token", middlewares.AuthAdmin, handlers.GenerateNewToken)
-		v1.Post("/generate-token/use", middlewares.AuthAdmin, handlers.UseToken)
 
 		// element
 		v1.Get("/element", middlewares.AuthAdmin, handlers.GetElements)
