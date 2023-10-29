@@ -2,6 +2,7 @@ package bloodType
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -34,6 +35,12 @@ func (s Service) GetBloodType() (listBloodType []response.BloodType) {
 	} else {
 		listBloodType = []response.BloodType{}
 	}
+
+	return
+}
+
+func (s Service) GetBloodTypeUser(userId string) (bloodType entities.BloodType, err error) {
+	bloodType, err = s.repo.FindBloodTypeUser(userId)
 
 	return
 }
