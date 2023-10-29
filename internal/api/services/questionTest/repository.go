@@ -21,6 +21,7 @@ type Statement struct {
 	insertSubmission      *sqlx.NamedStmt
 	insertSubSubmission   *sqlx.NamedStmt
 	insertPointSubmission *sqlx.NamedStmt
+	countQuestionTestUser *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionTestRepository {
@@ -29,6 +30,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.QuestionTes
 		insertSubmission:      datasources.PrepareNamed(dbWriter, insertSubmission),
 		insertSubSubmission:   datasources.PrepareNamed(dbWriter, insertSubSubmission),
 		insertPointSubmission: datasources.PrepareNamed(dbWriter, insertPointSubmission),
+		countQuestionTestUser: datasources.Prepare(dbReader, countQuestionTestUser),
 	}
 
 	r := Repository{
@@ -95,6 +97,15 @@ func (r Repository) SubmitQuestionTest(params entities.SubmitQuestionTest, userI
 		if err != nil {
 			log.Println("error while insert point submission ", err)
 		}
+	}
+
+	return
+}
+
+func (r Repository) CountQuestionTestUser(userId string) (total int64, err error) {
+	err = r.stmt.countQuestionTestUser.Get(&total, userId)
+	if err != nil {
+		log.Println("error while count question test user ", err)
 	}
 
 	return

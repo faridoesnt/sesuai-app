@@ -23,4 +23,13 @@ const (
 	insertPointSubmission = `
 		INSERT INTO point_submission (id_submission, id_category, point) VALUES (:id_submission, :id_category, :point)
 	`
+
+	countQuestionTestUser = `
+		SELECT
+			count(id_submission) as count
+		FROM
+		    submission
+		WHERE
+		    id_user = ?
+	`
 )

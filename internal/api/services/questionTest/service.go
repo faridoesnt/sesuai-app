@@ -32,3 +32,9 @@ func (s Service) SubmitQuestionTest(params entities.SubmitQuestionTest, userId s
 
 	return
 }
+
+func (s Service) CheckQuestionTestUser(userId string) (isExist bool, err error) {
+	count, err := s.repo.CountQuestionTestUser(userId)
+
+	return count > 0, err
+}
