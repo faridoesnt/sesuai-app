@@ -1,6 +1,6 @@
 package response
 
 type Shio struct {
-	Id   string
-	Name string
+	Id   string `json:"id_shio"`
+	Name string `json:"name"`
 }
