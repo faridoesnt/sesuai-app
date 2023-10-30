@@ -1,6 +1,6 @@
 package response
 
 type Horoscope struct {
-	Id   string
-	Name string
+	Id   string `json:"id_horoscope"`
+	Name string `json:"name"`
 }
