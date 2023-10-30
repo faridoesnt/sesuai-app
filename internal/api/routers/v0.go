@@ -89,5 +89,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// shio for update profile user
 		v1.Get("/shio", middlewares.AuthUser, handlers.GetShio)
+
+		// horoscope for update profile user
+		v1.Get("/horoscope", middlewares.AuthUser, handlers.GetHoroscope)
 	}
 }
