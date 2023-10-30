@@ -8,6 +8,7 @@ type UserRepository interface {
 	InsertUser(user entities.RequestRegister) (err error)
 	CountPhoneNumber(phoneNumber string) (total int64, err error)
 	FindUserLoggedIn(userId, token string) (user entities.User, err error)
+	FindProfileUser(userId string) (profileUser entities.User, err error)
 }
 
 type UserService interface {
@@ -16,4 +17,5 @@ type UserService interface {
 	InsertUser(user entities.RequestRegister) (err error)
 	IsExistPhoneNumber(phoneNumber string) bool
 	GetUserLoggedIn(userId, token string) (user entities.User, err error)
+	GetProfileUser(userId string) (profileUser entities.User, err error)
 }

@@ -20,6 +20,7 @@ type Statement struct {
 	insertUser       *sqlx.NamedStmt
 	countPhoneNumber *sqlx.Stmt
 	findUserLoggedIn *sqlx.Stmt
+	findProfileUser  *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserRepository {
@@ -29,6 +30,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserReposit
 		insertUser:       datasources.PrepareNamed(dbWriter, insertUser),
 		countPhoneNumber: datasources.Prepare(dbReader, countPhoneNumber),
 		findUserLoggedIn: datasources.Prepare(dbReader, findUserLoggedIn),
+		findProfileUser:  datasources.Prepare(dbReader, findProfileUser),
 	}
 
 	r := Repository{
@@ -80,6 +82,15 @@ func (r Repository) FindUserLoggedIn(userId, token string) (user entities.User, 
 	err = r.stmt.findUserLoggedIn.Get(&user, userId, token)
 	if err != nil {
 		log.Println("error while find user logged in ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindProfileUser(userId string) (profileUser entities.User, err error) {
+	err = r.stmt.findProfileUser.Get(&profileUser, userId)
+	if err != nil {
+		log.Println("error while find profile user ", err)
 	}
 
 	return

@@ -54,3 +54,9 @@ func (s Service) GetUserLoggedIn(userId, token string) (user entities.User, err 
 
 	return
 }
+
+func (s Service) GetProfileUser(userId string) (profileUser entities.User, err error) {
+	profileUser, err = s.repo.FindProfileUser(userId)
+
+	return
+}
