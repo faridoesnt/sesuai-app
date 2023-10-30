@@ -7,6 +7,7 @@ const (
 			name
 		FROM
 		    horoscope
+		ORDER BY name ASC
 	`
 
 	findHoroscopeByName = `
