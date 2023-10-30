@@ -7,6 +7,7 @@ const (
 			name
 		FROM
 		    shio
+		ORDER BY name ASC
 	`
 
 	findShioUser = `
