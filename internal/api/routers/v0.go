@@ -86,5 +86,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 
 		// profile user
 		v1.Get("/profile-user", middlewares.AuthUser, handlers.GetProfileUser)
+
+		// shio for update profile user
+		v1.Get("/shio", middlewares.AuthUser, handlers.GetShio)
 	}
 }
