@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"Sesuai/internal/api/constants"
 	"Sesuai/internal/api/helpers"
 	"Sesuai/pkg/ahttp"
 	"errors"
+	"fmt"
 	"github.com/kataras/iris/v12"
 )
 
@@ -35,5 +37,20 @@ func GetUser(c iris.Context) {
 	data["horoscope"] = user.Horoscope
 
 	HttpSuccess(c, headers, data)
+	return
+}
+
+func GetProfileUser(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	userId := c.Values().GetString(constants.AuthUserId)
+
+	profileUser, err := app.Services.User.GetProfileUser(userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, profileUser)
 	return
 }

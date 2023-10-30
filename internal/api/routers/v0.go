@@ -83,5 +83,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 		// result
 		v1.Get("/result", middlewares.AuthUser, handlers.GetResult)
 		v1.Get("/result/all", middlewares.AuthUser, handlers.GetAllResult)
+
+		// profile user
+		v1.Get("/profile-user", middlewares.AuthUser, handlers.GetProfileUser)
 	}
 }
