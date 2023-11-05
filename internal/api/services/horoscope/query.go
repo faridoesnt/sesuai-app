@@ -31,4 +31,13 @@ const (
 		WHERE
 		    u.id_user = ?
 	`
+
+	countHoroscopeById = `
+		SELECT
+			COUNT(id_horoscope) as count
+		FROM
+		    horoscope
+		WHERE
+		    id_horoscope = ?
+	`
 )

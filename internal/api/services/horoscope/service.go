@@ -53,3 +53,9 @@ func (s Service) GetHoroscopeUser(userId string) (horoscope entities.Horoscope, 
 
 	return
 }
+
+func (s Service) IsHoroscopeExist(horoscopeId string) bool {
+	count, _ := s.repo.CountHoroscopeById(horoscopeId)
+
+	return count > 0
+}
