@@ -14,3 +14,16 @@ type User struct {
 	Sex         string `db:"sex" json:"gender"`
 	Language    string `db:"language" json:"-"`
 }
+
+type UpdateProfile struct {
+	UserId      string `db:"id_user" json:"-"`
+	Email       string `db:"email" json:"email"`
+	FullName    string `db:"full_name" json:"full_name"`
+	PhoneNumber string `db:"phone_number" json:"phone_number"`
+	DateBirth   string `db:"date_birth" json:"birth_date"`
+	BirthTime   string `db:"birth_time" json:"birth_time"`
+	BloodType   string `db:"id_blood_type" json:"id_blood_type"`
+	Shio        string `db:"id_shio" json:"id_shio"`
+	Horoscope   string `db:"id_horoscope" json:"id_horoscope"`
+	Sex         string `db:"sex" json:"gender"`
+}

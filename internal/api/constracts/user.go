@@ -9,6 +9,7 @@ type UserRepository interface {
 	CountPhoneNumber(phoneNumber string) (total int64, err error)
 	FindUserLoggedIn(userId, token string) (user entities.User, err error)
 	FindProfileUser(userId string) (profileUser entities.User, err error)
+	UpdateProfileUser(params entities.UpdateProfile) (err error)
 }
 
 type UserService interface {
@@ -18,4 +19,5 @@ type UserService interface {
 	IsExistPhoneNumber(phoneNumber string) bool
 	GetUserLoggedIn(userId, token string) (user entities.User, err error)
 	GetProfileUser(userId string) (profileUser entities.User, err error)
+	UpdateProfileUser(params entities.UpdateProfile) (err error)
 }

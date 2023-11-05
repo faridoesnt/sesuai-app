@@ -15,22 +15,24 @@ type Repository struct {
 }
 
 type Statement struct {
-	findUserByEmail  *sqlx.Stmt
-	refreshToken     *sqlx.Stmt
-	insertUser       *sqlx.NamedStmt
-	countPhoneNumber *sqlx.Stmt
-	findUserLoggedIn *sqlx.Stmt
-	findProfileUser  *sqlx.Stmt
+	findUserByEmail   *sqlx.Stmt
+	refreshToken      *sqlx.Stmt
+	insertUser        *sqlx.NamedStmt
+	countPhoneNumber  *sqlx.Stmt
+	findUserLoggedIn  *sqlx.Stmt
+	findProfileUser   *sqlx.Stmt
+	updateProfileUser *sqlx.NamedStmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserRepository {
 	stmts := Statement{
-		findUserByEmail:  datasources.Prepare(dbReader, findUserByEmail),
-		refreshToken:     datasources.Prepare(dbWriter, refreshToken),
-		insertUser:       datasources.PrepareNamed(dbWriter, insertUser),
-		countPhoneNumber: datasources.Prepare(dbReader, countPhoneNumber),
-		findUserLoggedIn: datasources.Prepare(dbReader, findUserLoggedIn),
-		findProfileUser:  datasources.Prepare(dbReader, findProfileUser),
+		findUserByEmail:   datasources.Prepare(dbReader, findUserByEmail),
+		refreshToken:      datasources.Prepare(dbWriter, refreshToken),
+		insertUser:        datasources.PrepareNamed(dbWriter, insertUser),
+		countPhoneNumber:  datasources.Prepare(dbReader, countPhoneNumber),
+		findUserLoggedIn:  datasources.Prepare(dbReader, findUserLoggedIn),
+		findProfileUser:   datasources.Prepare(dbReader, findProfileUser),
+		updateProfileUser: datasources.PrepareNamed(dbWriter, updateProfileUser),
 	}
 
 	r := Repository{
@@ -91,6 +93,15 @@ func (r Repository) FindProfileUser(userId string) (profileUser entities.User, e
 	err = r.stmt.findProfileUser.Get(&profileUser, userId)
 	if err != nil {
 		log.Println("error while find profile user ", err)
+	}
+
+	return
+}
+
+func (r Repository) UpdateProfileUser(params entities.UpdateProfile) (err error) {
+	_, err = r.stmt.updateProfileUser.Exec(params)
+	if err != nil {
+		log.Println("error while update profile user ", err)
 	}
 
 	return

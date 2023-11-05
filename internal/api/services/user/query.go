@@ -97,4 +97,15 @@ const (
 			u.id_user = ? 
 		LIMIT 1
 	`
+
+	updateProfileUser = `
+		UPDATE 
+		    user 
+		SET 
+		    fullname = :full_name, email = :email, phone_number = :phone_number, date_birth = :date_birth, 
+		    birth_time = :birth_time, id_blood_type = :id_blood_type, id_shio = :id_shio, id_horoscope = :id_horoscope,
+		    sex = :sex
+		WHERE 
+		    id_user = :id_user
+	`
 )

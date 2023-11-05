@@ -60,3 +60,9 @@ func (s Service) GetProfileUser(userId string) (profileUser entities.User, err e
 
 	return
 }
+
+func (s Service) UpdateProfileUser(params entities.UpdateProfile) (err error) {
+	err = s.repo.UpdateProfileUser(params)
+
+	return
+}
