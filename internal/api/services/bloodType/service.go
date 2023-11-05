@@ -44,3 +44,9 @@ func (s Service) GetBloodTypeUser(userId string) (bloodType entities.BloodType, 
 
 	return
 }
+
+func (s Service) IsBloodTypeExist(bloodTypeId string) bool {
+	count, _ := s.repo.CountBloodTypeById(bloodTypeId)
+
+	return count > 0
+}

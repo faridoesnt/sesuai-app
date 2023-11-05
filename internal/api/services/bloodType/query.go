@@ -20,4 +20,13 @@ const (
 		WHERE
 		    u.id_user = ?
 	`
+
+	countBloodTypeById = `
+		SELECT
+			COUNT(id_blood_type) as count
+		FROM
+		    blood_type
+		WHERE
+		    id_blood_type = ?
+	`
 )

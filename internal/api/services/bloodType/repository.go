@@ -15,14 +15,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	findBloodType     *sqlx.Stmt
-	findBloodTypeUser *sqlx.Stmt
+	findBloodType      *sqlx.Stmt
+	findBloodTypeUser  *sqlx.Stmt
+	countBloodTypeById *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.BloodTypeRepository {
 	stmts := Statement{
-		findBloodType:     datasources.Prepare(dbReader, findBloodType),
-		findBloodTypeUser: datasources.Prepare(dbReader, findBloodTypeUser),
+		findBloodType:      datasources.Prepare(dbReader, findBloodType),
+		findBloodTypeUser:  datasources.Prepare(dbReader, findBloodTypeUser),
+		countBloodTypeById: datasources.Prepare(dbReader, countBloodTypeById),
 	}
 
 	r := Repository{
@@ -47,6 +49,15 @@ func (r Repository) FindBloodTypeUser(userId string) (bloodType entities.BloodTy
 	err = r.stmt.findBloodTypeUser.Get(&bloodType, userId)
 	if err != nil {
 		log.Println("error while find blood type user ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountBloodTypeById(bloodTypeId string) (count int64, err error) {
+	err = r.stmt.countBloodTypeById.Get(&count, bloodTypeId)
+	if err != nil {
+		log.Println("error while count blood type by id ", err)
 	}
 
 	return
