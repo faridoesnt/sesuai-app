@@ -72,3 +72,9 @@ func (s Service) IsEmailAlreadyUsed(email, userId string) (isExist bool, err err
 
 	return count > 0, err
 }
+
+func (s Service) IsPhoneNumberAlreadyUsed(phoneNumber, userId string) (isExist bool, err error) {
+	count, err := s.repo.CountPhoneNumberAlreadyUsed(phoneNumber, userId)
+
+	return count > 0, err
+}

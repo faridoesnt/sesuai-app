@@ -118,4 +118,14 @@ const (
 		    email = ? AND
 		    id_user != ?
 	`
+
+	countPhoneNumberAlreadyUsed = `
+		SELECT
+			COUNT(phone_number) as total
+		FROM
+		    user
+		WHERE
+		    phone_number = ? AND
+		    id_user != ?
+	`
 )

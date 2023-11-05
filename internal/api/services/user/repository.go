@@ -15,26 +15,28 @@ type Repository struct {
 }
 
 type Statement struct {
-	findUserByEmail       *sqlx.Stmt
-	refreshToken          *sqlx.Stmt
-	insertUser            *sqlx.NamedStmt
-	countPhoneNumber      *sqlx.Stmt
-	findUserLoggedIn      *sqlx.Stmt
-	findProfileUser       *sqlx.Stmt
-	updateProfileUser     *sqlx.NamedStmt
-	countEmailAlreadyUsed *sqlx.Stmt
+	findUserByEmail             *sqlx.Stmt
+	refreshToken                *sqlx.Stmt
+	insertUser                  *sqlx.NamedStmt
+	countPhoneNumber            *sqlx.Stmt
+	findUserLoggedIn            *sqlx.Stmt
+	findProfileUser             *sqlx.Stmt
+	updateProfileUser           *sqlx.NamedStmt
+	countEmailAlreadyUsed       *sqlx.Stmt
+	countPhoneNumberAlreadyUsed *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserRepository {
 	stmts := Statement{
-		findUserByEmail:       datasources.Prepare(dbReader, findUserByEmail),
-		refreshToken:          datasources.Prepare(dbWriter, refreshToken),
-		insertUser:            datasources.PrepareNamed(dbWriter, insertUser),
-		countPhoneNumber:      datasources.Prepare(dbReader, countPhoneNumber),
-		findUserLoggedIn:      datasources.Prepare(dbReader, findUserLoggedIn),
-		findProfileUser:       datasources.Prepare(dbReader, findProfileUser),
-		updateProfileUser:     datasources.PrepareNamed(dbWriter, updateProfileUser),
-		countEmailAlreadyUsed: datasources.Prepare(dbReader, countEmailAlreadyUsed),
+		findUserByEmail:             datasources.Prepare(dbReader, findUserByEmail),
+		refreshToken:                datasources.Prepare(dbWriter, refreshToken),
+		insertUser:                  datasources.PrepareNamed(dbWriter, insertUser),
+		countPhoneNumber:            datasources.Prepare(dbReader, countPhoneNumber),
+		findUserLoggedIn:            datasources.Prepare(dbReader, findUserLoggedIn),
+		findProfileUser:             datasources.Prepare(dbReader, findProfileUser),
+		updateProfileUser:           datasources.PrepareNamed(dbWriter, updateProfileUser),
+		countEmailAlreadyUsed:       datasources.Prepare(dbReader, countEmailAlreadyUsed),
+		countPhoneNumberAlreadyUsed: datasources.Prepare(dbReader, countPhoneNumberAlreadyUsed),
 	}
 
 	r := Repository{
@@ -113,6 +115,15 @@ func (r Repository) CountEmailAlreadyUsed(email, userId string) (total int64, er
 	err = r.stmt.countEmailAlreadyUsed.Get(&total, email, userId)
 	if err != nil {
 		log.Println("error while count email already used ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountPhoneNumberAlreadyUsed(phoneNumber, userId string) (total int64, err error) {
+	err = r.stmt.countPhoneNumberAlreadyUsed.Get(&total, phoneNumber, userId)
+	if err != nil {
+		log.Println("error while count phone number already used ", err)
 	}
 
 	return
