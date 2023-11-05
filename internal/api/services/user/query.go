@@ -108,4 +108,14 @@ const (
 		WHERE 
 		    id_user = :id_user
 	`
+
+	countEmailAlreadyUsed = `
+		SELECT
+			COUNT(email) as total
+		FROM
+		    user
+		WHERE
+		    email = ? AND
+		    id_user != ?
+	`
 )

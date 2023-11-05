@@ -66,3 +66,9 @@ func (s Service) UpdateProfileUser(params entities.UpdateProfile) (err error) {
 
 	return
 }
+
+func (s Service) IsEmailAlreadyUsed(email, userId string) (isExist bool, err error) {
+	count, err := s.repo.CountEmailAlreadyUsed(email, userId)
+
+	return count > 0, err
+}
