@@ -114,17 +114,26 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	user, err := app.Services.User.GetUserByEmail(params.Email)
-	if err == nil {
-		if user.Email != params.Email {
-			HttpError(c, headers, fmt.Errorf("Email Already Used"), ahttp.ErrFailure("email_already_used"))
-			return
-		}
+	emailAlreadyUsed, err := app.Services.User.IsEmailAlreadyUsed(params.Email, userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
 
-		if user.PhoneNumber != params.PhoneNumber {
-			HttpError(c, headers, fmt.Errorf("Phone Number Already Used"), ahttp.ErrFailure("phone_number_already_used"))
-			return
-		}
+	if emailAlreadyUsed {
+		HttpError(c, headers, fmt.Errorf("Email Already Used"), ahttp.ErrFailure("email_already_used"))
+		return
+	}
+
+	phoneNumberAlreadyUsed, err := app.Services.User.IsPhoneNumberAlreadyUsed(params.PhoneNumber, userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if phoneNumberAlreadyUsed {
+		HttpError(c, headers, fmt.Errorf("Phone Number Already Used"), ahttp.ErrFailure("phone_number_already_used"))
+		return
 	}
 
 	existHoroscope := app.Services.Horoscope.IsHoroscopeExist(params.Horoscope)
