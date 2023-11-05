@@ -15,14 +15,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	findShio     *sqlx.Stmt
-	findShioUser *sqlx.Stmt
+	findShio      *sqlx.Stmt
+	findShioUser  *sqlx.Stmt
+	countShioById *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ShioRepository {
 	stmts := Statement{
-		findShio:     datasources.Prepare(dbReader, findShio),
-		findShioUser: datasources.Prepare(dbReader, findShioUser),
+		findShio:      datasources.Prepare(dbReader, findShio),
+		findShioUser:  datasources.Prepare(dbReader, findShioUser),
+		countShioById: datasources.Prepare(dbReader, countShioById),
 	}
 
 	r := Repository{
@@ -47,6 +49,15 @@ func (r Repository) FindShioUser(userId string) (shio entities.Shio, err error) 
 	err = r.stmt.findShioUser.Get(&shio, userId)
 	if err != nil {
 		log.Println("error while find shio user ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountShioById(shioId string) (count int64, err error) {
+	err = r.stmt.countShioById.Get(&count, shioId)
+	if err != nil {
+		log.Println("error while count shio by id ", err)
 	}
 
 	return

@@ -21,4 +21,13 @@ const (
 		WHERE
 		    u.id_user = ?
 	`
+
+	countShioById = `
+		SELECT
+			COUNT(id_shio) as count
+		FROM
+		    shio
+		WHERE
+		    id_shio = ?
+	`
 )

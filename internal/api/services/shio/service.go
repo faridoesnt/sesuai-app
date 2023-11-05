@@ -40,3 +40,9 @@ func (s Service) GetShioUser(userId string) (shio entities.Shio, err error) {
 
 	return
 }
+
+func (s Service) IsShioExist(shioId string) bool {
+	count, _ := s.repo.CountShioById(shioId)
+
+	return count > 0
+}
