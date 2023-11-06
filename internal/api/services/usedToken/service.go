@@ -23,3 +23,9 @@ func (s Service) InsertUsedToken(tokenId, userId string) (err error) {
 
 	return
 }
+
+func (s Service) IsUserToken(token, userId string) (isUserToken bool, err error) {
+	total, err := s.repo.CountUserToken(token, userId)
+
+	return total > 0, err
+}

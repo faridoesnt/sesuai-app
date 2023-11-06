@@ -15,11 +15,13 @@ type Repository struct {
 
 type Statement struct {
 	insertUsedToken *sqlx.Stmt
+	countUserToken  *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UsedTokenRepository {
 	stmts := Statement{
 		insertUsedToken: datasources.Prepare(dbWriter, insertUsedToken),
+		countUserToken:  datasources.Prepare(dbReader, countUserToken),
 	}
 
 	r := Repository{
@@ -35,6 +37,15 @@ func (r Repository) InsertUsedToken(tokenId, userId string) (err error) {
 	_, err = r.stmt.insertUsedToken.Exec(tokenId, userId)
 	if err != nil {
 		log.Println("error while insert used token ", err)
+	}
+
+	return
+}
+
+func (r Repository) CountUserToken(token, userId string) (total int64, err error) {
+	err = r.stmt.countUserToken.Get(&total, token, userId)
+	if err != nil {
+		log.Println("error while count user token ", err)
 	}
 
 	return
