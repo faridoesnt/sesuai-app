@@ -51,20 +51,28 @@ func GetAllResult(c iris.Context) {
 	}
 
 	if token.Status == "non active" {
-		HttpError(c, headers, fmt.Errorf("Token Already Used"), ahttp.ErrFailure("token_already_used"))
-		return
-	}
+		isUserToken, err := app.Services.UsedToken.IsUserToken(params.Token, userId)
+		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
 
-	err = app.Services.GenerateToken.ToggleInactiveToken(token.Id)
-	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
-		return
-	}
+		if !isUserToken {
+			HttpError(c, headers, fmt.Errorf("Token Already Used"), ahttp.ErrFailure("token_already_used"))
+			return
+		}
+	} else {
+		err = app.Services.GenerateToken.ToggleInactiveToken(token.Id)
+		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
 
-	err = app.Services.UsedToken.InsertUsedToken(token.Id, userId)
-	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
-		return
+		err = app.Services.UsedToken.InsertUsedToken(token.Id, userId)
+		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
 	}
 
 	allResult, err := app.Services.Result.GetAllResult(userId)
