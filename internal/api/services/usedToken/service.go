@@ -29,3 +29,9 @@ func (s Service) IsUserToken(token, userId string) (isUserToken bool, err error)
 
 	return total > 0, err
 }
+
+func (s Service) GetUsedTokenByUserId(userId string) (token string, err error) {
+	token, err = s.repo.FindUsedTokenByUserId(userId)
+
+	return
+}

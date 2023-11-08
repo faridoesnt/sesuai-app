@@ -20,4 +20,15 @@ const (
 		    gt.token = ? AND
 		    ut.id_user = ?
 	`
+
+	findUsedTokenByUserId = `
+		SELECT
+			gt.token as token
+		FROM
+		    used_token as ut
+		LEFT JOIN 
+			generate_token as gt ON ut.id_token = gt.id_token
+		WHERE
+		    ut.id_user = ?
+	`
 )
