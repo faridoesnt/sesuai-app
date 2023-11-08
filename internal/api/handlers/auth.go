@@ -125,6 +125,11 @@ func Login(c iris.Context) {
 			return
 		}
 
+		tokenResult, err := app.Services.UsedToken.GetUsedTokenByUserId(user.UserId)
+		if err != nil {
+			tokenResult = ""
+		}
+
 		data := &response.Auth{
 			Token:       newToken,
 			Id:          user.UserId,
@@ -139,6 +144,7 @@ func Login(c iris.Context) {
 			Sex:         user.Sex,
 			Language:    user.Language,
 			Type:        params.Type,
+			TokenResult: tokenResult,
 		}
 
 		HttpSuccess(c, headers, data)
@@ -270,6 +276,11 @@ func Register(c iris.Context) {
 		// get user for response
 		user, _ = app.Services.User.GetUserByEmail(params.Email)
 
+		tokenResult, err := app.Services.UsedToken.GetUsedTokenByUserId(user.UserId)
+		if err != nil {
+			tokenResult = ""
+		}
+
 		data := &response.Auth{
 			Token:       token,
 			Id:          user.UserId,
@@ -284,6 +295,7 @@ func Register(c iris.Context) {
 			Sex:         user.Sex,
 			Language:    user.Language,
 			Type:        "user",
+			TokenResult: tokenResult,
 		}
 
 		HttpSuccess(c, headers, data)

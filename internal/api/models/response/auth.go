@@ -14,4 +14,5 @@ type Auth struct {
 	Sex         string `json:"sex"`
 	Language    string `json:"language"`
 	Type        string `json:"type"`
+	TokenResult string `json:"token_result"`
 }
