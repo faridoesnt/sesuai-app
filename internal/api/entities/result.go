@@ -7,7 +7,3 @@ type Result struct {
 	Point        string `db:"point" json:"point"`
 	Note         string `db:"-" json:"note"`
 }
-
-type RequestAllResult struct {
-	Token string `db:"token" json:"token"`
-}

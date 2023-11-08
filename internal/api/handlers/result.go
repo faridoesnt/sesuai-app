@@ -36,22 +36,21 @@ func GetAllResult(c iris.Context) {
 
 	userId := c.Values().GetString(constants.AuthUserId)
 
-	params := entities.RequestAllResult{}
+	params := c.FormValue("token")
 
-	err := c.ReadJSON(&params)
-	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+	if params == "" {
+		HttpError(c, headers, fmt.Errorf("Token Can't Empty"), ahttp.ErrFailure("token_can't_empty"))
 		return
 	}
 
-	token, err := app.Services.GenerateToken.GetGenerateTokenByToken(params.Token)
+	token, err := app.Services.GenerateToken.GetGenerateTokenByToken(params)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf("Token Not Found"), ahttp.ErrFailure("token_not_found"))
 		return
 	}
 
 	if token.Status == "non active" {
-		isUserToken, err := app.Services.UsedToken.IsUserToken(params.Token, userId)
+		isUserToken, err := app.Services.UsedToken.IsUserToken(params, userId)
 		if err != nil {
 			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 			return
