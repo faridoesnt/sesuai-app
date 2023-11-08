@@ -1,8 +1,11 @@
 package entities
 
 type Result struct {
-	ElementName string `db:"element_name" json:"element_name"`
-	Point       string `db:"point" json:"point"`
+	Id           string `db:"id" json:"id"`
+	ElementName  string `db:"element_name" json:"element_name"`
+	ElementImage string `db:"element_image" json:"element_image"`
+	Point        string `db:"point" json:"point"`
+	Note         string `db:"-" json:"note"`
 }
 
 type RequestAllResult struct {

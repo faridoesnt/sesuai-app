@@ -3,7 +3,9 @@ package result
 const (
 	findResult = `
 		SELECT
+		    s.id_submission as id,
 			e.name as element_name,
+			e.photo as element_image,
 			ps.point
 		FROM
 		    submission as s
@@ -18,7 +20,9 @@ const (
 
 	findAllResult = `
 		SELECT
+			s.id_submission as id,
 			e.name as element_name,
+			e.photo as element_image,
 			ps.point
 		FROM
 		    submission as s
