@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"time"
 )
 
 func GetUser(c iris.Context) {
@@ -99,16 +100,6 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	if params.Shio == "" {
-		HttpError(c, headers, fmt.Errorf("Shio Can't Empty"), ahttp.ErrFailure("shio_can't_empty"))
-		return
-	}
-
-	if params.Horoscope == "" {
-		HttpError(c, headers, fmt.Errorf("Horoscope Can't Empty"), ahttp.ErrFailure("horoscope_can't_empty"))
-		return
-	}
-
 	if params.Sex == "" {
 		HttpError(c, headers, fmt.Errorf("Gender Can't Empty"), ahttp.ErrFailure("gender_can't_empty"))
 		return
@@ -136,23 +127,44 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	existHoroscope := app.Services.Horoscope.IsHoroscopeExist(params.Horoscope)
-	if !existHoroscope {
-		HttpError(c, headers, fmt.Errorf("Horoscope Not Found"), ahttp.ErrFailure("horoscope_not_found"))
-		return
-	}
-
-	existShio := app.Services.Shio.IsShioExist(params.Shio)
-	if !existShio {
-		HttpError(c, headers, fmt.Errorf("Shio Not Found"), ahttp.ErrFailure("shio_not_found"))
-		return
-	}
-
 	existBloodType := app.Services.BloodType.IsBloodTypeExist(params.BloodType)
 	if !existBloodType {
 		HttpError(c, headers, fmt.Errorf("Blood Type Not Found"), ahttp.ErrFailure("blood_type_not_found"))
 		return
 	}
+
+	// get year on date birth for set shio
+	t, err := time.Parse(constants.FormatDate, params.DateBirth)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	year := t.Year()
+
+	// get all shio
+	shio, err := app.Services.Shio.GetShio()
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	shioYear := (year - 4) % 12
+
+	// set shio
+	params.Shio = shio[shioYear].Id
+
+	// get horoscope from date birth
+	horoscopeName := helpers.GetHoroscope(t)
+
+	horoscope, err := app.Services.Horoscope.GetHoroscopeByName(horoscopeName)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	// set horoscope
+	params.Horoscope = horoscope.Id
 
 	params.UserId = userId
 
@@ -162,6 +174,12 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	HttpSuccess(c, headers, nil)
+	profileUser, err := app.Services.User.GetProfileUser(userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, profileUser)
 	return
 }
