@@ -13,6 +13,7 @@ type UserRepository interface {
 	CountEmailAlreadyUsed(email, userId string) (total int64, err error)
 	CountPhoneNumberAlreadyUsed(phoneNumber, userId string) (total int64, err error)
 	FindUserById(userId string) (user entities.User, err error)
+	ChangePassword(userId, newPassword string) (err error)
 }
 
 type UserService interface {
@@ -26,4 +27,5 @@ type UserService interface {
 	IsEmailAlreadyUsed(email, userId string) (isExist bool, err error)
 	IsPhoneNumberAlreadyUsed(phoneNumber, userId string) (isExist bool, err error)
 	GetUserById(userId string) (user entities.User, err error)
+	ChangePassword(userId, newPassword string) (err error)
 }

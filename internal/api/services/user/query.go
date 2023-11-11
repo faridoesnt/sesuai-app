@@ -155,4 +155,13 @@ const (
 			u.id_user = ? 
 		LIMIT 1
 	`
+
+	changePassword = `
+		UPDATE
+			user
+		SET
+		    password = ?
+		WHERE
+		    id_user = ?
+	`
 )

@@ -84,3 +84,9 @@ func (s Service) GetUserById(userId string) (user entities.User, err error) {
 
 	return
 }
+
+func (s Service) ChangePassword(userId, newPassword string) (err error) {
+	err = s.repo.ChangePassword(userId, newPassword)
+
+	return
+}

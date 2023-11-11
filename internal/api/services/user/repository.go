@@ -25,6 +25,7 @@ type Statement struct {
 	countEmailAlreadyUsed       *sqlx.Stmt
 	countPhoneNumberAlreadyUsed *sqlx.Stmt
 	findUserById                *sqlx.Stmt
+	changePassword              *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserRepository {
@@ -39,6 +40,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserReposit
 		countEmailAlreadyUsed:       datasources.Prepare(dbReader, countEmailAlreadyUsed),
 		countPhoneNumberAlreadyUsed: datasources.Prepare(dbReader, countPhoneNumberAlreadyUsed),
 		findUserById:                datasources.Prepare(dbReader, findUserById),
+		changePassword:              datasources.Prepare(dbWriter, changePassword),
 	}
 
 	r := Repository{
@@ -135,6 +137,15 @@ func (r Repository) FindUserById(userId string) (user entities.User, err error) 
 	err = r.stmt.findUserById.Get(&user, userId)
 	if err != nil {
 		log.Println("error while find user by id ", err)
+	}
+
+	return
+}
+
+func (r Repository) ChangePassword(userId, newPassword string) (err error) {
+	_, err = r.stmt.changePassword.Exec(newPassword, userId)
+	if err != nil {
+		log.Println("error while change password ", err)
 	}
 
 	return
