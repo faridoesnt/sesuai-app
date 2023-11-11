@@ -24,6 +24,7 @@ type Statement struct {
 	updateProfileUser           *sqlx.NamedStmt
 	countEmailAlreadyUsed       *sqlx.Stmt
 	countPhoneNumberAlreadyUsed *sqlx.Stmt
+	findUserById                *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserRepository {
@@ -37,6 +38,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UserReposit
 		updateProfileUser:           datasources.PrepareNamed(dbWriter, updateProfileUser),
 		countEmailAlreadyUsed:       datasources.Prepare(dbReader, countEmailAlreadyUsed),
 		countPhoneNumberAlreadyUsed: datasources.Prepare(dbReader, countPhoneNumberAlreadyUsed),
+		findUserById:                datasources.Prepare(dbReader, findUserById),
 	}
 
 	r := Repository{
@@ -124,6 +126,15 @@ func (r Repository) CountPhoneNumberAlreadyUsed(phoneNumber, userId string) (tot
 	err = r.stmt.countPhoneNumberAlreadyUsed.Get(&total, phoneNumber, userId)
 	if err != nil {
 		log.Println("error while count phone number already used ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindUserById(userId string) (user entities.User, err error) {
+	err = r.stmt.findUserById.Get(&user, userId)
+	if err != nil {
+		log.Println("error while find user by id ", err)
 	}
 
 	return

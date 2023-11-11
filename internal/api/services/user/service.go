@@ -78,3 +78,9 @@ func (s Service) IsPhoneNumberAlreadyUsed(phoneNumber, userId string) (isExist b
 
 	return count > 0, err
 }
+
+func (s Service) GetUserById(userId string) (user entities.User, err error) {
+	user, err = s.repo.FindUserById(userId)
+
+	return
+}

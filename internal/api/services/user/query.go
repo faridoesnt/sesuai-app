@@ -128,4 +128,31 @@ const (
 		    phone_number = ? AND
 		    id_user != ?
 	`
+
+	findUserById = `
+		SELECT 
+			u.id_user as user_id,
+			u.fullname as full_name,
+			u.email,
+			u.password,
+			u.phone_number,
+			u.date_birth,
+			u.birth_time,
+			bt.name as blood_type,
+			s.name as shio,
+			h.name as horoscope,
+			IFNULL(sex, "") as sex,
+			IFNULL(language, "") as language
+		FROM 
+			user as u
+		LEFT JOIN blood_type as bt
+			ON u.id_blood_type = bt.id_blood_type
+		LEFT JOIN shio as s
+			ON u.id_shio = s.id_shio
+		LEFT JOIN horoscope as h
+			ON u.id_horoscope = h.id_horoscope
+		WHERE 
+			u.id_user = ? 
+		LIMIT 1
+	`
 )

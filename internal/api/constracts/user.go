@@ -12,6 +12,7 @@ type UserRepository interface {
 	UpdateProfileUser(params entities.UpdateProfile) (err error)
 	CountEmailAlreadyUsed(email, userId string) (total int64, err error)
 	CountPhoneNumberAlreadyUsed(phoneNumber, userId string) (total int64, err error)
+	FindUserById(userId string) (user entities.User, err error)
 }
 
 type UserService interface {
@@ -24,4 +25,5 @@ type UserService interface {
 	UpdateProfileUser(params entities.UpdateProfile) (err error)
 	IsEmailAlreadyUsed(email, userId string) (isExist bool, err error)
 	IsPhoneNumberAlreadyUsed(phoneNumber, userId string) (isExist bool, err error)
+	GetUserById(userId string) (user entities.User, err error)
 }
