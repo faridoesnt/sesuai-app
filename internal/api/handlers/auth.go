@@ -115,7 +115,7 @@ func Login(c iris.Context) {
 
 		// verify password
 		if !verifyPassword(params.Password, user.Password) {
-			HttpError(c, headers, err, ahttp.ErrFailure("password_not_match"))
+			HttpError(c, headers, fmt.Errorf("password not match"), ahttp.ErrFailure("password_not_match"))
 			return
 		}
 
@@ -158,7 +158,7 @@ func Login(c iris.Context) {
 
 		// verify password
 		if !verifyPassword(params.Password, admin.Password) {
-			HttpError(c, headers, err, ahttp.ErrFailure("password_not_match"))
+			HttpError(c, headers, fmt.Errorf("password not match"), ahttp.ErrFailure("password_not_match"))
 			return
 		}
 
