@@ -27,3 +27,9 @@ type UpdateProfile struct {
 	Horoscope   string `db:"id_horoscope" json:"-"`
 	Sex         string `db:"sex" json:"gender"`
 }
+
+type ChangePassword struct {
+	CurrentPassword   string `db:"current_password" json:"current_password"`
+	NewPassword       string `db:"new_password" json:"new_password"`
+	RepeatNewPassword string `db:"-" json:"repeat_new_password"`
+}
