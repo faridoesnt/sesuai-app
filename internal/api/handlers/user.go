@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -181,5 +182,70 @@ func UpdateProfileUser(c iris.Context) {
 	}
 
 	HttpSuccess(c, headers, profileUser)
+	return
+}
+
+func ChangePassword(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	userId := c.Values().GetString(constants.AuthUserId)
+
+	params := entities.ChangePassword{}
+
+	err := c.ReadJSON(&params)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if params.CurrentPassword == "" {
+		HttpError(c, headers, fmt.Errorf("current password can't empty"), ahttp.ErrFailure("current_password_can't_empty"))
+		return
+	}
+
+	if params.NewPassword == "" {
+		HttpError(c, headers, fmt.Errorf("new password can't empty"), ahttp.ErrFailure("new_password_can't_empty"))
+		return
+	}
+
+	if params.RepeatNewPassword == "" {
+		HttpError(c, headers, fmt.Errorf("repeat new password can't empty"), ahttp.ErrFailure("repeat_new_password_can't_empty"))
+		return
+	}
+
+	user, err := app.Services.User.GetUserById(userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	if !verifyPassword(params.CurrentPassword, user.Password) {
+		HttpError(c, headers, fmt.Errorf("current password not match"), ahttp.ErrFailure("current_password_not_match"))
+		return
+	}
+
+	if params.NewPassword != params.RepeatNewPassword {
+		HttpError(c, headers, fmt.Errorf("new password and repeat new password not match"), ahttp.ErrFailure("new_password_and_repeat_new_password_not_match"))
+		return
+	}
+
+	if verifyPassword(params.NewPassword, user.Password) {
+		HttpError(c, headers, fmt.Errorf("current password and new password can't be same"), ahttp.ErrFailure("current_password_and_new_password_can't_be_same"))
+		return
+	}
+
+	hashNewPassword, err := bcrypt.GenerateFromPassword([]byte(params.NewPassword), 16)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	err = app.Services.User.ChangePassword(userId, string(hashNewPassword))
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	HttpSuccess(c, headers, nil)
 	return
 }
