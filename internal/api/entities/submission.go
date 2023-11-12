@@ -8,6 +8,7 @@ type Submission struct {
 	TotalSubmission string `db:"total_submission"`
 	TotalQuestion   string `db:"total_question"`
 	CreatedAt       string `db:"created_at"`
+	Token           string `db:"token"`
 }
 
 type ResultSubmission struct {
