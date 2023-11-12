@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"Sesuai/internal/api/constants"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/helpers"
 	"Sesuai/internal/api/models/response"
 	"Sesuai/pkg/ahttp"
@@ -57,16 +58,23 @@ func GetResultSubmission(c iris.Context) {
 	submissionId := c.Params().GetString("submissionId")
 
 	if submissionId == "" {
-		HttpError(c, headers, ahttp.Error{Message: "Submission Id Is Empty"}, ahttp.ErrFailure("submission_id_is_empty"))
+		HttpError(c, headers, fmt.Errorf("submission id is empty"), ahttp.ErrFailure("submission_id_is_empty"))
 		return
 	}
 
 	resultSubmission, err := app.Services.Submission.GetResultSubmission(submissionId)
 	if err != nil {
-		HttpError(c, headers, ahttp.Error{Message: "Error while get result submissions"}, ahttp.ErrFailure(err.Error()))
+		HttpError(c, headers, fmt.Errorf("error while get result submissions"), ahttp.ErrFailure(err.Error()))
 		return
 	}
 
-	HttpSuccess(c, headers, resultSubmission)
+	data := make(map[string]interface{})
+	data["result_list"] = []entities.Result{}
+
+	if len(resultSubmission) > 0 {
+		data["result_list"] = resultSubmission
+	}
+
+	HttpSuccess(c, headers, data)
 	return
 }
