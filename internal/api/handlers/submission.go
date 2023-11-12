@@ -3,6 +3,7 @@ package handlers
 import (
 	"Sesuai/internal/api/constants"
 	"Sesuai/internal/api/helpers"
+	"Sesuai/internal/api/models/response"
 	"Sesuai/pkg/ahttp"
 	"fmt"
 	"github.com/kataras/iris/v12"
@@ -26,7 +27,14 @@ func GetSubmissions(c iris.Context) {
 
 	submissions := app.Services.Submission.GetSubmissions()
 
-	HttpSuccess(c, headers, submissions)
+	data := make(map[string]interface{})
+	data["submission_list"] = []response.Submission{}
+
+	if len(submissions) > 0 {
+		data["submission_list"] = submissions
+	}
+
+	HttpSuccess(c, headers, data)
 	return
 }
 
