@@ -10,9 +10,3 @@ type Submission struct {
 	CreatedAt       string `db:"created_at"`
 	Token           string `db:"token"`
 }
-
-type ResultSubmission struct {
-	ElementId   string `db:"category_id"`
-	ElementName string `db:"category_name"`
-	Point       string `db:"point"`
-}
