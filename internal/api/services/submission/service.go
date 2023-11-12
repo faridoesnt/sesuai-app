@@ -33,6 +33,7 @@ func (s Service) GetSubmissions() (submissions []response.Submission) {
 				Timer:         submission.Timer,
 				TotalQuestion: submission.TotalSubmission + " / " + submission.TotalQuestion,
 				CreatedAt:     submission.CreatedAt,
+				Token:         submission.Token,
 			})
 		}
 	} else {
