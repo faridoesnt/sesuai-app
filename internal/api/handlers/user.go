@@ -28,18 +28,7 @@ func GetUser(c iris.Context) {
 		return
 	}
 
-	data := make(map[string]interface{})
-	data["email"] = user.Email
-	data["full_name"] = user.FullName
-	data["phone_number"] = user.PhoneNumber
-	data["birth_date"] = user.DateBirth
-	data["birth_time"] = user.BirthTime
-	data["gender"] = user.Sex
-	data["blood_type"] = user.BloodType
-	data["shio"] = user.Shio
-	data["horoscope"] = user.Horoscope
-
-	HttpSuccess(c, headers, data)
+	HttpSuccess(c, headers, user)
 	return
 }
 
