@@ -9,9 +9,3 @@ type Submission struct {
 	CreatedAt     string `json:"created_at"`
 	Token         string `json:"token"`
 }
-
-type ResultSubmission struct {
-	ElementId   string `json:"element_id"`
-	ElementName string `json:"element_name"`
-	Point       string `json:"point"`
-}
