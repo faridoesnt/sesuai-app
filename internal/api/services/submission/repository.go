@@ -43,7 +43,7 @@ func (r Repository) FindSubmissions() (submissions []entities.Submission, err er
 	return
 }
 
-func (r Repository) FindResultSubmission(submissionId string) (resultSubmission []entities.ResultSubmission, err error) {
+func (r Repository) FindResultSubmission(submissionId string) (resultSubmission []entities.Result, err error) {
 	err = r.stmt.findResultSubmission.Select(&resultSubmission, submissionId)
 	if err != nil {
 		log.Println("error while find result submission ", err)

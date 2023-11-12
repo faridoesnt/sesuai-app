@@ -2,6 +2,7 @@ package submission
 
 import (
 	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -43,20 +44,8 @@ func (s Service) GetSubmissions() (submissions []response.Submission) {
 	return
 }
 
-func (s Service) GetResultSubmission(submissionId string) (resultSubmission []response.ResultSubmission, err error) {
-	results, err := s.repo.FindResultSubmission(submissionId)
-
-	if len(resultSubmission) > 0 {
-		for _, result := range results {
-			resultSubmission = append(resultSubmission, response.ResultSubmission{
-				ElementId:   result.ElementId,
-				ElementName: result.ElementName,
-				Point:       result.Point,
-			})
-		}
-	} else {
-		resultSubmission = []response.ResultSubmission{}
-	}
+func (s Service) GetResultSubmission(submissionId string) (results []entities.Result, err error) {
+	results, err = s.repo.FindResultSubmission(submissionId)
 
 	return
 }

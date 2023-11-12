@@ -37,14 +37,17 @@ const (
 
 	findResultSubmission = `
 		SELECT
-			c.id_category as category_id,
-			c.name as category_name,
-			ps.point as point
-		FROM 
-		    point_submission ps
-		LEFT JOIN category c
-			ON c.id_category = ps.id_category
+			s.id_submission as id,
+			e.name as element_name,
+			e.photo as element_image,
+			ps.point
+		FROM
+		    submission as s
+		LEFT JOIN point_submission as ps
+			ON ps.id_submission = s.id_submission
+		LEFT JOIN category as e
+			ON e.id_category = ps.id_category
 		WHERE
-		    ps.id_submission = ?
+		    s.id_submission = ?
 	`
 )
