@@ -15,7 +15,7 @@ const (
 			ON c.id_category = sp.id_category
 		WHERE
 		    c.id_category = ?
-		ORDER BY s.name ASC
+		ORDER BY s.id_shio ASC
 	`
 
 	updateShioPoint = `
