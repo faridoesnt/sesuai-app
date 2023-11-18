@@ -15,7 +15,7 @@ const (
 			ON c.id_category = bp.id_category
 		WHERE
 		    c.id_category = ?
-		ORDER BY b.name ASC
+		ORDER BY b.id_blood_type ASC
 	`
 
 	updateBloodTypePoint = `
