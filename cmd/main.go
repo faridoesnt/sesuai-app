@@ -29,6 +29,7 @@ func main() {
 	irisApp := iris.New()
 	irisApp.Use()
 	irisApp.AllowMethods(iris.MethodOptions)
+	irisApp.RegisterView(iris.HTML("./views", ".html"))
 
 	app = &constracts.App{
 		Iris: irisApp,

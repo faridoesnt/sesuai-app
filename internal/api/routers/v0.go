@@ -5,9 +5,18 @@ import (
 	"Sesuai/internal/api/handlers"
 	"Sesuai/internal/api/middlewares"
 	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/context"
+	"log"
 )
 
 func Init(app *constracts.App, crs iris.Handler) {
+
+	app.Iris.Get("/user-agreement/en", func(c *context.Context) {
+		err := c.View("user_agreement_en.html")
+		if err != nil {
+			log.Println("error while serve user agreement english")
+		}
+	})
 
 	v1 := app.Iris.Party("/v1", crs)
 	{
