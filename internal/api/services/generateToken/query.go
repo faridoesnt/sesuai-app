@@ -19,9 +19,9 @@ const (
 
 	insertNewToken = `
 		INSERT INTO generate_token (
-			id_admin, token, status
+			id_admin, token, status, created_at
 		) VALUES (
-		    ?, ?, 'active'
+		    ?, ?, 'active', ?
 		)
 	`
 

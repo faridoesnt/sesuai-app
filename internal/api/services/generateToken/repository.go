@@ -1,11 +1,13 @@
 package generateToken
 
 import (
+	"Sesuai/internal/api/constants"
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/datasources"
 	"Sesuai/internal/api/entities"
 	"github.com/jmoiron/sqlx"
 	"log"
+	"time"
 )
 
 type Repository struct {
@@ -48,7 +50,7 @@ func (r Repository) FindGenerateToken(adminId string) (tokens []entities.Generat
 }
 
 func (r Repository) InsertNewToken(adminId, token string) (err error) {
-	_, err = r.stmt.insertNewToken.Exec(adminId, token)
+	_, err = r.stmt.insertNewToken.Exec(adminId, token, time.Now().Format(constants.FormatDateTime))
 	if err != nil {
 		log.Println("error while insert new token ", err)
 	}
