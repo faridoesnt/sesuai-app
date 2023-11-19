@@ -18,6 +18,13 @@ func Init(app *constracts.App, crs iris.Handler) {
 		}
 	})
 
+	app.Iris.Get("/user-agreement/id", func(c *context.Context) {
+		err := c.View("user_agreement_id.html")
+		if err != nil {
+			log.Println("error while serve user agreement indonesian")
+		}
+	})
+
 	v1 := app.Iris.Party("/v1", crs)
 	{
 		// auth
