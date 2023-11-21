@@ -4,6 +4,7 @@ import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/services/accessMenu"
 	"Sesuai/internal/api/services/admin"
+	"Sesuai/internal/api/services/adminPhoneNumber"
 	"Sesuai/internal/api/services/bloodType"
 	"Sesuai/internal/api/services/bloodTypePoint"
 	"Sesuai/internal/api/services/element"
@@ -26,25 +27,26 @@ import (
 
 func InitServices() {
 	app.Services = &constracts.Services{
-		User:           user.Init(app),
-		Admin:          admin.Init(app),
-		BloodType:      bloodType.Init(app),
-		BloodTypePoint: bloodTypePoint.Init(app),
-		GenerateToken:  generateToken.Init(app),
-		Element:        element.Init(app),
-		Question:       question.Init(app),
-		Submission:     submission.Init(app),
-		Shio:           shio.Init(app),
-		ShioPoint:      shioPoint.Init(app),
-		Horoscope:      horoscope.Init(app),
-		HoroscopePoint: horoscopePoint.Init(app),
-		PointAnswer:    pointAnswer.Init(app),
-		AccessMenu:     accessMenu.Init(app),
-		Menu:           menu.Init(app),
-		Logging:        logging.Init(app),
-		QuestionTest:   questionTest.Init(app),
-		Result:         result.Init(app),
-		UsedToken:      usedToken.Init(app),
+		User:             user.Init(app),
+		Admin:            admin.Init(app),
+		BloodType:        bloodType.Init(app),
+		BloodTypePoint:   bloodTypePoint.Init(app),
+		GenerateToken:    generateToken.Init(app),
+		Element:          element.Init(app),
+		Question:         question.Init(app),
+		Submission:       submission.Init(app),
+		Shio:             shio.Init(app),
+		ShioPoint:        shioPoint.Init(app),
+		Horoscope:        horoscope.Init(app),
+		HoroscopePoint:   horoscopePoint.Init(app),
+		PointAnswer:      pointAnswer.Init(app),
+		AccessMenu:       accessMenu.Init(app),
+		Menu:             menu.Init(app),
+		Logging:          logging.Init(app),
+		QuestionTest:     questionTest.Init(app),
+		Result:           result.Init(app),
+		UsedToken:        usedToken.Init(app),
+		AdminPhoneNumber: adminPhoneNumber.Init(app),
 	}
 
 	alog.Logger.Printf("Initializing Services: Pass")
