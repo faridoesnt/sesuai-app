@@ -20,11 +20,22 @@ func GetResult(c iris.Context) {
 		return
 	}
 
+	adminPhoneNumber, err := app.Services.AdminPhoneNumber.GetAdminPhoneNumber()
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
 	data := make(map[string]interface{})
 	data["result_list"] = []entities.Result{}
+	data["admin_phone_number"] = ""
 
 	if len(result) > 0 {
 		data["result_list"] = result
+	}
+
+	if adminPhoneNumber.Id != "" {
+		data["admin_phone_number"] = adminPhoneNumber.PhoneNumber
 	}
 
 	HttpSuccess(c, headers, data)
