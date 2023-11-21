@@ -3,6 +3,7 @@ package submission
 import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/entities"
+	"Sesuai/internal/api/helpers"
 	"Sesuai/internal/api/models/response"
 )
 
@@ -46,6 +47,10 @@ func (s Service) GetSubmissions() (submissions []response.Submission) {
 
 func (s Service) GetResultSubmission(submissionId string) (results []entities.Result, err error) {
 	results, err = s.repo.FindResultSubmission(submissionId)
+
+	if len(results) > 0 {
+		results = helpers.FormattedPoint(results)
+	}
 
 	return
 }

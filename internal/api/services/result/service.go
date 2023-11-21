@@ -3,6 +3,7 @@ package result
 import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/entities"
+	"Sesuai/internal/api/helpers"
 )
 
 type Service struct {
@@ -24,11 +25,19 @@ func Init(a *constracts.App) (svc constracts.ResultService) {
 func (s Service) GetResult(userId string) (results []entities.Result, err error) {
 	results, err = s.repo.FindResult(userId)
 
+	if len(results) > 0 {
+		results = helpers.FormattedPoint(results)
+	}
+
 	return
 }
 
 func (s Service) GetAllResult(userId string) (results []entities.Result, err error) {
 	results, err = s.repo.FindAllResult(userId)
+
+	if len(results) > 0 {
+		results = helpers.FormattedPoint(results)
+	}
 
 	return
 }
