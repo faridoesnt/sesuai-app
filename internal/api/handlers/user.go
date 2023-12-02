@@ -139,7 +139,7 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	shioYear := (year - 4) % 12
+	shioYear := (year - 3) % 12
 
 	// set shio
 	params.Shio = shio[shioYear].Id
