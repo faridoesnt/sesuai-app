@@ -252,7 +252,7 @@ func Register(c iris.Context) {
 		shioYear := (year - 3) % 12
 
 		// set shio
-		params.Shio = shio[shioYear].Id
+		params.Shio = shio[shioYear-1].Id
 
 		// get horoscope from date birth
 		horoscopeName := helpers.GetHoroscope(t)
