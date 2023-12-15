@@ -26,6 +26,10 @@ func GetResult(c iris.Context) {
 		return
 	}
 
+	for _, val := range result {
+		val.Note = "Your " + val.ElementName + " element value is " + val.Point
+	}
+
 	data := make(map[string]interface{})
 	data["result_list"] = []entities.Result{}
 	data["admin_phone_number"] = ""
@@ -89,6 +93,10 @@ func GetAllResult(c iris.Context) {
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return
+	}
+
+	for _, val := range allResult {
+		val.Note = "Your " + val.ElementName + " element value is " + val.Point
 	}
 
 	data := make(map[string]interface{})
