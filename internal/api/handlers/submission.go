@@ -68,6 +68,10 @@ func GetResultSubmission(c iris.Context) {
 		return
 	}
 
+	for index := range resultSubmission {
+		resultSubmission[index].Note = "Your " + resultSubmission[index].ElementName + " element value is " + resultSubmission[index].Point
+	}
+
 	data := make(map[string]interface{})
 	data["result_list"] = []entities.Result{}
 

@@ -26,8 +26,8 @@ func GetResult(c iris.Context) {
 		return
 	}
 
-	for _, val := range result {
-		val.Note = "Your " + val.ElementName + " element value is " + val.Point
+	for index := range result {
+		result[index].Note = "Your " + result[index].ElementName + " element value is " + result[index].Point
 	}
 
 	data := make(map[string]interface{})
@@ -95,8 +95,8 @@ func GetAllResult(c iris.Context) {
 		return
 	}
 
-	for _, val := range allResult {
-		val.Note = "Your " + val.ElementName + " element value is " + val.Point
+	for index := range allResult {
+		allResult[index].Note = "Your " + allResult[index].ElementName + " element value is " + allResult[index].Point
 	}
 
 	data := make(map[string]interface{})
