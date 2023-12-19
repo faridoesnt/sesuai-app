@@ -160,6 +160,9 @@ func SaveAdmin(c iris.Context) {
 	params.Password = string(hashPassword)
 
 	if len(params.Access) > 0 {
+
+		params.Access = helpers.UniqueString(params.Access)
+
 		for _, val := range params.Access {
 			var id string
 
@@ -295,6 +298,9 @@ func UpdateAdmin(c iris.Context) {
 	}
 
 	if len(params.Access) > 0 {
+
+		params.Access = helpers.UniqueString(params.Access)
+
 		for _, val := range params.Access {
 			var id string
 
