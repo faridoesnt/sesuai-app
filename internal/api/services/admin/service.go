@@ -112,3 +112,9 @@ func (s Service) DeleteAdmin(adminId string) (err error) {
 
 	return
 }
+
+func (s Service) ChangePassword(adminId, newPassword string) (err error) {
+	err = s.repo.ChangePassword(adminId, newPassword)
+
+	return
+}

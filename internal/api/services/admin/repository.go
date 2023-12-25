@@ -31,6 +31,7 @@ type Statement struct {
 	countAdmin          *sqlx.Stmt
 	countAdminWithToken *sqlx.Stmt
 	deleteAdmin         *sqlx.NamedStmt
+	changePassword      *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminRepository {
@@ -49,6 +50,7 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.AdminReposi
 		countAdmin:          datasources.Prepare(dbReader, countAdmin),
 		countAdminWithToken: datasources.Prepare(dbReader, countAdminWithToken),
 		deleteAdmin:         datasources.PrepareNamed(dbWriter, deleteAdmin),
+		changePassword:      datasources.Prepare(dbWriter, changePassword),
 	}
 
 	r := Repository{
@@ -243,6 +245,15 @@ func (r Repository) DeleteAdmin(adminId string) (err error) {
 	_, err = tx.NamedStmt(r.stmt.deleteAdmin).Exec(data)
 	if err != nil {
 		log.Println("error while delete admin ", err)
+	}
+
+	return
+}
+
+func (r Repository) ChangePassword(adminId, newPassword string) (err error) {
+	_, err = r.stmt.changePassword.Exec(newPassword, adminId)
+	if err != nil {
+		log.Println("error while change password ", err)
 	}
 
 	return

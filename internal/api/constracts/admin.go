@@ -15,6 +15,7 @@ type AdminRepository interface {
 	CountAdmin(adminId string) (total int64, err error)
 	CountAdminWithToken(adminId, token string) (total int64, err error)
 	DeleteAdmin(adminId string) (err error)
+	ChangePassword(adminId, newPassword string) (err error)
 }
 
 type AdminService interface {
@@ -30,4 +31,5 @@ type AdminService interface {
 	IsAdminExist(adminId string) bool
 	IsAdminWithTokenExist(adminId, token string) bool
 	DeleteAdmin(adminId string) (err error)
+	ChangePassword(adminId, newPassword string) (err error)
 }

@@ -83,6 +83,7 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Post("/admins", middlewares.AuthAdmin, handlers.SaveAdmin)
 		v1.Put("/admins/{adminId}", middlewares.AuthAdmin, handlers.UpdateAdmin)
 		v1.Delete("/admins/{adminId}", middlewares.AuthAdmin, handlers.DeleteAdmin)
+		v1.Put("/admins/change-password", middlewares.AuthAdmin, handlers.ChangePasswordAdmin)
 
 		// access menu by admin id
 		v1.Get("/access-menu/{adminId}", middlewares.AuthAdmin, handlers.GetAccessMenu)

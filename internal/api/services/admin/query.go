@@ -19,7 +19,8 @@ const (
 			id_admin as admin_id,
 			fullname as full_name,
 			email,
-			IFNULL(phone_number, '') as phone_number
+			IFNULL(phone_number, '') as phone_number,
+			password
 		FROM 
 			admin 
 		WHERE 
@@ -117,5 +118,14 @@ const (
 
 	deleteAdmin = `
 		DELETE FROM admin WHERE id_admin = :id_admin
+	`
+
+	changePassword = `
+		UPDATE
+			admin
+		SET
+		    password = ?
+		WHERE
+		    id_admin = ?
 	`
 )
