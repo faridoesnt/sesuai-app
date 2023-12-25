@@ -32,7 +32,8 @@ const (
 			id_admin,
 			fullname as full_name,
 			email,
-			password
+			password,
+			is_super_admin
 		FROM 
 			admin 
 		WHERE 
@@ -47,7 +48,8 @@ const (
 			id_admin,
 			fullname as full_name,
 			email,
-			password
+			password,
+			is_super_admin
 		FROM 
 			admin 
 		WHERE 

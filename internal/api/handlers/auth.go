@@ -182,6 +182,7 @@ func Login(c iris.Context) {
 		data["email"] = admin.Email
 		data["type"] = params.Type
 		data["access_menu"] = []string{}
+		data["is_super_admin"] = admin.IsSuperAdmin
 
 		if len(accessMenu) > 0 {
 			data["access_menu"] = accessMenu
