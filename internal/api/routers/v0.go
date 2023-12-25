@@ -61,11 +61,11 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Get("/submissions", middlewares.AuthAdmin, handlers.GetSubmissions)
 		v1.Get("/submissions/result/{submissionId}", middlewares.AuthAdmin, handlers.GetResultSubmission)
 
-		// horoscope point
+		// zodiac point
 		v1.Get("/horoscope-point/{elementId}", middlewares.AuthAdmin, handlers.GetHoroscopePoint)
 		v1.Put("/horoscope-point", middlewares.AuthAdmin, handlers.UpdateHoroscopePoint)
 
-		// shio point
+		// horoscope point
 		v1.Get("/shio-point/{elementId}", middlewares.AuthAdmin, handlers.GetShioPoint)
 		v1.Put("/shio-point", middlewares.AuthAdmin, handlers.UpdateShioPoint)
 
