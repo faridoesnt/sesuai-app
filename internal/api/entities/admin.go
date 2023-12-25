@@ -14,6 +14,7 @@ type AdminList struct {
 	Email       string   `db:"email" json:"email"`
 	PhoneNumber string   `db:"phone_number" json:"phone_number"`
 	AccessMenu  []string `json:"access_menu"`
+	Password    string   `db:"password" json:"-"`
 }
 
 type RequestAdmin struct {
