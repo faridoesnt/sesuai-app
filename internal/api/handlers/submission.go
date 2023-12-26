@@ -26,10 +26,22 @@ func GetSubmissions(c iris.Context) {
 		return
 	}
 
-	submissions := app.Services.Submission.GetSubmissions()
+	search := c.FormValue("search")
+
+	submissions := []response.Submission{}
+
+	if search == "" {
+		submissions = app.Services.Submission.GetSubmissions()
+	} else {
+		if helpers.IsEmail(search) {
+			submissions = app.Services.Submission.GetSubmissionsByEmailUser(search)
+		} else if !helpers.IsEmail(search) {
+			submissions = app.Services.Submission.GetSubmissionsByFullName(search)
+		}
+	}
 
 	data := make(map[string]interface{})
-	data["submission_list"] = []response.Submission{}
+	data["submission_list"] = submissions
 
 	if len(submissions) > 0 {
 		data["submission_list"] = submissions

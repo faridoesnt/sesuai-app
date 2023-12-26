@@ -15,14 +15,18 @@ type Repository struct {
 }
 
 type Statement struct {
-	findSubmissions      *sqlx.Stmt
-	findResultSubmission *sqlx.Stmt
+	findSubmissions            *sqlx.Stmt
+	findSubmissionsByEmailUser *sqlx.Stmt
+	findSubmissionsByFullName  *sqlx.Stmt
+	findResultSubmission       *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.SubmissionRepository {
 	stmts := Statement{
-		findSubmissions:      datasources.Prepare(dbReader, findSubmissions),
-		findResultSubmission: datasources.Prepare(dbReader, findResultSubmission),
+		findSubmissions:            datasources.Prepare(dbReader, findSubmissions),
+		findSubmissionsByEmailUser: datasources.Prepare(dbReader, findSubmissionsByEmailUser),
+		findSubmissionsByFullName:  datasources.Prepare(dbReader, findSubmissionsByFullName),
+		findResultSubmission:       datasources.Prepare(dbReader, findResultSubmission),
 	}
 
 	r := Repository{
@@ -38,6 +42,24 @@ func (r Repository) FindSubmissions() (submissions []entities.Submission, err er
 	err = r.stmt.findSubmissions.Select(&submissions)
 	if err != nil {
 		log.Println("error while find submissions ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindSubmissionsByEmailUser(emailUser string) (submissions []entities.Submission, err error) {
+	err = r.stmt.findSubmissionsByEmailUser.Select(&submissions, emailUser)
+	if err != nil {
+		log.Println("error while find submissions by email user ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindSubmissionsByFullName(fullName string) (submissions []entities.Submission, err error) {
+	err = r.stmt.findSubmissionsByFullName.Select(&submissions, "%"+fullName+"%")
+	if err != nil {
+		log.Println("error while find submissions by full name ", err)
 	}
 
 	return
