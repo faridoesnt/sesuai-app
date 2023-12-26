@@ -11,7 +11,7 @@ const (
     				u.date_birth,
     				u.birth_time,
     				bt.name as blood_type,
-    				s.name as shio,
+    				s.id_shio as shio,
     				h.name as horoscope,
     				IFNULL(sex, "") as sex,
     				IFNULL(language, "") as language
@@ -55,7 +55,7 @@ const (
 			u.phone_number,
 			u.date_birth,
 			bt.name as blood_type,
-			s.name as shio,
+			s.id_shio as shio,
 			h.name as horoscope,
 			IFNULL(sex, "") as sex,
 			IFNULL(language, "") as language
@@ -81,7 +81,7 @@ const (
 			u.date_birth,
 			u.birth_time,
 			bt.name as blood_type,
-			s.name as shio,
+			s.id_shio as shio,
 			h.name as horoscope,
 			IFNULL(sex, "") as sex,
 			IFNULL(language, "") as language
@@ -139,7 +139,7 @@ const (
 			u.date_birth,
 			u.birth_time,
 			bt.name as blood_type,
-			s.name as shio,
+			s.id_shio as shio,
 			h.name as horoscope,
 			IFNULL(sex, "") as sex,
 			IFNULL(language, "") as language
