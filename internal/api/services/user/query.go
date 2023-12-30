@@ -12,6 +12,7 @@ const (
     				IFNULL(u.birth_time, "") as birth_time,
     				bt.name as blood_type,
     				s.id_shio as shio,
+    				IFNULL(ss.id_shio, "") as shio_support,
     				h.name as horoscope,
     				IFNULL(sex, "") as sex,
     				IFNULL(language, "") as language
@@ -21,6 +22,8 @@ const (
 					ON u.id_blood_type = bt.id_blood_type
 				LEFT JOIN shio as s
 					ON u.id_shio = s.id_shio
+				LEFT JOIN shio as ss
+					ON u.id_shio_support = ss.id_shio
 				LEFT JOIN horoscope as h
 					ON u.id_horoscope = h.id_horoscope
 				WHERE 
@@ -82,6 +85,7 @@ const (
 			IFNULL(u.birth_time, "") as birth_time,
 			bt.name as blood_type,
 			s.id_shio as shio,
+			IFNULL(ss.id_shio, "") as shio_support,
 			h.name as horoscope,
 			IFNULL(sex, "") as sex,
 			IFNULL(language, "") as language
@@ -91,6 +95,8 @@ const (
 			ON u.id_blood_type = bt.id_blood_type
 		LEFT JOIN shio as s
 			ON u.id_shio = s.id_shio
+		LEFT JOIN shio as ss
+			ON u.id_shio_support = ss.id_shio
 		LEFT JOIN horoscope as h
 			ON u.id_horoscope = h.id_horoscope
 		WHERE 
@@ -140,6 +146,7 @@ const (
 			IFNULL(u.birth_time, "") as birth_time,
 			bt.name as blood_type,
 			s.id_shio as shio,
+			IFNULL(ss.id_shio, "") as shio_support,
 			h.name as horoscope,
 			IFNULL(sex, "") as sex,
 			IFNULL(language, "") as language
@@ -149,6 +156,8 @@ const (
 			ON u.id_blood_type = bt.id_blood_type
 		LEFT JOIN shio as s
 			ON u.id_shio = s.id_shio
+		LEFT JOIN shio as ss
+			ON u.id_shio_support = ss.id_shio
 		LEFT JOIN horoscope as h
 			ON u.id_horoscope = h.id_horoscope
 		WHERE 

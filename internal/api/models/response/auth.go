@@ -10,6 +10,7 @@ type Auth struct {
 	TimeBirth   string `json:"time_birth"`
 	BloodType   string `json:"blood_type"`
 	Shio        int    `json:"shio"`
+	ShioSupport string `json:"shio_support"`
 	Horoscope   string `json:"horoscope"`
 	Sex         string `json:"sex"`
 	Language    string `json:"language"`

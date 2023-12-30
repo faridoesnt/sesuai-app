@@ -10,6 +10,7 @@ type User struct {
 	BirthTime   string `db:"birth_time" json:"birth_time"`
 	BloodType   string `db:"blood_type" json:"blood_type"`
 	Shio        int    `db:"shio" json:"shio"`
+	ShioSupport string `db:"shio_support" json:"shio_support"`
 	Horoscope   string `db:"horoscope" json:"horoscope"`
 	Sex         string `db:"sex" json:"gender"`
 	Language    string `db:"language" json:"-"`
