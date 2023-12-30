@@ -205,6 +205,45 @@ func Register(c iris.Context) {
 	}
 
 	if params.Agreement {
+		if params.Email == "" {
+			HttpError(c, headers, fmt.Errorf("email can't empty"), ahttp.ErrFailure("email_can't_empty"))
+			return
+		}
+
+		if params.Password == "" {
+			HttpError(c, headers, fmt.Errorf("password can't empty"), ahttp.ErrFailure("password_can't_empty"))
+			return
+		}
+
+		if params.FullName == "" {
+			HttpError(c, headers, fmt.Errorf("full name can't empty"), ahttp.ErrFailure("full_name_can't_empty"))
+			return
+		}
+
+		if params.PhoneNumber == "" {
+			HttpError(c, headers, fmt.Errorf("phone number can't empty"), ahttp.ErrFailure("phone_number_can't_empty"))
+			return
+		}
+
+		if params.BirthDate == "" {
+			HttpError(c, headers, fmt.Errorf("birth date can't empty"), ahttp.ErrFailure("birth_date_can't_empty"))
+			return
+		}
+
+		if *params.BirthTime == "" {
+			params.BirthTime = nil
+		}
+
+		if params.Gender == "" {
+			HttpError(c, headers, fmt.Errorf("gender can't empty"), ahttp.ErrFailure("gender_can't_empty"))
+			return
+		}
+
+		if params.BloodType == "" {
+			HttpError(c, headers, fmt.Errorf("blood type can't empty"), ahttp.ErrFailure("blood_type_can't_empty"))
+			return
+		}
+
 		// get user for check email not used
 		user, _ := app.Services.User.GetUserByEmail(params.Email)
 

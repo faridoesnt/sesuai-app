@@ -80,9 +80,8 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	if params.BirthTime == "" {
-		HttpError(c, headers, fmt.Errorf("Birth Time Can't Empty"), ahttp.ErrFailure("birth_time_can't_empty"))
-		return
+	if *params.BirthTime == "" {
+		params.BirthTime = nil
 	}
 
 	if params.BloodType == "" {
