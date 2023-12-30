@@ -10,6 +10,16 @@ const (
 		ORDER BY id_shio ASC
 	`
 
+	findShioByShioName = `
+		SELECT
+			id_shio,
+			name
+		FROM
+		    shio
+		WHERE
+		    name = ?
+	`
+
 	findShioUser = `
 		SELECT
 			s.id_shio,

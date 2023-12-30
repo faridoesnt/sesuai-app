@@ -32,9 +32,9 @@ const (
 
 	insertUser = `
 		INSERT INTO user 
-		    (email, password, fullname, phone_number, date_birth, birth_time, id_blood_type, id_shio, id_horoscope, sex, token)
+		    (email, password, fullname, phone_number, date_birth, birth_time, id_blood_type, id_shio, id_shio_support, id_horoscope, sex, token)
 		VALUES 
-		    (:email, :password, :fullname, :phone_number, :date_birth, :birth_time, :id_blood_type, :id_shio, :id_horoscope, :sex, :token)
+		    (:email, :password, :fullname, :phone_number, :date_birth, :birth_time, :id_blood_type, :id_shio, :id_shio_support, :id_horoscope, :sex, :token)
 	`
 
 	countPhoneNumber = `
@@ -103,7 +103,7 @@ const (
 		    user 
 		SET 
 		    fullname = :full_name, email = :email, phone_number = :phone_number, date_birth = :date_birth, 
-		    birth_time = :birth_time, id_blood_type = :id_blood_type, id_shio = :id_shio, id_horoscope = :id_horoscope,
+		    birth_time = :birth_time, id_blood_type = :id_blood_type, id_shio = :id_shio, id_shio_support = :id_shio_support, id_horoscope = :id_horoscope,
 		    sex = :sex
 		WHERE 
 		    id_user = :id_user

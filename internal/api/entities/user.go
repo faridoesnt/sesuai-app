@@ -24,6 +24,7 @@ type UpdateProfile struct {
 	BirthTime   *string `db:"birth_time" json:"birth_time"`
 	BloodType   string  `db:"id_blood_type" json:"id_blood_type"`
 	Shio        string  `db:"id_shio" json:"-"`
+	ShioSupport *string `db:"id_shio_support" json:"-"`
 	Horoscope   string  `db:"id_horoscope" json:"-"`
 	Sex         string  `db:"sex" json:"gender"`
 }

@@ -35,6 +35,12 @@ func (s Service) GetShio() (shio []response.Shio, err error) {
 	return
 }
 
+func (s Service) GetShioByShioName(shioName string) (shio entities.Shio, err error) {
+	shio, err = s.repo.FindShioByShioName(shioName)
+
+	return
+}
+
 func (s Service) GetShioUser(userId string) (shio entities.Shio, err error) {
 	shio, err = s.repo.FindShioUser(userId)
 

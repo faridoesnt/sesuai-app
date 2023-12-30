@@ -20,6 +20,7 @@ type RequestRegister struct {
 	Gender      string  `db:"sex" json:"gender"`
 	BloodType   string  `db:"id_blood_type" json:"id_blood_type"`
 	Shio        string  `db:"id_shio"`
+	ShioSupport *string `db:"id_shio_support"`
 	Horoscope   string  `db:"id_horoscope"`
 	Token       string  `db:"token"`
 	Agreement   bool    `json:"user_agreement"`

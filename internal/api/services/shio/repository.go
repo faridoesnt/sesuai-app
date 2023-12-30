@@ -15,16 +15,18 @@ type Repository struct {
 }
 
 type Statement struct {
-	findShio      *sqlx.Stmt
-	findShioUser  *sqlx.Stmt
-	countShioById *sqlx.Stmt
+	findShio           *sqlx.Stmt
+	findShioByShioName *sqlx.Stmt
+	findShioUser       *sqlx.Stmt
+	countShioById      *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ShioRepository {
 	stmts := Statement{
-		findShio:      datasources.Prepare(dbReader, findShio),
-		findShioUser:  datasources.Prepare(dbReader, findShioUser),
-		countShioById: datasources.Prepare(dbReader, countShioById),
+		findShio:           datasources.Prepare(dbReader, findShio),
+		findShioByShioName: datasources.Prepare(dbReader, findShioByShioName),
+		findShioUser:       datasources.Prepare(dbReader, findShioUser),
+		countShioById:      datasources.Prepare(dbReader, countShioById),
 	}
 
 	r := Repository{
@@ -40,6 +42,15 @@ func (r Repository) FindShio() (shio []entities.Shio, err error) {
 	err = r.stmt.findShio.Select(&shio)
 	if err != nil {
 		log.Println("error while find all shio ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindShioByShioName(shioName string) (shio entities.Shio, err error) {
+	err = r.stmt.findShioByShioName.Get(&shio, shioName)
+	if err != nil {
+		log.Println("error while find shio by shio name ", err)
 	}
 
 	return

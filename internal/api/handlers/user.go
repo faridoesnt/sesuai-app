@@ -80,10 +80,6 @@ func UpdateProfileUser(c iris.Context) {
 		return
 	}
 
-	if *params.BirthTime == "" {
-		params.BirthTime = nil
-	}
-
 	if params.BloodType == "" {
 		HttpError(c, headers, fmt.Errorf("Blood Type Can't Empty"), ahttp.ErrFailure("blood_type_can't_empty"))
 		return
@@ -142,6 +138,26 @@ func UpdateProfileUser(c iris.Context) {
 
 	// set shio
 	params.Shio = shio[shioYear-1].Id
+
+	/** start set shio support **/
+	if *params.BirthTime == "" {
+		params.BirthTime = nil
+		params.ShioSupport = nil
+	} else {
+		birthTime := *params.BirthTime + ":00"
+		params.BirthTime = &birthTime
+
+		strShioSupport := helpers.GetShioSupport(*params.BirthTime)
+
+		shioSupport, err := app.Services.Shio.GetShioByShioName(strShioSupport)
+		if err != nil {
+			HttpError(c, headers, err, ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		params.ShioSupport = &shioSupport.Id
+	}
+	/** end set shio support **/
 
 	// get horoscope from date birth
 	horoscopeName := helpers.GetHoroscope(t)
