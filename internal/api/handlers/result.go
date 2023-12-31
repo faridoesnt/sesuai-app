@@ -21,10 +21,10 @@ func GetResults(c iris.Context) {
 	}
 
 	data := make(map[string]interface{})
-	data["result_list"] = results
+	data["results"] = results
 
 	if len(results) > 0 {
-		data["result_list"] = results
+		data["results"] = results
 	}
 
 	HttpSuccess(c, headers, data)
