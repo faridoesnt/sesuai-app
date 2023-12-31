@@ -9,6 +9,28 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
+func GetResults(c iris.Context) {
+	headers := helpers.GetHeaders(c)
+
+	userId := c.Values().GetString(constants.AuthUserId)
+
+	results, err := app.Services.Result.GetResults(userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["result_list"] = results
+
+	if len(results) > 0 {
+		data["result_list"] = results
+	}
+
+	HttpSuccess(c, headers, data)
+	return
+}
+
 func GetResultBySubmissionId(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 

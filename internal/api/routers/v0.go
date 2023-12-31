@@ -98,6 +98,7 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Post("/submit-question-test", middlewares.AuthUser, handlers.SubmitQuestionTest)
 
 		// result
+		v1.Get("/results", middlewares.AuthUser, handlers.GetResults)
 		v1.Get("/results/{submissionId}", middlewares.AuthUser, handlers.GetResultBySubmissionId)
 		v1.Get("/result/all", middlewares.AuthUser, handlers.GetAllResult)
 
