@@ -9,7 +9,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-func GetResult(c iris.Context) {
+func GetResultBySubmissionId(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	userId := c.Values().GetString(constants.AuthUserId)
