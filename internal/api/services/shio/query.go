@@ -32,6 +32,18 @@ const (
 		    u.id_user = ?
 	`
 
+	findShioSupportUser = `
+		SELECT
+			IFNULL(s.id_shio, "") as id_shio,
+			IFNULL(s.name, "") as name
+		FROM
+		    shio as s
+		LEFT JOIN user as u
+			ON s.id_shio = u.id_shio_support
+		WHERE
+		    u.id_user = ?
+	`
+
 	countShioById = `
 		SELECT
 			COUNT(id_shio) as count

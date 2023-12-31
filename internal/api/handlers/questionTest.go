@@ -107,6 +107,12 @@ func SubmitQuestionTest(c iris.Context) {
 		return
 	}
 
+	shioSupportUser, err := app.Services.Shio.GetShioSupportUser(userId)
+	if err != nil {
+		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+		return
+	}
+
 	horoscopeUser, err := app.Services.Horoscope.GetHoroscopeUser(userId)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf("User Don't Have Horoscope"), ahttp.ErrFailure("user_don't_have_horoscope"))
@@ -148,6 +154,17 @@ func SubmitQuestionTest(c iris.Context) {
 		}
 
 		totalPoint += pointShio
+
+		// add up total point with point shio support
+		if shioSupportUser.Id != "" {
+			pointShioSupport, err := app.Services.ShioPoint.GetPointShioByIdAndElementId(shioSupportUser.Id, elementId)
+			if err != nil {
+				HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+				return
+			}
+
+			totalPoint += pointShioSupport
+		}
 
 		// add up total point with point horoscope
 		pointHoroscope, err := app.Services.HoroscopePoint.GetPointHoroscopeByIdAndElementId(horoscopeUser.Id, elementId)
