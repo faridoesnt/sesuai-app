@@ -34,19 +34,6 @@ func CheckQuestionTest(c iris.Context) {
 func GetQuestionsTest(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
-	userId := c.Values().GetString(constants.AuthUserId)
-
-	questionTestExist, err := app.Services.QuestionTest.CheckQuestionTestUser(userId)
-	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
-		return
-	}
-
-	if questionTestExist {
-		HttpError(c, headers, fmt.Errorf("User Has Submit Question Test"), ahttp.ErrFailure("user_has_submit_question_test"))
-		return
-	}
-
 	questionsTest, err := app.Services.QuestionTest.GetQuestionsTest()
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf("Questions Not Found"), ahttp.ErrFailure("questions_not_found"))
@@ -79,20 +66,9 @@ func SubmitQuestionTest(c iris.Context) {
 
 	userId := c.Values().GetString(constants.AuthUserId)
 
-	questionTestExist, err := app.Services.QuestionTest.CheckQuestionTestUser(userId)
-	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
-		return
-	}
-
-	if questionTestExist {
-		HttpError(c, headers, fmt.Errorf("User Has Submit Question Test"), ahttp.ErrFailure("user_has_submit_question_test"))
-		return
-	}
-
 	params := entities.SubmitQuestionTest{}
 
-	err = c.ReadJSON(&params)
+	err := c.ReadJSON(&params)
 	if err != nil {
 		HttpError(c, headers, err, ahttp.ErrInvalid(err.Error()))
 		return
