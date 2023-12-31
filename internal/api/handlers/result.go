@@ -14,7 +14,13 @@ func GetResult(c iris.Context) {
 
 	userId := c.Values().GetString(constants.AuthUserId)
 
-	result, err := app.Services.Result.GetResult(userId)
+	submissionId := c.Params().GetString("submissionId")
+	if submissionId == "" {
+		HttpError(c, headers, fmt.Errorf("Submission Id Empty"), ahttp.ErrFailure("submission_id_empty"))
+		return
+	}
+
+	result, err := app.Services.Result.GetResultBySubmissionId(userId, submissionId)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return

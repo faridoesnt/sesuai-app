@@ -15,14 +15,14 @@ type Repository struct {
 }
 
 type Statement struct {
-	findResult    *sqlx.Stmt
-	findAllResult *sqlx.Stmt
+	findResultBySubmissionId *sqlx.Stmt
+	findAllResult            *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ResultRepository {
 	stmts := Statement{
-		findResult:    datasources.Prepare(dbReader, findResult),
-		findAllResult: datasources.Prepare(dbReader, findAllResult),
+		findResultBySubmissionId: datasources.Prepare(dbReader, findResultBySubmissionId),
+		findAllResult:            datasources.Prepare(dbReader, findAllResult),
 	}
 
 	r := Repository{
@@ -34,10 +34,10 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.ResultRepos
 	return &r
 }
 
-func (r Repository) FindResult(userId string) (results []entities.Result, err error) {
-	err = r.stmt.findResult.Select(&results, userId)
+func (r Repository) FindResultBySubmissionId(userId, submissionId string) (results []entities.Result, err error) {
+	err = r.stmt.findResultBySubmissionId.Select(&results, userId, submissionId)
 	if err != nil {
-		log.Println("error while find result ", err)
+		log.Println("error while find result by submission id ", err)
 	}
 
 	return

@@ -1,7 +1,7 @@
 package result
 
 const (
-	findResult = `
+	findResultBySubmissionId = `
 		SELECT
 		    s.id_submission as id,
 			e.name as element_name,
@@ -14,7 +14,9 @@ const (
 		LEFT JOIN category as e
 			ON e.id_category = ps.id_category
 		WHERE
-		    s.id_user = ? AND e.id_category IN (22, 20, 25, 17, 24)
+		    s.id_user = ? AND
+		    s.id_submission = ? AND 
+		    e.id_category IN (22, 20, 25, 17, 24)
 		ORDER BY CASE WHEN e.id_category = 22 THEN 1
 					  WHEN e.id_category = 20 THEN 2
 					  WHEN e.id_category = 25 THEN 3

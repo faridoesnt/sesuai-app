@@ -22,8 +22,8 @@ func Init(a *constracts.App) (svc constracts.ResultService) {
 	return
 }
 
-func (s Service) GetResult(userId string) (results []entities.Result, err error) {
-	results, err = s.repo.FindResult(userId)
+func (s Service) GetResultBySubmissionId(userId, submissionId string) (results []entities.Result, err error) {
+	results, err = s.repo.FindResultBySubmissionId(userId, submissionId)
 
 	if len(results) > 0 {
 		results = helpers.FormattedPoint(results)
