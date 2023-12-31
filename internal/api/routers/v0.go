@@ -100,7 +100,7 @@ func Init(app *constracts.App, crs iris.Handler) {
 		// result
 		v1.Get("/results", middlewares.AuthUser, handlers.GetResults)
 		v1.Get("/results/{submissionId}", middlewares.AuthUser, handlers.GetResultBySubmissionId)
-		v1.Get("/result/all", middlewares.AuthUser, handlers.GetAllResult)
+		v1.Get("/results/{submissionId}/all", middlewares.AuthUser, handlers.GetAllResultBySubmissionId)
 
 		// profile user
 		v1.Get("/profile-user", middlewares.AuthUser, handlers.GetProfileUser)

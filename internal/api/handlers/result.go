@@ -74,7 +74,7 @@ func GetResultBySubmissionId(c iris.Context) {
 	return
 }
 
-func GetAllResult(c iris.Context) {
+func GetAllResultBySubmissionId(c iris.Context) {
 	headers := helpers.GetHeaders(c)
 
 	userId := c.Values().GetString(constants.AuthUserId)
