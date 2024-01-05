@@ -107,11 +107,7 @@ func SubmitQuestionTest(c iris.Context) {
 		return
 	}
 
-	shioSupportUser, err := app.Services.Shio.GetShioSupportUser(userId)
-	if err != nil {
-		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
-		return
-	}
+	shioSupportUser, _ := app.Services.Shio.GetShioSupportUser(userId)
 
 	horoscopeUser, err := app.Services.Horoscope.GetHoroscopeUser(userId)
 	if err != nil {
