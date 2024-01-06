@@ -29,7 +29,7 @@ const (
 		LEFT JOIN user u
 		    ON s.id_user = u.id_user
 		LEFT JOIN used_token ut
-			ON u.id_user = ut.id_user
+			ON s.id_submission = ut.id_submission
 		LEFT JOIN generate_token as gt
 		    ON ut.id_token = gt.id_token
 		WHERE 
