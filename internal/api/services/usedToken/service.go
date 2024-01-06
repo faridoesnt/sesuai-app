@@ -1,6 +1,9 @@
 package usedToken
 
-import "Sesuai/internal/api/constracts"
+import (
+	"Sesuai/internal/api/constracts"
+	"Sesuai/internal/api/entities"
+)
 
 type Service struct {
 	app  constracts.App
@@ -30,8 +33,8 @@ func (s Service) IsSubmissionToken(token, submissionId string) (isSubmissionToke
 	return total > 0, err
 }
 
-func (s Service) GetUsedTokenByUserId(userId string) (token string, err error) {
-	token, err = s.repo.FindUsedTokenByUserId(userId)
+func (s Service) GetUsedTokenByUserId(userId string) (tokenResults []entities.TokenResult, err error) {
+	tokenResults, err = s.repo.FindUsedTokenByUserId(userId)
 
 	return
 }

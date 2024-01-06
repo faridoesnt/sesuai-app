@@ -127,7 +127,7 @@ func Login(c iris.Context) {
 
 		tokenResult, err := app.Services.UsedToken.GetUsedTokenByUserId(user.UserId)
 		if err != nil {
-			tokenResult = ""
+			tokenResult = []entities.TokenResult{}
 		}
 
 		data := &response.Auth{
@@ -335,7 +335,7 @@ func Register(c iris.Context) {
 
 		tokenResult, err := app.Services.UsedToken.GetUsedTokenByUserId(user.UserId)
 		if err != nil {
-			tokenResult = ""
+			tokenResult = []entities.TokenResult{}
 		}
 
 		data := &response.Auth{

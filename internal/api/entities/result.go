@@ -7,3 +7,8 @@ type Result struct {
 	Point        string `db:"point" json:"point"`
 	Note         string `db:"-" json:"note"`
 }
+
+type TokenResult struct {
+	SubmissionId string `db:"submission_id" json:"submission_id"`
+	Token        string `db:"token" json:"token"`
+}

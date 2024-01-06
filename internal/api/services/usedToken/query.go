@@ -23,12 +23,15 @@ const (
 
 	findUsedTokenByUserId = `
 		SELECT
+		    s.id_submission as submission_id,
 			gt.token as token
 		FROM
 		    used_token as ut
 		LEFT JOIN 
 			generate_token as gt ON ut.id_token = gt.id_token
+		LEFT JOIN 
+		    submission as s ON ut.id_submission = s.id_submission
 		WHERE
-		    ut.id_user = ?
+		    s.id_user = ?
 	`
 )

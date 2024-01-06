@@ -3,6 +3,7 @@ package usedToken
 import (
 	"Sesuai/internal/api/constracts"
 	"Sesuai/internal/api/datasources"
+	"Sesuai/internal/api/entities"
 	"github.com/jmoiron/sqlx"
 	"log"
 )
@@ -53,8 +54,8 @@ func (r Repository) CountSubmissionToken(token, submissionId string) (total int6
 	return
 }
 
-func (r Repository) FindUsedTokenByUserId(userId string) (token string, err error) {
-	err = r.stmt.findUsedTokenByUserId.Get(&token, userId)
+func (r Repository) FindUsedTokenByUserId(userId string) (tokenResults []entities.TokenResult, err error) {
+	err = r.stmt.findUsedTokenByUserId.Select(&tokenResults, userId)
 	if err != nil {
 		log.Println("error while find used token by user id ", err)
 	}
