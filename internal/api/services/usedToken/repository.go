@@ -15,14 +15,14 @@ type Repository struct {
 
 type Statement struct {
 	insertUsedToken       *sqlx.Stmt
-	countUserToken        *sqlx.Stmt
+	countSubmissionToken  *sqlx.Stmt
 	findUsedTokenByUserId *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UsedTokenRepository {
 	stmts := Statement{
 		insertUsedToken:       datasources.Prepare(dbWriter, insertUsedToken),
-		countUserToken:        datasources.Prepare(dbReader, countUserToken),
+		countSubmissionToken:  datasources.Prepare(dbReader, countSubmissionToken),
 		findUsedTokenByUserId: datasources.Prepare(dbReader, findUsedTokenByUserId),
 	}
 
@@ -35,8 +35,8 @@ func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.UsedTokenRe
 	return &r
 }
 
-func (r Repository) InsertUsedToken(tokenId, userId string) (err error) {
-	_, err = r.stmt.insertUsedToken.Exec(tokenId, userId)
+func (r Repository) InsertUsedToken(tokenId, submissionId string) (err error) {
+	_, err = r.stmt.insertUsedToken.Exec(tokenId, submissionId)
 	if err != nil {
 		log.Println("error while insert used token ", err)
 	}
@@ -44,10 +44,10 @@ func (r Repository) InsertUsedToken(tokenId, userId string) (err error) {
 	return
 }
 
-func (r Repository) CountUserToken(token, userId string) (total int64, err error) {
-	err = r.stmt.countUserToken.Get(&total, token, userId)
+func (r Repository) CountSubmissionToken(token, submissionId string) (total int64, err error) {
+	err = r.stmt.countSubmissionToken.Get(&total, token, submissionId)
 	if err != nil {
-		log.Println("error while count user token ", err)
+		log.Println("error while count submission token ", err)
 	}
 
 	return

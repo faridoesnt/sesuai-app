@@ -1,13 +1,13 @@
 package constracts
 
 type UsedTokenRepository interface {
-	InsertUsedToken(tokenId, userId string) (err error)
-	CountUserToken(token, userId string) (total int64, err error)
+	InsertUsedToken(tokenId, submissionId string) (err error)
+	CountSubmissionToken(token, submissionId string) (total int64, err error)
 	FindUsedTokenByUserId(userId string) (token string, err error)
 }
 
 type UsedTokenService interface {
-	InsertUsedToken(tokenId, userId string) (err error)
-	IsUserToken(token, userId string) (isUserToken bool, err error)
+	InsertUsedToken(tokenId, submissionId string) (err error)
+	IsSubmissionToken(token, submissionId string) (isSubmissionToken bool, err error)
 	GetUsedTokenByUserId(userId string) (token string, err error)
 }

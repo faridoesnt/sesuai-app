@@ -3,13 +3,13 @@ package usedToken
 const (
 	insertUsedToken = `
 		INSERT INTO used_token (
-			id_token, id_user
+			id_token, id_submission
 		) VALUES (
 		    ?, ?
 		)
 	`
 
-	countUserToken = `
+	countSubmissionToken = `
 		SELECT
 			COUNT(ut.id_token) as count
 		FROM
@@ -18,7 +18,7 @@ const (
 			generate_token as gt ON ut.id_token = gt.id_token
 		WHERE
 		    gt.token = ? AND
-		    ut.id_user = ?
+		    ut.id_submission = ?
 	`
 
 	findUsedTokenByUserId = `

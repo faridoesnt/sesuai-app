@@ -53,8 +53,8 @@ func (s Service) GetResultBySubmissionId(userId, submissionId string) (results [
 	return
 }
 
-func (s Service) GetAllResult(userId string) (results []entities.Result, err error) {
-	results, err = s.repo.FindAllResult(userId)
+func (s Service) GetAllResultBySubmissionId(userId, submissionId string) (results []entities.Result, err error) {
+	results, err = s.repo.FindAllResultBySubmissionId(userId, submissionId)
 
 	if len(results) > 0 {
 		results = helpers.FormattedPoint(results)

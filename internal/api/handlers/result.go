@@ -79,6 +79,12 @@ func GetAllResultBySubmissionId(c iris.Context) {
 
 	userId := c.Values().GetString(constants.AuthUserId)
 
+	submissionId := c.Params().GetString("submissionId")
+	if submissionId == "" {
+		HttpError(c, headers, fmt.Errorf("Submission Id Empty"), ahttp.ErrFailure("submission_id_empty"))
+		return
+	}
+
 	params := c.FormValue("token")
 
 	if params == "" {
@@ -93,13 +99,13 @@ func GetAllResultBySubmissionId(c iris.Context) {
 	}
 
 	if token.Status == "non active" {
-		isUserToken, err := app.Services.UsedToken.IsUserToken(params, userId)
+		isSubmissionToken, err := app.Services.UsedToken.IsSubmissionToken(params, submissionId)
 		if err != nil {
 			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 			return
 		}
 
-		if !isUserToken {
+		if !isSubmissionToken {
 			HttpError(c, headers, fmt.Errorf("Token Already Used"), ahttp.ErrFailure("token_already_used"))
 			return
 		}
@@ -110,14 +116,14 @@ func GetAllResultBySubmissionId(c iris.Context) {
 			return
 		}
 
-		err = app.Services.UsedToken.InsertUsedToken(token.Id, userId)
+		err = app.Services.UsedToken.InsertUsedToken(token.Id, submissionId)
 		if err != nil {
 			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 			return
 		}
 	}
 
-	allResult, err := app.Services.Result.GetAllResult(userId)
+	allResult, err := app.Services.Result.GetAllResultBySubmissionId(userId, submissionId)
 	if err != nil {
 		HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
 		return

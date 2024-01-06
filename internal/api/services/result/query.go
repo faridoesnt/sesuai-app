@@ -60,7 +60,7 @@ const (
 					  WHEN e.id_category = 24 THEN 5 END
 	`
 
-	findAllResult = `
+	findAllResultBySubmissionId = `
 		SELECT
 			s.id_submission as id,
 			e.name as element_name,
@@ -73,6 +73,7 @@ const (
 		LEFT JOIN category as e
 			ON e.id_category = ps.id_category
 		WHERE
-		    s.id_user = ?
+		    s.id_user = ? AND
+		    s.id_submission = ?
 	`
 )

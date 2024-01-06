@@ -18,14 +18,14 @@ func Init(a *constracts.App) (svc constracts.UsedTokenService) {
 	return
 }
 
-func (s Service) InsertUsedToken(tokenId, userId string) (err error) {
-	err = s.repo.InsertUsedToken(tokenId, userId)
+func (s Service) InsertUsedToken(tokenId, submissionId string) (err error) {
+	err = s.repo.InsertUsedToken(tokenId, submissionId)
 
 	return
 }
 
-func (s Service) IsUserToken(token, userId string) (isUserToken bool, err error) {
-	total, err := s.repo.CountUserToken(token, userId)
+func (s Service) IsSubmissionToken(token, submissionId string) (isSubmissionToken bool, err error) {
+	total, err := s.repo.CountSubmissionToken(token, submissionId)
 
 	return total > 0, err
 }
