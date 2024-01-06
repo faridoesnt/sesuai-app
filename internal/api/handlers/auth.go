@@ -127,6 +127,11 @@ func Login(c iris.Context) {
 
 		tokenResult, err := app.Services.UsedToken.GetUsedTokenByUserId(user.UserId)
 		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		if len(tokenResult) == 0 {
 			tokenResult = []entities.TokenResult{}
 		}
 
@@ -335,6 +340,11 @@ func Register(c iris.Context) {
 
 		tokenResult, err := app.Services.UsedToken.GetUsedTokenByUserId(user.UserId)
 		if err != nil {
+			HttpError(c, headers, fmt.Errorf(err.Error()), ahttp.ErrFailure(err.Error()))
+			return
+		}
+
+		if len(tokenResult) == 0 {
 			tokenResult = []entities.TokenResult{}
 		}
 
