@@ -106,5 +106,8 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Get("/profile-user", middlewares.AuthUser, handlers.GetProfileUser)
 		v1.Put("/profile-user", middlewares.AuthUser, handlers.UpdateProfileUser)
 		v1.Put("/profile-user/change-password", middlewares.AuthUser, handlers.ChangePassword)
+
+		// fetch data to excel
+		v1.Get("/fetch-data", middlewares.AuthAdmin, handlers.RecapSubmissions)
 	}
 }

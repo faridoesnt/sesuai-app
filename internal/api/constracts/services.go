@@ -21,4 +21,5 @@ type Services struct {
 	Result           ResultService
 	UsedToken        UsedTokenService
 	AdminPhoneNumber AdminPhoneNumberService
+	RecapSubmissions RecapSubmissionsService
 }
