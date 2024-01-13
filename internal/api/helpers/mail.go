@@ -14,7 +14,7 @@ const CONFIG_AUTH_PASSWORD = "wpnygwlymohalhrj"
 func SendEmail(file, emailReceiver, fileName string) (success bool, err error) {
 	mailer := gomail.NewMessage()
 	mailer.SetHeader("From", CONFIG_SENDER_NAME)
-	mailer.SetHeader("To", "faridoesnt@gmail.com")
+	mailer.SetHeader("To", emailReceiver)
 	mailer.SetHeader("Subject", fileName)
 	mailer.Attach(file)
 
