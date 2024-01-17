@@ -108,6 +108,6 @@ func Init(app *constracts.App, crs iris.Handler) {
 		v1.Put("/profile-user/change-password", middlewares.AuthUser, handlers.ChangePassword)
 
 		// fetch data to excel
-		v1.Get("/fetch-data", middlewares.AuthAdmin, handlers.RecapSubmissions)
+		v1.Post("/fetch-data", middlewares.AuthAdmin, handlers.RecapSubmissions)
 	}
 }
