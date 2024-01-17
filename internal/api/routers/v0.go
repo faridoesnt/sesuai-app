@@ -38,6 +38,12 @@ func Init(app *constracts.App, crs iris.Handler) {
 		// blood type
 		v1.Get("/blood-type", handlers.BloodType)
 
+		// horoscope (previously it was shio)
+		v1.Get("/horoscope", handlers.Horoscope)
+
+		// zodiac (previously it was horoscope)
+		v1.Get("/zodiac", handlers.Zodiac)
+
 		// generate token
 		v1.Get("/generate-token", middlewares.AuthAdmin, handlers.GetGenerateToken)
 		v1.Post("/generate-token", middlewares.AuthAdmin, handlers.GenerateNewToken)
