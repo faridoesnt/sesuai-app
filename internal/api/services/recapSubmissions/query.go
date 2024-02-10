@@ -38,4 +38,27 @@ const (
 		WHERE
 			s.id_user = ?
 	`
+
+	findSummariesSubmissionByUserId = `
+		SELECT
+		    s.id_submission as submission_id,
+			IFNULL(gt.token, "-") as token
+		FROM
+			submission s
+		LEFT JOIN used_token ut ON s.id_submission = ut.id_submission
+		LEFT JOIN generate_token gt ON ut.id_token = gt.id_token
+		WHERE s.id_user = ?
+		ORDER BY s.id_submission ASC
+	`
+
+	findSummariesPointSubmissionBySubmissionId = `
+		SELECT
+			c.name as element_name,
+			ps.point
+		FROM
+		    point_submission ps
+		LEFT JOIN category c ON ps.id_category = c.id_category
+		WHERE ps.id_submission = ?
+		ORDER BY c.name ASC
+	`
 )

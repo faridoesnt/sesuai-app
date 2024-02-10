@@ -39,6 +39,8 @@ func (s Service) GetRecapSubmissions(params entities.RequestRecapSubmissions) (r
 
 	if len(recapUser) > 0 {
 		for _, value := range recapUser {
+			var summaries []entities.SummariesSubmission
+
 			totalSubmissions := 0
 			totalUnlockSubmissions := 0
 
@@ -46,6 +48,8 @@ func (s Service) GetRecapSubmissions(params entities.RequestRecapSubmissions) (r
 
 			if recapSubmissions.TotalSubmissions != 0 {
 				totalSubmissions = recapSubmissions.TotalSubmissions
+
+				summaries, err = s.GetSummariesSubmissionByUserId(value.UserId)
 			}
 
 			if recapSubmissions.TotalUnlockSubmissions != 0 {
@@ -62,7 +66,29 @@ func (s Service) GetRecapSubmissions(params entities.RequestRecapSubmissions) (r
 				BloodType:              value.BloodType,
 				TotalSubmissions:       totalSubmissions,
 				TotalUnlockSubmissions: totalUnlockSubmissions,
+				Summaries:              summaries,
 			})
+		}
+	}
+
+	return
+}
+
+func (s Service) GetSummariesSubmissionByUserId(userId string) (summaries []entities.SummariesSubmission, err error) {
+	var summariesPoint []entities.SummariesPointSubmission
+
+	summaries, err = s.repo.FindSummariesSubmissionByUserId(userId)
+
+	if len(summaries) > 0 {
+		for index, val := range summaries {
+
+			summariesPoint, err = s.repo.FindSummariesPointSubmissionBySubmissionId(val.SubmissionId)
+
+			if len(summariesPoint) > 0 {
+				summariesPoint = helpers.FormattedPointSummaries(summariesPoint)
+			}
+
+			summaries[index].Points = summariesPoint
 		}
 	}
 
@@ -84,13 +110,16 @@ func (s Service) GenerateExcel(data []entities.ResultRecapSubmissions) (f *excel
 
 	styleBody, _ := f.NewStyle(constants.ExcelStyleBody(true))
 
-	f.SetActiveSheet(0)
-	sheetName := f.GetSheetName(0)
-
 	startRow := 3
 	number := 1
 
+	startRowSheet2 := 3
+	numberSheet2 := 1
+
 	for _, val := range data {
+		f.SetActiveSheet(0)
+		sheetName := f.GetSheetName(0)
+
 		var wg1 sync.WaitGroup
 
 		wg1.Add(1)
@@ -135,6 +164,35 @@ func (s Service) GenerateExcel(data []entities.ResultRecapSubmissions) (f *excel
 			// total unlock submissions
 			cell, _ = excelize.CoordinatesToCellName(9, startRow)
 			f = helpers.SetCellValue(f, helpers.CellValue{Value: val.TotalUnlockSubmissions, SheetName: sheetName, Cell: cell, Style: styleBody})
+
+			if len(val.Summaries) > 0 {
+				// Sheet 2
+				f.SetActiveSheet(1)
+				sheetName = f.GetSheetName(1)
+
+				for _, _v := range val.Summaries {
+					// no
+					cell, _ = excelize.CoordinatesToCellName(1, startRowSheet2)
+					f = helpers.SetCellValue(f, helpers.CellValue{Value: numberSheet2, SheetName: sheetName, Cell: cell, Style: styleBody})
+
+					// name
+					cell, _ = excelize.CoordinatesToCellName(2, startRowSheet2)
+					f = helpers.SetCellValue(f, helpers.CellValue{Value: val.Name, SheetName: sheetName, Cell: cell, Style: styleBody})
+
+					// token
+					cell, _ = excelize.CoordinatesToCellName(3, startRowSheet2)
+					f = helpers.SetCellValue(f, helpers.CellValue{Value: _v.Token, SheetName: sheetName, Cell: cell, Style: styleBody})
+
+					for index, __v := range _v.Points {
+						cell, _ = excelize.CoordinatesToCellName(4+index, startRowSheet2)
+						f = helpers.SetCellValue(f, helpers.CellValue{Value: __v.Point, SheetName: sheetName, Cell: cell, Style: styleBody})
+					}
+
+					startRowSheet2++
+					numberSheet2++
+				}
+
+			}
 
 			startRow++
 			number++

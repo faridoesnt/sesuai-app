@@ -15,12 +15,16 @@ type Repository struct {
 }
 
 type Statement struct {
-	countRecapSubmissionsUser *sqlx.Stmt
+	countRecapSubmissionsUser                  *sqlx.Stmt
+	findSummariesSubmissionByUserId            *sqlx.Stmt
+	findSummariesPointSubmissionBySubmissionId *sqlx.Stmt
 }
 
 func initRepository(dbWriter *sqlx.DB, dbReader *sqlx.DB) constracts.RecapSubmissionsRepository {
 	stmts := Statement{
-		countRecapSubmissionsUser: datasources.Prepare(dbReader, countRecapSubmissionsUser),
+		countRecapSubmissionsUser:                  datasources.Prepare(dbReader, countRecapSubmissionsUser),
+		findSummariesSubmissionByUserId:            datasources.Prepare(dbReader, findSummariesSubmissionByUserId),
+		findSummariesPointSubmissionBySubmissionId: datasources.Prepare(dbReader, findSummariesPointSubmissionBySubmissionId),
 	}
 
 	r := Repository{
@@ -95,6 +99,24 @@ func (r Repository) CountRecapSubmissionsUser(userId string) (recapSubmissions e
 	err = r.stmt.countRecapSubmissionsUser.Get(&recapSubmissions, userId)
 	if err != nil {
 		log.Println("error while count recap submissions user ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindSummariesSubmissionByUserId(userId string) (summaries []entities.SummariesSubmission, err error) {
+	err = r.stmt.findSummariesSubmissionByUserId.Select(&summaries, userId)
+	if err != nil {
+		log.Println("error while find summaries submission by user id ", err)
+	}
+
+	return
+}
+
+func (r Repository) FindSummariesPointSubmissionBySubmissionId(submissionId string) (summariesPoint []entities.SummariesPointSubmission, err error) {
+	err = r.stmt.findSummariesPointSubmissionBySubmissionId.Select(&summariesPoint, submissionId)
+	if err != nil {
+		log.Println("error while find summaries point submission by submission id ", err)
 	}
 
 	return
